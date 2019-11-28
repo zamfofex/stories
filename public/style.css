@@ -1,0 +1,239 @@
+@charset "utf-8";
+
+@font-face
+{
+	font-family: "Lora";
+	font-style: normal;
+	font-weight: 400;
+	src: url("/fonts/lora.ttf") format("truetype");
+}
+
+@font-face
+{
+	font-family: "Lora";
+	font-style: italic;
+	font-weight: 400;
+	src: url("/fonts/lora-italic.ttf") format("truetype");
+}
+
+@font-face
+{
+	font-family: "Oxygen Mono";
+	font-style: normal;
+	font-weight: 400;
+	src: url("/fonts/oxygen-mono.ttf") format("truetype");
+}
+
+@font-face
+{
+	font-family: "Asap";
+	font-style: italic;
+	font-weight: 400;
+	src: url("/fonts/asap-italic.woff2") format("woff2");
+}
+
+* { box-sizing: border-box; }
+
+body
+{
+	font-family: "Lora", serif;
+	background: #FED;
+	color: #741;
+	margin: 2em auto;
+	padding: 0 2em;
+	width: 25em;
+	min-width: calc(50% + 4em);
+	max-width: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	line-height: 175%;
+	text-align: justify;
+}
+
+::selection
+{
+	background: #EDC;
+}
+
+html
+{
+	width: 100%;
+	height: 100%;
+}
+
+p
+{
+	margin: 0.75em 0;
+}
+
+@media (max-width: 50em)
+{
+	body
+	{
+		text-align: left;
+	}
+}
+
+::-webkit-scrollbar
+{
+	background: none;
+	width: 0.25em;
+	height: 0.25em;
+}
+
+::-webkit-scrollbar-track
+{
+	background: none;
+}
+
+::-webkit-scrollbar-track-piece
+{
+	background: none;
+}
+
+::-webkit-scrollbar-button
+{
+	display: none;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background: #741;
+	border-radius: 1em;
+}
+
+::-webkit-scrollbar-corner
+{
+	background: none;
+}
+
+hr
+{
+	border: none;
+	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 0 12 2" stroke="%23741" fill="none" stroke-width="0.125"><path d="M 0 1 C 1 0 3 2 4 1 M 4.5 1.5 5 0.5 M 5.5 1.5 6 0.5 M 6.5 1 C 7.5 0 9.5 2 10.5 1" /></svg>');
+	background-position: center;
+	background-repeat: no-repeat;
+	margin: 0;
+	height: 1em;
+}
+
+a, button
+{
+	all: unset;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+a:focus, button:focus
+{
+	outline: 0.0625em solid #741;
+}
+
+blockquote
+{
+	padding: 0 0 0 1em;
+	position: relative;
+	margin: 0.75em 0;
+}
+
+blockquote::before
+{
+	content: "";
+	width: 0.25em;
+	margin: 0.5em 0 0.5em;
+	background: #741;
+	border-radius: 1em;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+}
+
+:not(pre) > code
+{
+	padding: 0 0.25em;
+	border-radius: 0.25em;
+	background: #EDC;
+	padding: 0.25em;
+}
+
+code, pre
+{
+	font-family: "Oxygen Mono", monospace, sans-serif;
+}
+
+pre, textarea
+{
+	padding: 0.5em 0.75em;
+	border-radius: 0.5em;
+	border: 0.125em solid #741;
+	overflow: auto;
+	box-shadow: #3333 0 0 1em inset;
+	text-align: left;
+}
+
+ul, ol
+{
+	padding: 0 0 0 2em;
+	margin: 0.75em 0;
+}
+
+li
+{
+	margin: 0.75em 0;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+	font-family: "Asap", sans-serif;
+	font-style: italic;
+	font-weight: normal;
+	margin: 0.75em 0;
+	text-align: left;
+}
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.75em; }
+h3 { font-size: 1.5em; }
+h4 { font-size: 1.25em; }
+h5 { font-size: 1.25em; }
+h6 { font-size: 1.125em; }
+h5, h6 { font-weight: bold; }
+
+textarea
+{
+	text-align: justify;
+	background: none;
+	resize: none;
+	width: 100%;
+	height: 16em;
+	font: unset;
+	outline: none;
+	transition: 0.125s ease box-shadow;
+	color: inherit;
+}
+
+textarea:not(:focus)
+{
+	box-shadow: none;
+}
+
+.submit
+{
+	text-align: right;
+}
+
+header
+{
+	font-weight: bold;
+}
+
+.response
+{
+	margin-left: 2em;
+}
+
+footer
+{
+	font-family: italic
+}

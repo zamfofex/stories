@@ -1,0 +1,20 @@
+{
+	"version": 2,
+	"name": "stories",
+	"routes":
+	[
+		{"src": "/(?<path>.*?)/+", "status": 307, "headers": {"location": "/$path"}, "methods": ["GET", "HEAD"]},
+		{"src": "/", "dest": "list.html"},
+		{"src": "/(?<name>.*)/feedback", "dest": "/api/feedback.js?name=$1", "methods": ["POST"]},
+		{"src": "/fonts/(?<name>.*)", "methods": ["GET", "HEAD"]},
+		{"src": "/style.css", "methods": ["GET", "HEAD"]},
+		{"src": "/license", "dest": "/license.html", "methods": ["GET", "HEAD"]},
+		{"src": "/(?<name>.*)", "dest": "/api/story.js?name=$1", "methods": ["GET", "HEAD"]}
+	],
+	"env":
+	{
+		"google_credentials_json": "@google-credentials",
+		"bucket_name": "@bucket-name"
+	},
+	"github": {"silent": true}
+}
