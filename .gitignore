@@ -8,7 +8,7 @@
 !stories
 !stories/*
 !licenses
-!licenses/readme.md
+!licenses/*
 !public
 !public/**
 !license.md
