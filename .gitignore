@@ -1,0 +1,17 @@
+*
+!api
+!api/*
+!build
+!build/*
+!now.json
+!package.json
+!stories
+!stories/*
+!licenses
+!licenses/readme.md
+!public
+!public/**
+!license.md
+!readme.md
+!.nowignore
+!.gitignore
