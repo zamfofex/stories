@@ -94,7 +94,10 @@ let main = async () =>
 		
 		document.body.append(license, list, h2, form)
 		
-		pages[name] = `<!-- This story is licensed under CC BY 4.0. See https://fanstories.now.sh/license to know more about the application of such license to this page. -->\n<!doctype html>\n${document.documentElement.outerHTML}\n`
+		let page = document.documentElement.outerHTML
+		// Note: ‘lastIndexOf’ should be faster, since ‘</body>’ is closer to the end of the string.
+		let i = page.lastIndexOf("</body>")
+		pages[name] = [`<!-- This story is licensed under CC BY 4.0. See https://fanstories.now.sh/license to know more about the application of such license to this page. -->\n<!doctype html>\n${page.slice(0, i)}`, page.slice(i) + "\n"]
 	}
 	
 	await Promise.all([

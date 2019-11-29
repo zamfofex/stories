@@ -1,15 +1,10 @@
-import jsdom from "jsdom"
 import pages from "./pages.json"
 import {Storage} from "@google-cloud/storage"
 import md from "commonmark"
 import process from "process"
 
-let {JSDOM} = jsdom
-
-let formatDate = ({date, document, node}) =>
+let formatDate = date =>
 {
-	node.dateTime = date.toISOString()
-	
 	let result = ""
 	
 	switch (date.getUTCDay())
@@ -90,17 +85,17 @@ let formatDate = ({date, document, node}) =>
 	
 	if (full)
 	{
-		let text = day + " " + ordenal + " " + year
-		node.append(text)
-		node.title = text + rest
+		return (
+			`<time datetime="${date.toISOString()}" title="${text + rest}">` +
+			`${day} ${ordenal} ${year}</time>`
+		)
 	}
 	else
 	{
-		let sup = document.createElement("sup")
-		sup.append(ordenal)
-		node.append(result, " ", day, sup, " ", year)
-		
-		node.title = result + " " + day + ordenal + " " + year + rest
+		return (
+			`<time datetime="${date.toISOString()}" title="${result} ${day + ordenal} ${year + rest}">` +
+			`${result} ${day}<sup>${ordenal}</sup> ${year}</time>`
+		)
 	}
 }
 
@@ -119,12 +114,34 @@ let cache = {}
 let download = async file =>
 {
 	let name = file.metadata.name
-	return cache[name] || (cache[name] = (await file.download())[0])
+	
+	let cached = cache[name]
+	if (cached) return cached
+	
+	let tree = parser.parse((await file.download())[0].toString("utf-8"))
+	
+	let walker = tree.walker()
+	while (true)
+	{
+		let event = walker.next()
+		if (!event) break
+		let {entering, node} = event
+		if (entering) continue
+		if (node.type !== "heading") continue
+		if (node.level > 4) node.level = 6
+		else node.level += 2
+	}
+	
+	let rendered = renderer.render(tree)
+	cache[name] = rendered
+	return rendered
 }
 
 export default async ({query: {name}}, res) =>
 {
-	if (!(name in pages))
+	let page = pages[name]
+	
+	if (!page)
 	{
 		res.statusCode = 404
 		res.end()
@@ -154,57 +171,32 @@ export default async ({query: {name}}, res) =>
 	
 	feedback.sort(({time: a}, {time: b}) => a - b)
 	
-	let dom = new JSDOM(pages[name])
-	let {window: {document}} = dom
+	res.setHeader("content-type", "text/html")
+	
+	res.write(page[0])
 	
 	for (let {file, time} of feedback)
 	{
+		res.write(`<article><header><p>on `)
+		
 		let date = new Date(time)
 		
-		let article = document.createElement("article")
+		res.write(formatDate(date))
 		
-		let header = document.createElement("header")
+		res.write(`, someone said:</p></header>`)
 		
-		let t = document.createElement("time")
-		formatDate({date, document, node: t})
+		res.write(await download(file))
 		
-		let p = document.createElement("p")
-		p.append("on ", t, ", someone said:")
-		
-		header.append(p)
-		
-		let tree = parser.parse((await download(file)).toString("utf-8"))
-		
-		let walker = tree.walker()
-		while (true)
-		{
-			let event = walker.next()
-			if (!event) break
-			let {entering, node} = event
-			if (entering) continue
-			if (node.type !== "heading") continue
-			if (node.level > 4) node.level = 6
-			else node.level += 2
-		}
-		
-		article.append(header, JSDOM.fragment(renderer.render(tree)))
-		
-		document.body.append(article)
+		res.write(`</article>`)
 		
 		let response = responses[time]
 		if (response)
 		{
-			let article = document.createElement("article")
-			article.classList.add("response")
-			let header = document.createElement("header")
-			let p = document.createElement("p")
-			p.append("response from the author:")
-			header.append(p)
-			article.append(header, JSDOM.fragment(renderer.render(parser.parse((await download(response)).toString("utf-8")))))
-			document.body.append(article)
+			res.write(`<article class="response"><header><p>response from the author:</p></header>`)
+			res.write(await download(response))
+			res.write(`</article>`)
 		}
 	}
 	
-	res.setHeader("content-type", "text/html");
-	res.end(dom.serialize())
+	res.end(page[1])
 }
