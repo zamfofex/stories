@@ -240,7 +240,7 @@ footer
 
 #capitalization
 {
-	position: fixed;
+	position: absolute;
 	opacity: 0;
 	pointer-events: none;
 }
