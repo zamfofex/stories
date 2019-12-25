@@ -237,3 +237,53 @@ footer
 {
 	font-style: italic;
 }
+
+#capitalization
+{
+	position: fixed;
+	opacity: 0;
+	pointer-events: none;
+}
+
+#capitalization-label
+{
+	display: inline-block;
+}
+
+#capitalization-label::before
+{
+	content: "";
+	width: 0.5em;
+	height: 0.5em;
+	border: 0.0625em solid #741;
+	display: inline-block;
+	margin-right: 0.5em;
+	border-radius: 0.125em;
+}
+
+#capitalization:checked ~ #options > #capitalization-label::before
+{
+	background: radial-gradient(#741 40%, #7410 40%);
+}
+
+#capitalization:focus ~ #options > #capitalization-label
+{
+	outline: 0.0625em solid #741;
+}
+
+#capitalization:not(:checked) ~ main,
+#capitalization:not(:checked) ~ article > header,
+#capitalization:not(:checked) ~ main > footer
+{
+	text-transform: lowercase;
+}
+
+#options
+{
+	text-align: right;
+}
+
+#options > label
+{
+	cursor: pointer;
+}

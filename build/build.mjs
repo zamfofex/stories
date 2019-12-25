@@ -32,11 +32,11 @@ let feedbackForm = document =>
 
 let parseMarkdown = md =>
 {
-	let dom = new JSDOM(`<!doctype html><meta charset="utf-8"><body>` + renderer.render(parser.parse(md)))
+	let dom = new JSDOM(`<!doctype html><meta charset="utf-8"><body><main>${renderer.render(parser.parse(md))}</main>`)
 	
 	let {window: {document}} = dom
 	
-	let title = document.querySelector("h1").textContent
+	let title = document.querySelector("h1").textContent.toLowerCase()
 	
 	document.title = title + " \u2014 " + "zambonifofex\u2019s stories"
 	
@@ -51,6 +51,21 @@ let parseMarkdown = md =>
 	style.href = "/style.css"
 	
 	document.head.append(viewport, style)
+	
+	let capitalization = document.createElement("input")
+	capitalization.type = "checkbox"
+	capitalization.id = "capitalization"
+	
+	let capitalizationLabel = document.createElement("label")
+	capitalizationLabel.htmlFor = "capitalization"
+	capitalizationLabel.append("enable capitalization")
+	capitalizationLabel.id = "capitalization-label"
+	
+	let options = document.createElement("p")
+	options.id = "options"
+	options.append(capitalizationLabel)
+	
+	document.body.prepend(capitalization, options)
 	
 	return document
 }
@@ -86,13 +101,15 @@ let main = async () =>
 		let license = document.createElement("footer")
 		
 		let ccby = document.createElement("a")
-		ccby.append("creative commons attribution 4.0 international")
+		ccby.append("Creative Commons Attribution 4.0 International")
 		ccby.href = `https://creativecommons.org/licenses/by/4.0`
 		ccby.rel = "license"
 		
-		license.append("this story is licensed under ", ccby, ".")
+		license.append("This story is licensed under ", ccby, ".")
 		
-		document.body.append(license, list, h2, form)
+		document.querySelector("main").append(license)
+		
+		document.body.append(list, h2, form)
 		
 		let page = document.documentElement.outerHTML
 		// Note: ‘lastIndexOf’ should be faster, since ‘</body>’ is closer to the end of the string.

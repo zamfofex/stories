@@ -9,31 +9,31 @@ let formatDate = date =>
 	
 	switch (date.getUTCDay())
 	{
-		case 0: result += "sunday" ; break
-		case 1: result += "monday" ; break
-		case 2: result += "tuesday" ; break
-		case 3: result += "wednesday" ; break
-		case 4: result += "thursday" ; break
-		case 5: result += "friday" ; break
-		case 6: result += "saturday" ; break
+		case 0: result += "Sunday" ; break
+		case 1: result += "Monday" ; break
+		case 2: result += "Tuesday" ; break
+		case 3: result += "Wednesday" ; break
+		case 4: result += "Thursday" ; break
+		case 5: result += "Friday" ; break
+		case 6: result += "Saturday" ; break
 	}
 	
 	result += ", "
 	
-	switch (date.getUTCMonth())
+	switch (date.getUTCMonth() + 1)
 	{
-		case 0: result += "january" ; break
-		case 1: result += "february" ; break
-		case 2: result += "march" ; break
-		case 3: result += "april" ; break
-		case 4: result += "may" ; break
-		case 5: result += "june" ; break
-		case 6: result += "july" ; break
-		case 7: result += "august" ; break
-		case 8: result += "september" ; break
-		case 9: result += "october" ; break
-		case 10: result += "november" ; break
-		case 11: result += "december" ; break
+		case 1: result += "January" ; break
+		case 2: result += "February" ; break
+		case 3: result += "March" ; break
+		case 4: result += "April" ; break
+		case 5: result += "May" ; break
+		case 6: result += "June" ; break
+		case 7: result += "July" ; break
+		case 8: result += "August" ; break
+		case 9: result += "September" ; break
+		case 10: result += "October" ; break
+		case 11: result += "November" ; break
+		case 12: result += "December" ; break
 	}
 	
 	let day = date.getUTCDate()
@@ -81,7 +81,7 @@ let formatDate = date =>
 	
 	rest += date.getUTCHours().toString().padStart(2, "0") + ":"
 	rest += date.getUTCMinutes().toString().padStart(2, "0") + ":"
-	rest += date.getUTCSeconds().toString().padStart(2, "0") + " utc"
+	rest += date.getUTCSeconds().toString().padStart(2, "0") + " UTC"
 	
 	if (full)
 	{
@@ -177,7 +177,7 @@ export default async ({query: {name}}, res) =>
 	
 	for (let {file, time} of feedback)
 	{
-		res.write(`<article><header><p>on `)
+		res.write(`<article><header><p>On `)
 		
 		let date = new Date(time)
 		
@@ -192,7 +192,7 @@ export default async ({query: {name}}, res) =>
 		let response = responses[time]
 		if (response)
 		{
-			res.write(`<article class="response"><header><p>response from the author:</p></header>`)
+			res.write(`<article class="response"><header><p>Response from the author:</p></header>`)
 			res.write(await download(response))
 			res.write(`</article>`)
 		}
