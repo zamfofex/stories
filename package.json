@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"now-build": "bash build/build.bash",
+		"now-build": "node --experimental-modules build.mjs",
 		"build": "true"
 	},
 	"dependencies": {
