@@ -168,28 +168,30 @@ let responsesRegex = /^([1-9][0-9]*)\/reply\.md$/
 let cacheTime = {}
 let cache = {}
 
-let download = async (file, process) =>
+let download = async (file, process, name) =>
 {
-	let metadata = file.metadata
-	
-	if (!metadata)
-	{
-		if (!(await file.exists())[0]) return null
-		
-		metadata = (await file.getMetadata())[0]
-	}
-	
-	let {name, updated} = metadata
+	if (!name) name = file.metadata.name
 	
 	let cached = cache[name]
 	if (cached)
 	{
 		let now = Date.now()
 		let time = cacheTime[name]
+		
 		if (now - time < 300000)
 			return cached
+		
+		let {updated} = file.metadata
+		
 		if (new Date(updated).getTime() < cacheTime[name])
 			return cached
+	}
+	
+	if (!(await file.exists())[0])
+	{
+		cache[name] = null
+		cacheTime[name] = Date.now()
+		return null
 	}
 	
 	let result = (await file.download())[0].toString("utf-8")
@@ -254,7 +256,7 @@ let processStory = md =>
 
 export default async ({query: {name}}, res) =>
 {
-	let page = await download(bucket.file(`/${name}.md`), processStory)
+	let page = await download(bucket.file(`/${name}.md`), processStory, `/${name}.md`)
 	
 	if (!page)
 	{
