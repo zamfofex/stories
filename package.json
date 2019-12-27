@@ -1,6 +1,5 @@
 {
 	"scripts": {
-		"now-build": "node --experimental-modules build.mjs",
 		"build": "true"
 	},
 	"dependencies": {

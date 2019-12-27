@@ -1,4 +1,3 @@
-import pages from "./pages.json"
 import {Storage} from "@google-cloud/storage"
 import md from "commonmark"
 import process from "process"
@@ -20,7 +19,7 @@ let unindent = write => async (strings, ...values) =>
 
 let template = async (write, {title, main, name, feedback}) =>
 {
-	write(`<!-- This story is licensed under CC BY 4.0. See https://github.com/Zambonifofex/stories to know more about the application of such license to this page. -->\n<!doctype html>\n`)
+	write(`<!doctype html>\n`)
 	await unindent(write)`
 		<html lang="en">
 			<head>
@@ -157,6 +156,7 @@ let formatDate = date =>
 
 let parser = new md.Parser()
 let renderer = new md.HtmlRenderer({safe: true})
+let unsafeRenderer = new md.HtmlRenderer()
 
 let storage = new Storage({credentials: JSON.parse(process.env.google_credentials_json)})
 
@@ -165,16 +165,43 @@ let bucket = storage.bucket(process.env.bucket_name)
 let feedbackRegex = /^([1-9][0-9]*)\.md*$/
 let responsesRegex = /^([1-9][0-9]*)\/reply\.md$/
 
+let cacheTime = {}
 let cache = {}
 
-let download = async file =>
+let download = async (file, process) =>
 {
-	let name = file.metadata.name
+	let metadata = file.metadata
+	
+	if (!metadata)
+	{
+		if (!(await file.exists())[0]) return null
+		
+		metadata = (await file.getMetadata())[0]
+	}
+	
+	let {name, updated} = metadata
 	
 	let cached = cache[name]
-	if (cached) return cached
+	if (cached)
+	{
+		let now = Date.now()
+		let time = cacheTime[name]
+		if (now - time < 300000)
+			return cached
+		if (new Date(updated).getTime() < cacheTime[name])
+			return cached
+	}
 	
-	let tree = parser.parse((await file.download())[0].toString("utf-8"))
+	let result = (await file.download())[0].toString("utf-8")
+	if (process) result = process(result)
+	cache[name] = result
+	cacheTime[name] = Date.now()
+	return result
+}
+
+let processFeedback = md =>
+{
+	let tree = parser.parse(md)
 	
 	let walker = tree.walker()
 	while (true)
@@ -184,18 +211,50 @@ let download = async file =>
 		let {entering, node} = event
 		if (entering) continue
 		if (node.type !== "heading") continue
+		
 		if (node.level > 4) node.level = 6
 		else node.level += 2
 	}
 	
-	let rendered = renderer.render(tree)
-	cache[name] = rendered
-	return rendered
+	return renderer.render(tree)
+}
+
+let processStory = md =>
+{
+	let title = "unknown"
+	let tree = parser.parse(md)
+	
+	let walker = tree.walker()
+	while (true)
+	{
+		let event = walker.next()
+		if (!event) break
+		let {entering, node} = event
+		if (entering) continue
+		if (node.type !== "heading") continue
+		if (node.level !== 1) continue
+		
+		title = ""
+		let hWalker = node.walker()
+		while (true)
+		{
+			let event = hWalker.next()
+			if (!event) break
+			let {node} = event
+			if (node.type !== "text") continue
+			
+			title += node.literal
+			break
+		}
+		break
+	}
+	
+	return {title: title.toLowerCase(), main: unsafeRenderer.render(tree)}
 }
 
 export default async ({query: {name}}, res) =>
 {
-	let page = pages[name]
+	let page = await download(bucket.file(`/${name}.md`), processStory)
 	
 	if (!page)
 	{
@@ -215,14 +274,11 @@ export default async ({query: {name}}, res) =>
 		let filename = file.metadata.name.slice(length)
 		
 		let match
+		
 		if (match = filename.match(feedbackRegex))
-		{
 			messages.push({file, time: Number(match[1])})
-		}
 		else if (match = filename.match(responsesRegex))
-		{
 			responses[match[1]] = file
-		}
 	}
 	
 	messages.sort(({time: a}, {time: b}) => a - b)
@@ -241,7 +297,7 @@ export default async ({query: {name}}, res) =>
 			
 			res.write(`, someone said:</p></header>`)
 			
-			res.write(await download(file))
+			res.write(await download(file, processFeedback))
 			
 			res.write(`</article>`)
 			

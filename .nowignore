@@ -1,7 +1,6 @@
 *
 !api
 !api/*
-!build.mjs
 !now.json
 !package.json
 !stories

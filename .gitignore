@@ -1,13 +1,8 @@
 *
 !api
 !api/*
-!build.mjs
 !now.json
 !package.json
-!stories
-!stories/*
-!licenses
-!licenses/*
 !public
 !public/**
 !license.md

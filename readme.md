@@ -8,14 +8,13 @@ This repository, besides the aforementioned style of stories, contains a [Now][Z
 license
 ---
 
-The software that composes the website is licensed under the [0BSD license][0BSD], whereas the stories themselves are licensed under [Creative Commons Attribution 4.0 International][CC BY 4.0]. For more infomation, see [the `licenses` directory](licenses/readme.md), or [the license page in the website][license].
+The software herein is licensed under the [0BSD license][0BSD], whereas the stories themselves are licensed under [Creative Commons Attribution 4.0 International][CC BY 4.0].
 
 <!-- -- -- -- -- -- -->
 
 [ZEIT Now]: https://zeit.co/home "ZEIT Now"
 
 [website]: https://fanstories.now.sh
-[license]: https://fanstories.now.sh/license
 
 [Google Cloud]: https://cloud.google.com "Google Cloud website"
 [GCS]: https://cloud.google.com/storage "Google Cloud Storage website"
