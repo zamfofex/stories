@@ -7,7 +7,5 @@
 !package.json
 !stories
 !stories/*
-!licenses
-!licenses/readme.md
 !public
 !public/**

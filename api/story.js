@@ -3,6 +3,62 @@ import {Storage} from "@google-cloud/storage"
 import md from "commonmark"
 import process from "process"
 
+let unindent = write => async (strings, ...values) =>
+{
+	let i = 0
+	for (let string of strings)
+	{
+		write(string.replace(/[\t\n]/g, ""))
+		let value = await values[i]
+		if (typeof value === "function")
+			await value()
+		else
+			write(value || "")
+		i++
+	}
+}
+
+let template = async (write, {title, main, name, feedback}) =>
+{
+	write(`<!-- This story is licensed under CC BY 4.0. See https://github.com/Zambonifofex/stories to know more about the application of such license to this page. -->\n<!doctype html>\n`)
+	await unindent(write)`
+		<html lang="en">
+			<head>
+				<meta charset="utf-8">
+				<title>${title} — zambonifofex’s stories</title>
+				<meta name="viewport" content="width=device-width,initial-scale=1">
+				<link rel="stylesheet" href="/style.css">
+			</head>
+			<body>
+				<input type="checkbox" id="capitalization">
+				<p id="options">
+					<label for="capitalization" id="capitalization-label">enable capitalization</label>
+				</p>
+				<main>
+					${main}
+					<footer>
+						This story is licensed under <a href="https://creativecommons.org/licenses/by/4.0" rel="license">Creative Commons Attribution 4.0 International</a>.
+					</footer>
+				</main>
+				<p>
+					<a href="/">list of stories</a>
+				</p>
+				<h2>feedback</h2>
+				<form method="POST" action="/${name}/feedback">
+					<p>
+						<textarea name="message" required="" minlength="12"></textarea>
+					</p>
+					<p class="submit">
+						<button>submit feedback</button>
+					</p>
+				</form>
+				${feedback}
+			</body>
+		</html>
+	`
+	write("\n")
+}
+
 let formatDate = date =>
 {
 	let result = ""
@@ -150,7 +206,7 @@ export default async ({query: {name}}, res) =>
 	
 	let length = name.length + 2
 	
-	let feedback = []
+	let messages = []
 	
 	let responses = {}
 	
@@ -161,7 +217,7 @@ export default async ({query: {name}}, res) =>
 		let match
 		if (match = filename.match(feedbackRegex))
 		{
-			feedback.push({file, time: Number(match[1])})
+			messages.push({file, time: Number(match[1])})
 		}
 		else if (match = filename.match(responsesRegex))
 		{
@@ -169,34 +225,37 @@ export default async ({query: {name}}, res) =>
 		}
 	}
 	
-	feedback.sort(({time: a}, {time: b}) => a - b)
+	messages.sort(({time: a}, {time: b}) => a - b)
 	
 	res.setHeader("content-type", "text/html")
 	
-	res.write(page[0])
-	
-	for (let {file, time} of feedback)
+	let feedback = async () =>
 	{
-		res.write(`<article><header><p>On `)
-		
-		let date = new Date(time)
-		
-		res.write(formatDate(date))
-		
-		res.write(`, someone said:</p></header>`)
-		
-		res.write(await download(file))
-		
-		res.write(`</article>`)
-		
-		let response = responses[time]
-		if (response)
+		for (let {file, time} of messages)
 		{
-			res.write(`<article class="response"><header><p>Response from the author:</p></header>`)
-			res.write(await download(response))
+			res.write(`<article><header><p>On `)
+			
+			let date = new Date(time)
+			
+			res.write(formatDate(date))
+			
+			res.write(`, someone said:</p></header>`)
+			
+			res.write(await download(file))
+			
 			res.write(`</article>`)
+			
+			let response = responses[time]
+			if (response)
+			{
+				res.write(`<article class="response"><header><p>Response from the author:</p></header>`)
+				res.write(await download(response))
+				res.write(`</article>`)
+			}
 		}
 	}
 	
-	res.end(page[1])
+	await template(s => res.write(s), {...page, name, feedback})
+	
+	res.end()
 }

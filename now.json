@@ -8,7 +8,7 @@
 		{"src": "/(?<name>.*)/feedback", "dest": "/api/feedback.js?name=$1", "methods": ["POST"]},
 		{"src": "/fonts/(?<name>.*)", "methods": ["GET", "HEAD"]},
 		{"src": "/style.css", "methods": ["GET", "HEAD"]},
-		{"src": "/license", "dest": "/license.html", "methods": ["GET", "HEAD"]},
+		{"src": "/license", "status": 307, "headers": {"location": "https://github.com/Zambonifofex/stories#license"}, "methods": ["GET", "HEAD"]},
 		{"src": "/(?<name>.*)", "dest": "/api/story.js?name=$1", "methods": ["GET", "HEAD"]}
 	],
 	"env":

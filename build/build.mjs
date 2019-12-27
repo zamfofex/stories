@@ -1,74 +1,11 @@
 import md from "commonmark"
 import fs from "fs"
-import jsdom from "jsdom"
 import process from "process"
 
 let fsp = fs.promises
-let {JSDOM} = jsdom
 
 let parser = new md.Parser()
 let renderer = new md.HtmlRenderer()
-
-let feedbackForm = document =>
-{
-	let inMessage = document.createElement("textarea")
-	inMessage.name = "message"
-	inMessage.required = true
-	inMessage.minLength = 12
-	let inSubmit = document.createElement("button")
-	inSubmit.append("submit feedback")
-	
-	let message = document.createElement("p")
-	let submit = document.createElement("p")
-	message.append(inMessage)
-	submit.append(inSubmit)
-	submit.classList.add("submit")
-	
-	let form = document.createElement("form")
-	form.append(message, submit)
-	form.method = "POST"
-	return form
-}
-
-let parseMarkdown = md =>
-{
-	let dom = new JSDOM(`<!doctype html><meta charset="utf-8"><body><main>${renderer.render(parser.parse(md))}</main>`)
-	
-	let {window: {document}} = dom
-	
-	let title = document.querySelector("h1").textContent.toLowerCase()
-	
-	document.title = title + " \u2014 " + "zambonifofex\u2019s stories"
-	
-	document.documentElement.lang = "en"
-	
-	let viewport = document.createElement("meta")
-	viewport.name = "viewport"
-	viewport.content = "width=device-width,initial-scale=1"
-	
-	let style = document.createElement("link")
-	style.rel = "stylesheet"
-	style.href = "/style.css"
-	
-	document.head.append(viewport, style)
-	
-	let capitalization = document.createElement("input")
-	capitalization.type = "checkbox"
-	capitalization.id = "capitalization"
-	
-	let capitalizationLabel = document.createElement("label")
-	capitalizationLabel.htmlFor = "capitalization"
-	capitalizationLabel.append("enable capitalization")
-	capitalizationLabel.id = "capitalization-label"
-	
-	let options = document.createElement("p")
-	options.id = "options"
-	options.append(capitalizationLabel)
-	
-	document.body.prepend(capitalization, options)
-	
-	return document
-}
 
 let main = async () =>
 {
@@ -83,44 +20,38 @@ let main = async () =>
 	
 	for (let name of names)
 	{
-		let document = parseMarkdown(await fsp.readFile("stories/" + name + ".md", "utf-8"))
+		let title = "unknown"
+		let tree = parser.parse(await fsp.readFile("stories/" + name + ".md", "utf-8"))
 		
-		let listLink = document.createElement("a")
-		listLink.href = "/"
-		listLink.append("list of stories")
+		let walker = tree.walker()
+		while (true)
+		{
+			let event = walker.next()
+			if (!event) break
+			let {entering, node} = event
+			if (entering) continue
+			if (node.type !== "heading") continue
+			if (node.level !== 1) continue
+			
+			title = ""
+			let hWalker = node.walker()
+			while (true)
+			{
+				let event = hWalker.next()
+				if (!event) break
+				let {node} = event
+				if (node.type !== "text") continue
+				
+				title += node.literal
+				break
+			}
+			break
+		}
 		
-		let list = document.createElement("p")
-		list.append(listLink)
-		
-		let h2 = document.createElement("h2")
-		h2.append("feedback")
-		
-		let form = feedbackForm(document)
-		form.action = `/${name}/feedback`
-		
-		let license = document.createElement("footer")
-		
-		let ccby = document.createElement("a")
-		ccby.append("Creative Commons Attribution 4.0 International")
-		ccby.href = `https://creativecommons.org/licenses/by/4.0`
-		ccby.rel = "license"
-		
-		license.append("This story is licensed under ", ccby, ".")
-		
-		document.querySelector("main").append(license)
-		
-		document.body.append(list, h2, form)
-		
-		let page = document.documentElement.outerHTML
-		// Note: ‘lastIndexOf’ should be faster, since ‘</body>’ is closer to the end of the string.
-		let i = page.lastIndexOf("</body>")
-		pages[name] = [`<!-- This story is licensed under CC BY 4.0. See https://fanstories.now.sh/license to know more about the application of such license to this page. -->\n<!doctype html>\n${page.slice(0, i)}`, page.slice(i) + "\n"]
+		pages[name] = {title: title.toLowerCase(), main: renderer.render(tree)}
 	}
 	
-	await Promise.all([
-		fsp.writeFile(`api/pages.json`, JSON.stringify(pages)),
-		fsp.writeFile(`public/license.html`, `<!doctype html>\n${parseMarkdown(await fsp.readFile("licenses/readme.md", "utf-8")).documentElement.outerHTML}\n`)
-	])
+	await fsp.writeFile(`api/pages.json`, JSON.stringify(pages))
 }
 
 main().catch(error => { console.error(error) ; process.exit(1) })
