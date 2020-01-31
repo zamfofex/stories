@@ -194,8 +194,7 @@ let download = async (file, process, name) =>
 		return null
 	}
 	
-	let result = (await file.download())[0].toString("utf-8")
-	if (process) result = process(result)
+	let result = process((await file.download())[0].toString("utf-8"))
 	cache[name] = result
 	cacheTime[name] = Date.now()
 	return result
@@ -307,7 +306,7 @@ export default async ({query: {name}}, res) =>
 			if (response)
 			{
 				res.write(`<article class="response"><header><p>Response from the author:</p></header>`)
-				res.write(await download(response))
+				res.write(await download(response, processFeedback))
 				res.write(`</article>`)
 			}
 		}
