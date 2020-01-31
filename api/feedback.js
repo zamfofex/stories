@@ -4,7 +4,7 @@ import util from "util"
 
 let storage = new Storage({credentials: JSON.parse(process.env.google_credentials_json)})
 
-let bucket = storage.bucket("zxstories-comments")
+let bucket = storage.bucket(process.env.bucket_name)
 
 export default async ({query: {name}, body: {message}}, res) =>
 {
