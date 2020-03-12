@@ -3,7 +3,7 @@ zambonifofex’s stories
 
 A collection of *potentially mildly lewd*, yet *hopefully heartwarming* stories.
 
-This repository, besides the aforementioned style of stories, contains a [Now][ZEIT Now] [website] structure to hold such stories, which allows anonymous feedback to be shared about them and stored to a [Google Cloud] [Storage][GCS] [bucket][GCS bucket].
+This repository contains a [Now][ZEIT Now] [website] to hold the aforementioned style of stories, as well as anonymous feedback shared by readers, which are all stored in a [Google Cloud] [Storage][GCS] [bucket][GCS bucket].
 
 license
 ---
