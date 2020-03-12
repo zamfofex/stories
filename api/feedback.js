@@ -1,9 +1,4 @@
-import {Storage} from "@google-cloud/storage"
-import util from "util"
-
-let storage = new Storage({credentials: JSON.parse(process.env.google_credentials_json)})
-
-let bucket = storage.bucket(process.env.bucket_name)
+import bucket from "./_bucket.js"
 
 export default async ({query: {name}, body: {message}}, res) =>
 {

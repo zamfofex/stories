@@ -1,6 +1,6 @@
-import {Storage} from "@google-cloud/storage"
 import md from "commonmark"
-import process from "process"
+import download from "./_download.js"
+import bucket from "./_bucket.js"
 
 let unindent = write => async (strings, ...values) =>
 {
@@ -19,13 +19,13 @@ let unindent = write => async (strings, ...values) =>
 
 let template = async (write, {title, main, name, feedback}) =>
 {
-	write(`<!doctype html>\n`)
+	write("<!doctype html>\n")
 	await unindent(write)`
 		<html lang="en">
 			<head>
 				<meta charset="utf-8">
 				<title>${title} — zambonifofex’s stories</title>
-				<meta name="viewport" content="width=device-width,initial-scale=1">
+				<meta name="viewport" content="width=device-width">
 				<link rel="stylesheet" href="/style.css">
 			</head>
 			<body>
@@ -126,8 +126,9 @@ let formatDate = date =>
 				case 1: ordenal = "st" ; break
 				case 2: ordenal = "nd" ; break
 				case 3: ordenal = "rd" ; break
-				default: ordenal = "th"
+				default: ordenal = "th" ; break
 			}
+			break
 	}
 	
 	let year = date.getUTCFullYear()
@@ -158,47 +159,8 @@ let parser = new md.Parser()
 let renderer = new md.HtmlRenderer({safe: true})
 let unsafeRenderer = new md.HtmlRenderer()
 
-let storage = new Storage({credentials: JSON.parse(process.env.google_credentials_json)})
-
-let bucket = storage.bucket(process.env.bucket_name)
-
 let feedbackRegex = /^([1-9][0-9]*)\.md*$/
 let responsesRegex = /^([1-9][0-9]*)\/reply\.md$/
-
-let cacheTime = {}
-let cache = {}
-
-let download = async (file, process, name) =>
-{
-	if (!name) name = file.metadata.name
-	
-	let cached = cache[name]
-	if (cached)
-	{
-		let now = Date.now()
-		let time = cacheTime[name]
-		
-		if (now - time < 300000)
-			return cached
-		
-		let {updated} = file.metadata
-		
-		if (new Date(updated).getTime() < cacheTime[name])
-			return cached
-	}
-	
-	if (!(await file.exists())[0])
-	{
-		cache[name] = null
-		cacheTime[name] = Date.now()
-		return null
-	}
-	
-	let result = process((await file.download())[0].toString("utf-8"))
-	cache[name] = result
-	cacheTime[name] = Date.now()
-	return result
-}
 
 let processFeedback = md =>
 {
