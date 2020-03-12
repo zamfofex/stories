@@ -20,5 +20,5 @@ The software herein is licensed under the [0BSD license][0BSD], whereas the stor
 [GCS]: https://cloud.google.com/storage "Google Cloud Storage website"
 [GCS bucket]: https://cloud.google.com/storage/docs/key-terms#buckets 'The definition of “bucket” in Google Cloud Storage’s documentation'
 
-[0BSD]: licenses/software.md "the copy of the 0BSD license applied to the software"
+[0BSD]: licenses.md "the copy of the 0BSD license applied to the software"
 [CC BY 4.0]: https://creativecommons.org/licenses/by/4.0 "the CC BY 4.0 license in its website"
