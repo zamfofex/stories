@@ -1,4 +1,4 @@
-Zero-clause BSD (0BSD)
+zero-clause BSD (0BSD)
 ===
 
 Copyright (C) 2019 by Pedro M. Zamboni "Zambonifofex"
