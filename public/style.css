@@ -151,7 +151,6 @@ blockquote::before
 
 :not(pre) > code
 {
-	padding: 0 0.25em;
 	border-radius: 0.25em;
 	background: #EDC;
 	padding: 0.25em;
@@ -170,17 +169,6 @@ pre, textarea
 	overflow: auto;
 	box-shadow: #3333 0 0 1em inset;
 	text-align: left;
-}
-
-ul, ol
-{
-	padding: 0 0 0 2em;
-	margin: 0.75em 0;
-}
-
-li
-{
-	margin: 0.75em 0;
 }
 
 h1, h2, h3, h4, h5, h6
@@ -287,3 +275,85 @@ footer
 {
 	cursor: pointer;
 }
+
+ul, ol, li { display: block; margin: 0.75em 0; }
+ul, ol { padding: 0; margin: 0; }
+li { margin: 0.5em 0; position: relative; }
+
+blockquote > ul { margin-left: 0.75em; }
+blockquote > ol { margin-left: 1.25em; }
+
+ol { counter-reset: list; }
+
+ul > li::before,
+ol > li::before
+{
+	display: block;
+	position: absolute;
+	left: 0;
+	transform: translate(-100%) translate(-0.5em);
+}
+
+ul > li::before
+{
+	content: "";
+	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 4 4"><circle r="1.5" fill="%23741" /></svg>');
+	width: 0.5em;
+	height: 0.5em;
+	top: 0.65em;
+}
+
+ol > li::before
+{
+	counter-increment: list;
+	content: counter(list, lower-roman) ") ";
+}
+
+@media print
+{
+	body
+	{
+		background: none;
+		color: #000;
+		margin: 2em;
+		width: unset;
+		text-align: justify;
+	}
+	
+	#options, form, ::-webkit-scrollbar, #list { display: none; }
+	
+	@media (max-width: 32em)
+	{
+		body { text-align: left; }
+	}
+	
+	a { text-decoration: none; }
+	
+	a:not([href^="/"])::after
+	{
+		content: " (" attr(href) ")";
+		word-break: break-word;
+	}
+	
+	pre { white-space: pre-wrap; }
+	
+	pre, textarea { border-color: #333; }
+	
+	:not(pre) > code
+	{
+		background: none;
+		border: 0.0625em solid #333;
+	}
+	
+	blockquote::before { background: #333; }
+	
+	ul > li::before
+	{
+		content: "";
+		background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 4 4"><circle r="1.5" /></svg>');
+	}
+}
+
+article, blockquote { break-inside: avoid; }
+
+h1, h2, h3, h4, h5, h6 { break-after: avoid; }

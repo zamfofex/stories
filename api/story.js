@@ -40,7 +40,7 @@ let template = async (write, {title, main, name, feedback}) =>
 					</footer>
 				</main>
 				<p>
-					<a href="/">list of stories</a>
+					<a href="/" id="list">list of stories</a>
 				</p>
 				<h2>feedback</h2>
 				<form method="POST" action="/${name}/feedback">
