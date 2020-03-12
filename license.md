@@ -1,8 +1,6 @@
 Zero-clause BSD (0BSD)
 ===
 
----
-
 Copyright (C) 2019 by Pedro M. Zamboni "Zambonifofex"
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
