@@ -4,7 +4,7 @@
 	},
 	"dependencies": {
 		"@google-cloud/storage": "4.5.0",
-		"commonmark": "0.29.0"
+		"commonmark": "0.29.1"
 	},
 	"license": "0BSD"
 }
