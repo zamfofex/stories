@@ -3,9 +3,9 @@
 !api/*
 !now.json
 !package.json
-!public
-!public/**
 !license.md
 !readme.md
 !.nowignore
 !.gitignore
+!build.bash
+!style.css

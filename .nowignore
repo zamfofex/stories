@@ -5,5 +5,5 @@
 !package.json
 !stories
 !stories/*
-!public
-!public/**
+!build.bash
+!style.css

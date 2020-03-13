@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"build": "true"
+		"build": "./build.bash"
 	},
 	"dependencies": {
 		"@google-cloud/storage": "4.5.0",
