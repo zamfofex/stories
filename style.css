@@ -46,7 +46,7 @@ body
 	max-width: 100%;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	line-height: 175%;
+	line-height: 1.75em;
 	text-align: justify;
 }
 
@@ -226,19 +226,14 @@ footer
 	font-style: italic;
 }
 
-#capitalization
+.option
 {
 	position: absolute;
 	opacity: 0;
 	pointer-events: none;
 }
 
-#capitalization-label
-{
-	display: inline-block;
-}
-
-#capitalization-label::before
+.option-label::before
 {
 	content: "";
 	width: 0.5em;
@@ -249,14 +244,51 @@ footer
 	border-radius: 0.125em;
 }
 
-#capitalization:checked ~ #options > #capitalization-label::before
+#guidelines-none-label::before,
+#guidelines-3-label::before,
+#guidelines-4-label::before,
+#guidelines-5-label::before
 {
-	background: radial-gradient(#741 40%, #7410 40%);
+	border-radius: 100%;
 }
 
-#capitalization:focus ~ #options > #capitalization-label
+#capitalization:checked ~ #options #capitalization-label::before
+{ background: radial-gradient(#741 40%, #7410 40%); }
+
+#capitalization:focus ~ #options #capitalization-label
+{ outline: 0.0625em solid #741; }
+
+#guidelines-none:checked ~ #options #guidelines-none-label::before
+{ background: radial-gradient(#741 40%, #7410 40%); }
+
+#guidelines-none:focus ~ #options #guidelines-none-label
+{ outline: 0.0625em solid #741; }
+
+#guidelines-3:checked ~ #options #guidelines-3-label::before
+{ background: radial-gradient(#741 40%, #7410 40%); }
+
+#guidelines-3:focus ~ #options #guidelines-3-label
+{ outline: 0.0625em solid #741; }
+
+#guidelines-4:checked ~ #options #guidelines-4-label::before
+{ background: radial-gradient(#741 40%, #7410 40%); }
+
+#guidelines-4:focus ~ #options #guidelines-4-label
+{ outline: 0.0625em solid #741; }
+
+#guidelines-5:checked ~ #options #guidelines-5-label::before
+{ background: radial-gradient(#741 40%, #7410 40%); }
+
+#guidelines-5:focus ~ #options #guidelines-5-label
+{ outline: 0.0625em solid #741; }
+
+#options { text-align: right; }
+
+#options label
 {
-	outline: 0.0625em solid #741;
+	cursor: pointer;
+	margin-left: 1em;
+	white-space: nowrap;
 }
 
 #capitalization:not(:checked) ~ main,
@@ -266,14 +298,13 @@ footer
 	text-transform: lowercase;
 }
 
-#options
-{
-	text-align: right;
-}
+#guidelines-3:checked ~ main { --guidelines: 3; }
+#guidelines-4:checked ~ main { --guidelines: 4; }
+#guidelines-5:checked ~ main { --guidelines: 5; }
 
-#options > label
+.guidelines:checked ~ main p
 {
-	cursor: pointer;
+	background: linear-gradient(#FED, #FED 1em, #FED0 1em, #FED0 calc(100% - 4em), #FED calc(100% - 4em)), repeating-linear-gradient(#7418 0.0625em, #7418 0.125em, #7410 0.125em, #7410 calc(var(--guidelines) * 1.75em + 0.0625em));
 }
 
 ul, ol, li { display: block; margin: 0.75em 0; }
@@ -314,9 +345,10 @@ ol > li::before
 
 @media print
 {
+	* { background: none !important; }
+	
 	body
 	{
-		background: none;
 		color: #000;
 		margin: 2em;
 		width: unset;

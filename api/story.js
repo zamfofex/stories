@@ -29,10 +29,24 @@ let template = async (write, {title, main, name, feedback}) =>
 				<link rel="stylesheet" href="/style.css">
 			</head>
 			<body>
-				<input type="checkbox" id="capitalization">
-				<p id="options">
-					<label for="capitalization" id="capitalization-label">enable capitalization</label>
-				</p>
+				<form id="options"></form>
+				<input type="radio" class="option guidelines" name="guidelines" form="form" id="guidelines-none" checked>
+				<input type="radio" class="option guidelines" name="guidelines" form="form" id="guidelines-3" data-guidelines="3">
+				<input type="radio" class="option guidelines" name="guidelines" form="form" id="guidelines-4" data-guidelines="4">
+				<input type="radio" class="option guidelines" name="guidelines" form="form" id="guidelines-5" data-guidelines="5">
+				<input type="checkbox" id="capitalization" class="option">
+				<div id="options">
+					<p>
+						<label class="option-label" for="capitalization" id="capitalization-label">enable capitalization</label>
+					</p>
+					<p>
+						guidelines:
+						<label class="option-label" for="guidelines-none" id="guidelines-none-label">disabled</label>
+						<label class="option-label" for="guidelines-3" id="guidelines-3-label">3</label>
+						<label class="option-label" for="guidelines-4" id="guidelines-4-label">4</label>
+						<label class="option-label" for="guidelines-5" id="guidelines-5-label">5</label>
+					</p>
+				</div>
 				<main>
 					${main}
 					<footer>
