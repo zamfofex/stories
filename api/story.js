@@ -156,8 +156,8 @@ let formatDate = date =>
 	if (full)
 	{
 		return (
-			`<time datetime="${date.toISOString()}" title="${text + rest}">` +
-			`${day} ${ordenal} ${year}</time>`
+			`<time datetime="${date.toISOString()}" title="${result} ${ordenal} ${year + rest}">` +
+			`${result} ${ordenal} ${year}</time>`
 		)
 	}
 	else
