@@ -1,4 +1,5 @@
 import bucket from "./_bucket.js"
+import util from "util"
 
 export default async ({query: {name}, body: {message}}, res) =>
 {
@@ -13,7 +14,7 @@ export default async ({query: {name}, body: {message}}, res) =>
 	await util.promisify((...args) => file.end(...args))(message)
 	
 	res.statusCode = 303
-	res.setHeader("location", `/${name}`);
+	res.setHeader("location", `/${name}`)
 	
 	res.end()
 }
