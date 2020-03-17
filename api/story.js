@@ -30,25 +30,31 @@ let template = async (write, {title, main, name, feedback}) =>
 				<script type="module" src="/script.js"></script>
 			</head>
 			<body>
-				<input type="checkbox" class="option" id="typesetting" disabled>
-				<input type="checkbox" class="option" id="typesetting-pull" disabled checked>
-				<input type="checkbox" class="option" id="typesetting-hyphens" disabled checked>
+				<input type="checkbox" id="capitalization" class="option">
 				<input type="radio" class="option" name="guidelines" id="guidelines-none" checked>
 				<input type="radio" class="option" name="guidelines" id="guidelines-3">
 				<input type="radio" class="option" name="guidelines" id="guidelines-4">
 				<input type="radio" class="option" name="guidelines" id="guidelines-5">
-				<input type="checkbox" id="capitalization" class="option">
-				<details id="options">
-					<summary>layout configurations</summary>
+				<input type="checkbox" class="option" id="typesetting" disabled>
+				<input type="checkbox" class="option" id="typesetting-pull" disabled checked>
+				<input type="checkbox" class="option" id="typesetting-hyphens" disabled checked>
+				<p tabindex="-1" id="display-options">layout configurations</p>
+				<div id="options">
 					<p>
 						<label for="capitalization" id="capitalization-label">enable capitalization</label>
 					</p>
-					<p class="radio-buttons">
+					<p>
 						guidelines:
-						<label for="guidelines-none" id="guidelines-none-label">disabled</label>
-						<label for="guidelines-3" id="guidelines-3-label">3</label>
-						<label for="guidelines-4" id="guidelines-4-label">4</label>
-						<label for="guidelines-5" id="guidelines-5-label">5</label>
+						&#x20;
+						<span class="radio-buttons" id="guidelines-labels">
+							<label for="guidelines-none" id="guidelines-none-label">disabled</label>
+							&#x20;
+							<label for="guidelines-3" id="guidelines-3-label">3</label>
+							&#x20;
+							<label for="guidelines-4" id="guidelines-4-label">4</label>
+							&#x20;
+							<label for="guidelines-5" id="guidelines-5-label">5</label>
+						</span>
 					</p>
 					<p>
 						<label for="typesetting" id="typesetting-label">custom typesetting</label>
@@ -59,15 +65,15 @@ let template = async (write, {title, main, name, feedback}) =>
 					<p>
 						<label for="typesetting-hyphens" id="typesetting-hyphens-label">hyphenation</label>
 					</p>
-				</details>
+				</div>
 				<main>
 					${main}
 					<footer>
 						This story is licensed under <a href="https://creativecommons.org/licenses/by/4.0" rel="license">Creative Commons Attribution 4.0 International</a>.
 					</footer>
 				</main>
-				<p>
-					<a href="/" id="list">list of stories</a>
+				<p id="list">
+					<a href="/">list of stories</a>
 				</p>
 				<h2>feedback</h2>
 				<form method="POST" action="/${name}/feedback">

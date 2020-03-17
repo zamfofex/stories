@@ -48,6 +48,7 @@ body
 	overflow-y: scroll;
 	line-height: 1.75em;
 	text-align: justify;
+	position: relative;
 }
 
 ::selection
@@ -124,7 +125,7 @@ a, button
 	text-decoration: underline;
 }
 
-a:focus, button:focus, summary:focus
+a:focus, button:focus
 {
 	outline: 0.0625em solid #741;
 }
@@ -244,10 +245,11 @@ main > footer
 	border-radius: 0.125em;
 }
 
-#options .radio-buttons label { margin-left: 1em; }
+#options .radio-buttons label:not(:first-child),
+#options .radio-buttons
+{ margin-left: 1em; }
 
 #options .radio-buttons label::before { border-radius: 100%; }
-
 
 #capitalization:checked ~ #options #capitalization-label::before,
 #guidelines-none:checked ~ #options #guidelines-none-label::before,
@@ -262,13 +264,13 @@ main > footer
 }
 
 #capitalization:focus ~ #options #capitalization-label,
-#guidelines-none:focus ~ #options #guidelines-none-label,
-#guidelines-3:focus ~ #options #guidelines-3-label,
-#guidelines-4:focus ~ #options #guidelines-4-label,
-#guidelines-5:focus ~ #options #guidelines-5-label,
-#typesetting-focus ~ #options #typesetting-label,
+#typesetting:focus ~ #options #typesetting-label,
 #typesetting-pull:focus ~ #options #typesetting-pull-label,
 #typesetting-hyphens:focus ~ #options #typesetting-hyphens-label,
+#guidelines-none:focus ~ #options #guidelines-labels,
+#guidelines-3:focus ~ #options #guidelines-labels,
+#guidelines-4:focus ~ #options #guidelines-labels,
+#guidelines-5:focus ~ #options #guidelines-labels
 {
 	outline: 0.0625em solid #741;
 }
@@ -290,18 +292,30 @@ main > footer
 
 #options
 {
-	width: max-content;
-	margin-left: auto;
+	display: none;
+	right: 1em;
+	top: 2.5em;
+	position: absolute;
+	border: 0.0625em solid #741;
+	border-radius: 0.5em;
+	padding: 0 1em;
+	background: #FED;
+	max-width: calc(100% - 2em);
 }
-
-#options > summary { text-align: right; }
-
-summary { cursor: pointer; }
 
 #options label
 {
 	cursor: pointer;
 	white-space: nowrap;
+}
+
+#display-options
+{
+	text-align: right;
+	cursor: pointer;
+	outline: none;
+	margin-left: auto;
+	width: max-content;
 }
 
 #capitalization:not(:checked) ~ main,
@@ -320,6 +334,12 @@ summary { cursor: pointer; }
 #guidelines-5:checked ~ main p
 {
 	background: linear-gradient(#FED, #FED 1em, #FED0 1em, #FED0 calc(100% - 4em), #FED calc(100% - 4em)), repeating-linear-gradient(#7418 0.0625em, #7418 0.125em, #7410 0.125em, #7410 calc(var(--guidelines) * 1.75em + 0.0625em));
+}
+
+:focus ~ #options,
+#options:hover
+{
+	display: block;
 }
 
 ul, ol, li { display: block; margin: 0.75em 0; }
@@ -370,7 +390,8 @@ ol > li::before
 		text-align: justify;
 	}
 	
-	#options, form, ::-webkit-scrollbar, #list { display: none; }
+	#options, form, ::-webkit-scrollbar, #list, #display-options
+	{ display: none; }
 	
 	@media (max-width: 32em)
 	{
