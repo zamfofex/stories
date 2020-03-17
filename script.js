@@ -13,9 +13,6 @@ let font = element =>
 	return `${fontStyle} ${fontWeight} ${fontSize} ${fontFamily}`
 }
 
-let defaultFont = font(document.body)
-ctx.font = defaultFont
-
 let typesetting = document.querySelector("#typesetting")
 let pull = document.querySelector("#typesetting-pull")
 let hyphens = document.querySelector("#typesetting-hyphens")
@@ -52,9 +49,15 @@ let prepare = () =>
 {
 	typesetting.removeEventListener("change", prepare)
 	typesetting.addEventListener("change", typeset)
+	pull.addEventListener("change", typeset)
+	hyphens.addEventListener("change", typeset)
+	capitalization.addEventListener("change", typeset)
+	addEventListener("resize", typeset)
+	
+	ctx.font = font(document.body)
 	
 	let computedWidths = {}
-
+	
 	for (let letter in ratios)
 		computedWidths[letter] = measure(letter)
 	
@@ -288,7 +291,3 @@ let typeset = () =>
 
 typesetting.disabled = false
 typesetting.addEventListener("change", prepare)
-pull.addEventListener("change", typeset)
-hyphens.addEventListener("change", typeset)
-capitalization.addEventListener("change", typeset)
-addEventListener("resize", typeset)
