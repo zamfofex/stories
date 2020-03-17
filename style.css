@@ -314,8 +314,13 @@ main > footer
 	text-align: right;
 	cursor: pointer;
 	outline: none;
-	margin-left: auto;
+	margin: 0 0 0 auto;
 	width: max-content;
+}
+
+#display-options:focus
+{
+	pointer-events: none;
 }
 
 #capitalization:not(:checked) ~ main,
