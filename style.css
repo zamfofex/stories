@@ -429,12 +429,6 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	white-space: pre;
 }
 
-#typesetting:checked ~ main .break > .ws
-{
-	display: inline-block;
-	width: 0;
-}
-
 #typesetting:checked ~ main .last-line
 { word-spacing: normal; }
 
