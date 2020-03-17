@@ -117,7 +117,11 @@ let prepare = () =>
 			{
 				let {syllable, shy, whitespace} = syllables[i]
 				
-				let [whole, left, letters, right] = syllable.match(/^([\.,“”‘’—–‐:;TYCcOo]?)(.*?)([\.,“”‘’—–‐:;]?)$/)
+				let normalized
+				if (capitalization.checked) normalized = syllable
+				else normalized = syllable.toLowerCase()
+				
+				let [whole, left, letters, right] = normalized.match(/^([\.,“”‘’—–‐:;TYCcOo]?)(.*?)([\.,“”‘’—–‐:;]?)$/)
 				if (!letters) right = left
 				if (shy) right = ""
 				let leftWidth = computedWidths[left] || 0
