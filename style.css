@@ -124,7 +124,7 @@ a, button
 	text-decoration: underline;
 }
 
-a:focus, button:focus
+a:focus, button:focus, summary:focus
 {
 	outline: 0.0625em solid #741;
 }
@@ -221,7 +221,7 @@ header
 	margin-left: 2em;
 }
 
-footer
+main > footer
 {
 	font-style: italic;
 }
@@ -233,7 +233,7 @@ footer
 	pointer-events: none;
 }
 
-.option-label::before
+#options label::before
 {
 	content: "";
 	width: 0.5em;
@@ -244,50 +244,63 @@ footer
 	border-radius: 0.125em;
 }
 
-#guidelines-none-label::before,
-#guidelines-3-label::before,
-#guidelines-4-label::before,
-#guidelines-5-label::before
+#options .radio-buttons label { margin-left: 1em; }
+
+#options .radio-buttons label::before { border-radius: 100%; }
+
+
+#capitalization:checked ~ #options #capitalization-label::before,
+#guidelines-none:checked ~ #options #guidelines-none-label::before,
+#guidelines-3:checked ~ #options #guidelines-3-label::before,
+#guidelines-4:checked ~ #options #guidelines-4-label::before,
+#guidelines-5:checked ~ #options #guidelines-5-label::before,
+#typesetting:checked ~ #options #typesetting-label::before,
+#typesetting-pull:checked ~ #options #typesetting-pull-label::before,
+#typesetting-hyphens:checked ~ #options #typesetting-hyphens-label::before
 {
-	border-radius: 100%;
+	background: radial-gradient(#741 40%, #7410 40%);
 }
 
-#capitalization:checked ~ #options #capitalization-label::before
-{ background: radial-gradient(#741 40%, #7410 40%); }
+#capitalization:focus ~ #options #capitalization-label,
+#guidelines-none:focus ~ #options #guidelines-none-label,
+#guidelines-3:focus ~ #options #guidelines-3-label,
+#guidelines-4:focus ~ #options #guidelines-4-label,
+#guidelines-5:focus ~ #options #guidelines-5-label,
+#typesetting-focus ~ #options #typesetting-label,
+#typesetting-pull:focus ~ #options #typesetting-pull-label,
+#typesetting-hyphens:focus ~ #options #typesetting-hyphens-label,
+{
+	outline: 0.0625em solid #741;
+}
 
-#capitalization:focus ~ #options #capitalization-label
-{ outline: 0.0625em solid #741; }
+#typesetting:disabled ~ #options #typesetting-label::before,
+#typesetting-pull:disabled ~ #options #typesetting-pull-label::before,
+#typesetting-hyphens:disabled ~ #options #typesetting-hyphens-label::before
+{
+	background: none;
+}
 
-#guidelines-none:checked ~ #options #guidelines-none-label::before
-{ background: radial-gradient(#741 40%, #7410 40%); }
+#typesetting:disabled ~ #options #typesetting-label,
+#typesetting-pull:disabled ~ #options #typesetting-pull-label,
+#typesetting-hyphens:disabled ~ #options #typesetting-hyphens-label
+{
+	opacity: 0.5;
+	cursor: default;
+}
 
-#guidelines-none:focus ~ #options #guidelines-none-label
-{ outline: 0.0625em solid #741; }
+#options
+{
+	width: max-content;
+	margin-left: auto;
+}
 
-#guidelines-3:checked ~ #options #guidelines-3-label::before
-{ background: radial-gradient(#741 40%, #7410 40%); }
+#options > summary { text-align: right; }
 
-#guidelines-3:focus ~ #options #guidelines-3-label
-{ outline: 0.0625em solid #741; }
-
-#guidelines-4:checked ~ #options #guidelines-4-label::before
-{ background: radial-gradient(#741 40%, #7410 40%); }
-
-#guidelines-4:focus ~ #options #guidelines-4-label
-{ outline: 0.0625em solid #741; }
-
-#guidelines-5:checked ~ #options #guidelines-5-label::before
-{ background: radial-gradient(#741 40%, #7410 40%); }
-
-#guidelines-5:focus ~ #options #guidelines-5-label
-{ outline: 0.0625em solid #741; }
-
-#options { text-align: right; }
+summary { cursor: pointer; }
 
 #options label
 {
 	cursor: pointer;
-	margin-left: 1em;
 	white-space: nowrap;
 }
 
@@ -302,7 +315,9 @@ footer
 #guidelines-4:checked ~ main { --guidelines: 4; }
 #guidelines-5:checked ~ main { --guidelines: 5; }
 
-.guidelines:checked ~ main p
+#guidelines-3:checked ~ main p,
+#guidelines-4:checked ~ main p,
+#guidelines-5:checked ~ main p
 {
 	background: linear-gradient(#FED, #FED 1em, #FED0 1em, #FED0 calc(100% - 4em), #FED calc(100% - 4em)), repeating-linear-gradient(#7418 0.0625em, #7418 0.125em, #7410 0.125em, #7410 calc(var(--guidelines) * 1.75em + 0.0625em));
 }
@@ -392,3 +407,68 @@ ol > li::before
 article, blockquote { break-inside: avoid; }
 
 h1, h2, h3, h4, h5, h6 { break-after: avoid; }
+
+ #typesetting:checked ~ main .p
+{
+	white-space: nowrap;
+	text-align-last: justify;
+	word-spacing: -0.2em;
+}
+
+#typesetting:checked ~ main .p::after
+{
+	content: "";
+	display: inline-block;
+	width: 100%;
+	height: 0;
+}
+
+#typesetting:checked ~ main .break > .br::after
+{
+	content: "\A";
+	white-space: pre;
+}
+
+#typesetting:checked ~ main .break > .ws
+{
+	display: inline-block;
+	width: 0;
+}
+
+#typesetting:checked ~ main .last-line
+{ word-spacing: normal; }
+
+#typesetting:checked ~ #typesetting-pull:checked ~ main .break::before
+{
+	content: "";
+	margin-right: var(--pull-left);
+	display: inline-block;
+}
+
+#typesetting:checked ~ #typesetting-pull:checked ~ main .break::after
+{
+	content: "";
+	margin-left: var(--pull-right);
+	display: inline-block;
+}
+
+#typesetting:checked ~ main .shy.break::before { content: "\2010" !important; }
+
+.shy, .glue, .br
+{
+	display: contents;
+}
+
+body > footer
+{
+	text-align: center;
+	font-size: 0.75em;
+	content: "";
+}
+
+main
+{
+	padding: 0 2em;
+	margin: 0 -2em;
+	overflow: hidden;
+}

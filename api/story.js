@@ -27,26 +27,39 @@ let template = async (write, {title, main, name, feedback}) =>
 				<title>${title} — zambonifofex’s stories</title>
 				<meta name="viewport" content="width=device-width">
 				<link rel="stylesheet" href="/style.css">
+				<script type="module" src="/script.js"></script>
 			</head>
 			<body>
-				<form id="options"></form>
-				<input type="radio" class="option guidelines" name="guidelines" form="form" id="guidelines-none" checked>
-				<input type="radio" class="option guidelines" name="guidelines" form="form" id="guidelines-3" data-guidelines="3">
-				<input type="radio" class="option guidelines" name="guidelines" form="form" id="guidelines-4" data-guidelines="4">
-				<input type="radio" class="option guidelines" name="guidelines" form="form" id="guidelines-5" data-guidelines="5">
+				<input type="checkbox" class="option" id="typesetting" disabled>
+				<input type="checkbox" class="option" id="typesetting-pull" disabled checked>
+				<input type="checkbox" class="option" id="typesetting-hyphens" disabled checked>
+				<input type="radio" class="option" name="guidelines" id="guidelines-none" checked>
+				<input type="radio" class="option" name="guidelines" id="guidelines-3">
+				<input type="radio" class="option" name="guidelines" id="guidelines-4">
+				<input type="radio" class="option" name="guidelines" id="guidelines-5">
 				<input type="checkbox" id="capitalization" class="option">
-				<div id="options">
+				<details id="options">
+					<summary>layout configurations</summary>
 					<p>
-						<label class="option-label" for="capitalization" id="capitalization-label">enable capitalization</label>
+						<label for="capitalization" id="capitalization-label">enable capitalization</label>
 					</p>
-					<p>
+					<p class="radio-buttons">
 						guidelines:
-						<label class="option-label" for="guidelines-none" id="guidelines-none-label">disabled</label>
-						<label class="option-label" for="guidelines-3" id="guidelines-3-label">3</label>
-						<label class="option-label" for="guidelines-4" id="guidelines-4-label">4</label>
-						<label class="option-label" for="guidelines-5" id="guidelines-5-label">5</label>
+						<label for="guidelines-none" id="guidelines-none-label">disabled</label>
+						<label for="guidelines-3" id="guidelines-3-label">3</label>
+						<label for="guidelines-4" id="guidelines-4-label">4</label>
+						<label for="guidelines-5" id="guidelines-5-label">5</label>
 					</p>
-				</div>
+					<p>
+						<label for="typesetting" id="typesetting-label">custom typesetting</label>
+					</p>
+					<p>
+						<label for="typesetting-pull" id="typesetting-pull-label">optical alignment</label>
+					</p>
+					<p>
+						<label for="typesetting-hyphens" id="typesetting-hyphens-label">hyphenation</label>
+					</p>
+				</details>
 				<main>
 					${main}
 					<footer>
@@ -66,6 +79,7 @@ let template = async (write, {title, main, name, feedback}) =>
 					</p>
 				</form>
 				${feedback}
+				<footer>this website makes uses of <a href="/licenses.txt">various free software</a>.</footer>
 			</body>
 		</html>
 	`

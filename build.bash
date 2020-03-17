@@ -13,3 +13,7 @@ curl -L https://github.com/cyrealtype/Lora-Cyrillic/releases/download/v2.202/Lor
 curl -L https://github.com/Omnibus-Type/Asap/raw/master/fonts/webfonts/woff2/Asap-Italic.woff2 --output public/fonts/asap-italic.woff2
 
 mv style.css public
+
+npx browserify script.js -p esmify > public/script.js
+
+yarn licenses generate-disclaimer > public/licenses.txt

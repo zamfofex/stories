@@ -4,7 +4,13 @@
 	},
 	"dependencies": {
 		"@google-cloud/storage": "4.5.0",
-		"commonmark": "0.29.1"
+		"commonmark": "0.29.1",
+		"esmify": "2.1.1",
+		"browserify": "16.5.0",
+		"hypher": "0.2.5",
+		"hyphenation.en-us": "0.2.1",
+		"tex-linebreak": "0.5.2",
+		"linebreak": "1.0.2"
 	},
 	"license": "0BSD"
 }
