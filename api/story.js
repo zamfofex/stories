@@ -85,7 +85,7 @@ let template = async (write, {title, main, name, feedback}) =>
 					</p>
 				</form>
 				${feedback}
-				<footer>this website makes uses of <a href="/licenses.txt">various free software</a>.</footer>
+				<footer>this website makes use of <a href="/licenses.txt">various free software</a>.</footer>
 			</body>
 		</html>
 	`
