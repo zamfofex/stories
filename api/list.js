@@ -5,10 +5,10 @@ import bucket from "./_bucket.js"
 let parser = new md.Parser()
 let renderer = new md.HtmlRenderer()
 
-let unindent = async (strings, ...values) =>
+let unindent = (strings, ...values) =>
 	strings.map((string, i) => (i ? values[i - 1] : "") + string.replace(/[\t\n]/g, "")).join("")
 
-let process = async md => unindent`
+let process = md => unindent`
 	<!doctype html>
 	<html lang="en">
 		<head>
