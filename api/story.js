@@ -95,98 +95,89 @@ let template = async (write, {title, main, name, feedback}) =>
 let formatDate = date =>
 {
 	let result = ""
+	let title = ""
+	
+	let add = (result_, title_ = result_) => { result += result_ ; title += title_ }
 	
 	switch (date.getUTCDay())
 	{
-		case 0: result += "Sunday" ; break
-		case 1: result += "Monday" ; break
-		case 2: result += "Tuesday" ; break
-		case 3: result += "Wednesday" ; break
-		case 4: result += "Thursday" ; break
-		case 5: result += "Friday" ; break
-		case 6: result += "Saturday" ; break
+		case 0: add("Sunday") ; break
+		case 1: add("Monday") ; break
+		case 2: add("Tuesday") ; break
+		case 3: add("Wednesday") ; break
+		case 4: add("Thursday") ; break
+		case 5: add("Friday") ; break
+		case 6: add("Saturday") ; break
 	}
 	
-	result += ", "
-	
-	switch (date.getUTCMonth() + 1)
-	{
-		case 1: result += "January" ; break
-		case 2: result += "February" ; break
-		case 3: result += "March" ; break
-		case 4: result += "April" ; break
-		case 5: result += "May" ; break
-		case 6: result += "June" ; break
-		case 7: result += "July" ; break
-		case 8: result += "August" ; break
-		case 9: result += "September" ; break
-		case 10: result += "October" ; break
-		case 11: result += "November" ; break
-		case 12: result += "December" ; break
-	}
+	add(", the ")
 	
 	let day = date.getUTCDate()
 	
-	let ordenal
-	let full = true
-	
 	switch (day)
 	{
-		case 1: ordenal = "first" ; break
-		case 2: ordenal = "second" ; break
-		case 3: ordenal = "third" ; break
-		case 4: ordenal = "fourth" ; break
-		case 5: ordenal = "fifth" ; break
-		case 6: ordenal = "sixth" ; break
-		case 7: ordenal = "seventh" ; break
-		case 8: ordenal = "eighth" ; break
-		case 9: ordenal = "ninth" ; break
-		case 10: ordenal = "tenth" ; break
-		case 11: ordenal = "eleventh" ; break
-		case 12: ordenal = "twelfth" ; break
-		case 13: ordenal = "thirteenth" ; break
-		case 14: ordenal = "fourteenth" ; break
-		case 15: ordenal = "fifteenth" ; break
-		case 16: ordenal = "sixteenth" ; break
-		case 17: ordenal = "seventeenth" ; break
-		case 18: ordenal = "eighteenth" ; break
-		case 19: ordenal = "nineteenth" ; break
-		case 20: ordenal = "twentieth" ; break
-		case 30: ordenal = "thirtieth" ; break
+		case 1: add("first") ; break
+		case 2: add("second") ; break
+		case 3: add("third") ; break
+		case 4: add("fourth") ; break
+		case 5: add("fifth") ; break
+		case 6: add("sixth") ; break
+		case 7: add("seventh") ; break
+		case 8: add("eighth") ; break
+		case 9: add("ninth") ; break
+		case 10: add("tenth") ; break
+		case 11: add("eleventh") ; break
+		case 12: add("twelfth") ; break
+		case 13: add("thirteenth") ; break
+		case 14: add("fourteenth") ; break
+		case 15: add("fifteenth") ; break
+		case 16: add("sixteenth") ; break
+		case 17: add("seventeenth") ; break
+		case 18: add("eighteenth") ; break
+		case 19: add("nineteenth") ; break
+		case 20: add("twentieth") ; break
+		case 30: add("thirtieth") ; break
 		default:
-			full = false
+			add(day)
 			switch (day % 10)
 			{
-				case 1: ordenal = "st" ; break
-				case 2: ordenal = "nd" ; break
-				case 3: ordenal = "rd" ; break
-				default: ordenal = "th" ; break
+				case 1: add("<sup>st</sup>", "st") ; break
+				case 2: add("<sup>nd</sup>", "nd") ; break
+				case 3: add("<sup>rd</sup>", "rd") ; break
+				default: add("<sup>th</sup>", "th") ; break
 			}
 			break
 	}
 	
-	let year = date.getUTCFullYear()
+	add(" of ")
 	
-	let rest = " at "
-	
-	rest += date.getUTCHours().toString().padStart(2, "0") + ":"
-	rest += date.getUTCMinutes().toString().padStart(2, "0") + ":"
-	rest += date.getUTCSeconds().toString().padStart(2, "0") + " UTC"
-	
-	if (full)
+	switch (date.getUTCMonth() + 1)
 	{
-		return (
-			`<time datetime="${date.toISOString()}" title="${result} ${ordenal} ${year + rest}">` +
-			`${result} ${ordenal} ${year}</time>`
-		)
+		case 1: add("January") ; break
+		case 2: add("February") ; break
+		case 3: add("March") ; break
+		case 4: add("April") ; break
+		case 5: add("May") ; break
+		case 6: add("June") ; break
+		case 7: add("July") ; break
+		case 8: add("August") ; break
+		case 9: add("September") ; break
+		case 10: add("October") ; break
+		case 11: add("November") ; break
+		case 12: add("December") ; break
 	}
-	else
-	{
-		return (
-			`<time datetime="${date.toISOString()}" title="${result} ${day + ordenal} ${year + rest}">` +
-			`${result} ${day}<sup>${ordenal}</sup> ${year}</time>`
-		)
-	}
+	
+	add(" of " + date.getUTCFullYear())
+	
+	title += " at "
+	
+	let hours = date.getUTCHours()
+	title += hours.toString().padStart(2, "0") + ":"
+	title += date.getUTCMinutes().toString().padStart(2, "0") + " "
+	if (0 < hours && hours < 13) title += "a.m. (UTC)"
+	else title += "UTC"
+	
+	return `<time datetime="${date.toISOString()}" title="${title}">${result}</time>`
 }
 
 let parser = new md.Parser()
