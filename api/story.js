@@ -30,6 +30,7 @@ let template = async (write, {title, main, name, feedback}) =>
 				<script type="module" src="/script.js"></script>
 			</head>
 			<body>
+				<p tabindex="-1" id="display-options">layout configurations</p>
 				<input type="checkbox" id="capitalization" class="option">
 				<input type="radio" class="option" name="guidelines" id="guidelines-none" checked>
 				<input type="radio" class="option" name="guidelines" id="guidelines-3">
@@ -38,7 +39,6 @@ let template = async (write, {title, main, name, feedback}) =>
 				<input type="checkbox" class="option" id="typesetting" disabled>
 				<input type="checkbox" class="option" id="typesetting-pull" disabled checked>
 				<input type="checkbox" class="option" id="typesetting-hyphens" disabled checked>
-				<p tabindex="-1" id="display-options">layout configurations</p>
 				<div id="options">
 					<p>
 						<label for="capitalization" id="capitalization-label">enable capitalization</label>
