@@ -44,7 +44,7 @@ let template = async (write, {title, main, name, feedback}) =>
 						<label for="capitalization" id="capitalization-label">enable capitalization</label>
 					</p>
 					<p>
-						guidelines:
+						guide rulers:
 						&#x20;
 						<span class="radio-buttons" id="guidelines-labels">
 							<label for="guidelines-none" id="guidelines-none-label">disabled</label>
