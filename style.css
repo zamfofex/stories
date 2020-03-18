@@ -245,11 +245,11 @@ main > footer
 	border-radius: 0.125em;
 }
 
-#options .radio-buttons label:not(:first-child),
-#options .radio-buttons
-{ margin-left: 1em; }
+.radio-buttons label { margin-left: 1em; }
 
 #options .radio-buttons label::before { border-radius: 100%; }
+
+.radio-buttons { display: inline-block; }
 
 #capitalization:checked ~ #options #capitalization-label::before,
 #guidelines-none:checked ~ #options #guidelines-none-label::before,
