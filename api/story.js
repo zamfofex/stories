@@ -78,7 +78,7 @@ let template = async (write, {title, main, name, feedback}) =>
 				<h2>feedback</h2>
 				<form method="POST" action="/${name}/feedback">
 					<p>
-						<textarea name="message" required="" minlength="12"></textarea>
+						<textarea name="message" required minlength="12"></textarea>
 					</p>
 					<p class="submit">
 						<button>submit feedback</button>
