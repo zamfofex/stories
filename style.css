@@ -292,7 +292,6 @@ main > footer
 
 #options
 {
-	display: none;
 	right: 1em;
 	top: 2.5em;
 	position: absolute;
@@ -301,6 +300,11 @@ main > footer
 	padding: 0 1em;
 	background: #FED;
 	max-width: calc(100% - 2em);
+	opacity: 0;
+	pointer-events: none;
+	transform: translate(0, 1em);
+	transition: 0.25s ease transform, 0.25s ease opacity;
+	box-shadow: #3333 0 0 1em;
 }
 
 #options label
@@ -316,6 +320,7 @@ main > footer
 	outline: none;
 	margin: 0 0 0 auto;
 	width: max-content;
+	text-decoration: underline;
 }
 
 #display-options:focus
@@ -345,6 +350,10 @@ main > footer
 #options:hover
 {
 	display: block;
+	opacity: unset;
+	pointer-events: unset;
+	transform: unset;
+	transition: 0.25s ease transform, 0.125s ease opacity;
 }
 
 ul, ol, li { display: block; margin: 0.75em 0; }
