@@ -2,95 +2,98 @@ import md from "commonmark"
 import download from "./_download.js"
 import bucket from "./_bucket.js"
 
-let unindent = write => async (strings, ...values) =>
+let prepare = (strings, ...values) =>
 {
-	let i = 0
-	for (let string of strings)
+	let unindented = strings.map(string => string.replace(/[\t\n]/g, ""))
+	return (write, object) =>
 	{
-		write(string.replace(/[\t\n]/g, ""))
-		let value = await values[i]
-		if (typeof value === "function")
-			await value()
-		else
-			write(value || "")
-		i++
+		write("<!doctype html>\n")
+		
+		let length = values.length
+		for (let i = 0 ; i < length ; i++)
+		{
+			write(unindented[i])
+			let value = object[values[i]]
+			if (typeof value === "function")
+				value()
+			else
+				write(value)
+		}
+		
+		write(unindented[length])
+		write("\n")
 	}
 }
 
-let template = async (write, {title, main, name, feedback}) =>
-{
-	write("<!doctype html>\n")
-	await unindent(write)`
-		<html lang="en">
-			<head>
-				<meta charset="utf-8">
-				<title>${title} — zambonifofex’s stories</title>
-				<meta name="viewport" content="width=device-width">
-				<link rel="stylesheet" href="/style.css">
-				<script type="module" src="/script.js"></script>
-			</head>
-			<body>
-				<p tabindex="-1" id="display-options">layout configurations</p>
-				<input type="checkbox" id="capitalization" class="option">
-				<input type="radio" class="option" name="guidelines" id="guidelines-none" checked>
-				<input type="radio" class="option" name="guidelines" id="guidelines-3">
-				<input type="radio" class="option" name="guidelines" id="guidelines-4">
-				<input type="radio" class="option" name="guidelines" id="guidelines-5">
-				<input type="checkbox" class="option" id="typesetting" disabled>
-				<input type="checkbox" class="option" id="typesetting-pull" disabled checked>
-				<input type="checkbox" class="option" id="typesetting-hyphens" disabled checked>
-				<div id="options">
-					<p>
-						<label for="capitalization" id="capitalization-label">enable capitalization</label>
-					</p>
-					<p>
-						guide rulers:
-						&#x20;
-						<span class="radio-buttons" id="guidelines-labels">
-							<label for="guidelines-none" id="guidelines-none-label">disabled</label>
-							&#x20;
-							<label for="guidelines-3" id="guidelines-3-label">3</label>
-							&#x20;
-							<label for="guidelines-4" id="guidelines-4-label">4</label>
-							&#x20;
-							<label for="guidelines-5" id="guidelines-5-label">5</label>
-						</span>
-					</p>
-					<p>
-						<label for="typesetting" id="typesetting-label">custom typesetting</label>
-					</p>
-					<p>
-						<label for="typesetting-pull" id="typesetting-pull-label">optical alignment</label>
-					</p>
-					<p>
-						<label for="typesetting-hyphens" id="typesetting-hyphens-label">hyphenation</label>
-					</p>
-				</div>
-				<main>
-					${main}
-					<footer>
-						This story is licensed under <a href="https://creativecommons.org/licenses/by/4.0" rel="license">Creative Commons Attribution 4.0 International</a>.
-					</footer>
-				</main>
-				<p id="list">
-					<a href="/">list of stories</a>
+let template = prepare`
+	<html lang="en">
+		<head>
+			<meta charset="utf-8">
+			<title>${"title"} — zambonifofex’s stories</title>
+			<meta name="viewport" content="width=device-width">
+			<link rel="stylesheet" href="/style.css">
+			<script type="module" src="/script.js"></script>
+		</head>
+		<body>
+			<p tabindex="-1" id="display-options">layout configurations</p>
+			<input type="checkbox" id="capitalization" class="option">
+			<input type="radio" class="option" name="guidelines" id="guidelines-none" checked>
+			<input type="radio" class="option" name="guidelines" id="guidelines-3">
+			<input type="radio" class="option" name="guidelines" id="guidelines-4">
+			<input type="radio" class="option" name="guidelines" id="guidelines-5">
+			<input type="checkbox" class="option" id="typesetting" disabled>
+			<input type="checkbox" class="option" id="typesetting-pull" disabled checked>
+			<input type="checkbox" class="option" id="typesetting-hyphens" disabled checked>
+			<div id="options">
+				<p>
+					<label for="capitalization" id="capitalization-label">enable capitalization</label>
 				</p>
-				<h2>feedback</h2>
-				<form method="POST" action="/${name}/feedback">
-					<p>
-						<textarea name="message" required minlength="12"></textarea>
-					</p>
-					<p class="submit">
-						<button>submit feedback</button>
-					</p>
-				</form>
-				${feedback}
-				<footer>this website makes use of <a href="/licenses.txt">various free software</a>.</footer>
-			</body>
-		</html>
-	`
-	write("\n")
-}
+				<p>
+					guide rulers:
+					&#x20;
+					<span class="radio-buttons" id="guidelines-labels">
+						<label for="guidelines-none" id="guidelines-none-label">disabled</label>
+						&#x20;
+						<label for="guidelines-3" id="guidelines-3-label">3</label>
+						&#x20;
+						<label for="guidelines-4" id="guidelines-4-label">4</label>
+						&#x20;
+						<label for="guidelines-5" id="guidelines-5-label">5</label>
+					</span>
+				</p>
+				<p>
+					<label for="typesetting" id="typesetting-label">custom typesetting</label>
+				</p>
+				<p>
+					<label for="typesetting-pull" id="typesetting-pull-label">optical alignment</label>
+				</p>
+				<p>
+					<label for="typesetting-hyphens" id="typesetting-hyphens-label">hyphenation</label>
+				</p>
+			</div>
+			<main>
+				${"main"}
+				<footer>
+					This story is licensed under <a href="https://creativecommons.org/licenses/by/4.0" rel="license">Creative Commons Attribution 4.0 International</a>.
+				</footer>
+			</main>
+			<p id="list">
+				<a href="/">list of stories</a>
+			</p>
+			<h2>feedback</h2>
+			<form method="POST" action="/${"name"}/feedback">
+				<p>
+					<textarea name="message" required minlength="12"></textarea>
+				</p>
+				<p class="submit">
+					<button>submit feedback</button>
+				</p>
+			</form>
+			${"feedback"}
+			<footer>this website makes use of <a href="/licenses.txt">various free software</a>.</footer>
+		</body>
+	</html>
+`
 
 let formatDate = date =>
 {
@@ -264,9 +267,12 @@ export default async ({query: {name}}, res) =>
 		let match
 		
 		if (match = filename.match(feedbackRegex))
-			messages.push({file, time: Number(match[1])})
+			messages.push({
+				text: await download(file, processFeedback),
+				time: Number(match[1])
+			})
 		else if (match = filename.match(responsesRegex))
-			responses[match[1]] = file
+			responses[match[1]] = await download(file, processFeedback)
 	}
 	
 	messages.sort(({time: a}, {time: b}) => a - b)
@@ -275,7 +281,7 @@ export default async ({query: {name}}, res) =>
 	
 	let feedback = async () =>
 	{
-		for (let {file, time} of messages)
+		for (let {text, time} of messages)
 		{
 			res.write(`<article><header><p>On `)
 			
@@ -285,7 +291,7 @@ export default async ({query: {name}}, res) =>
 			
 			res.write(`, someone said:</p></header>`)
 			
-			res.write(await download(file, processFeedback))
+			res.write(text)
 			
 			res.write(`</article>`)
 			
@@ -293,7 +299,7 @@ export default async ({query: {name}}, res) =>
 			if (response)
 			{
 				res.write(`<article class="response"><header><p>Response from the author:</p></header>`)
-				res.write(await download(response, processFeedback))
+				res.write(response)
 				res.write(`</article>`)
 			}
 		}
