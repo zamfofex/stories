@@ -14,6 +14,15 @@ curl -L https://github.com/Omnibus-Type/Asap/raw/master/fonts/webfonts/woff2/Asa
 
 mv style.css public
 
-npx browserify script.js -p esmify > public/script.js
+npx google-closure-compiler \
+	--module_resolution=NODE \
+	--dependency_mode=PRUNE \
+	--compilation_level=ADVANCED \
+	--jscomp_off=checkTypes \
+	--process_common_js_modules \
+	--entry_point=script.js script.js \
+	'node_modules/**.{mjs,js,esm,cjs,json}' \
+	--language_out=ECMASCRIPT_2019 \
+	> public/script.js
 
 yarn licenses generate-disclaimer > public/licenses.txt

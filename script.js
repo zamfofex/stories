@@ -1,7 +1,7 @@
 import Hypher from "hypher"
 import english from "hyphenation.en-us"
-import {breakLines} from "tex-linebreak"
-import LineBreaker from "linebreak"
+import linebreak from "tex-linebreak"
+let {breakLines} = linebreak
 
 let hypher = new Hypher(english)
 
@@ -52,7 +52,7 @@ let prepare = () =>
 	pull.addEventListener("change", typeset)
 	hyphens.addEventListener("change", typeset)
 	capitalization.addEventListener("change", typeset)
-	addEventListener("resize", typeset)
+	window.addEventListener("resize", typeset)
 	
 	ctx.font = font(document.body)
 	
@@ -62,6 +62,8 @@ let prepare = () =>
 		computedWidths[letter] = measure(letter)
 	
 	hyphenWidth = measure("\u2010")
+	
+	let spaceWidth = measure(" ")
 	
 	for (let node of document.querySelectorAll("main > p, main > :not(footer) p"))
 	{
@@ -95,30 +97,19 @@ let prepare = () =>
 		
 		for (let textNode of textNodes)
 		{
-			let text = textNode.data
-			text = hypher.hyphenateText(text)
+			let text = hypher.hyphenateText(textNode.data)
 			
-			let breaker = new LineBreaker(text)
-			
-			let last = 0
-			let lbreak
-			
-			let syllables = []
-			while (lbreak = breaker.nextBreak())
-			{
-				let [whole, syllable, shy, whitespace] = text.slice(last, lbreak.position).match(/^(.*?)(\xAD?)(\s*)$/)
-				last = lbreak.position
-				
-				syllables.push({syllable, whitespace, shy})
-			}
+			let syllables = text.split(/([^\p{WSpace}\xAD]*[\p{L}\p{N}\p{Pc}]+[^\p{WSpace}\xAD]*)(\xAD?)/gu)
 			
 			let length = syllables.length
 			
 			currentNodes = []
 			
-			for (let i = 0 ; i < length ; i++)
+			for (let i = 1 ; i < length ; i += 3)
 			{
-				let {syllable, shy, whitespace} = syllables[i]
+				let syllable = syllables[i + 0]
+				let shy = syllables[i + 1]
+				let whitespace = syllables[i + 2]
 				
 				let normalized
 				if (capitalization.checked) normalized = syllable
@@ -154,19 +145,16 @@ let prepare = () =>
 				}
 				else
 				{
-					let spaceWidth
-					if (syllables[i+1])
-						spaceWidth = measure(syllable + " " + syllables[i+1].syllable) - measure(syllable) - measure(syllables[i+1].syllable)
-					else
-						spaceWidth = measure(" ")
-					
 					if (whitespace)
 					{
+						let next = syllables[i+3] || ""
+						let spaceWidth = measure(syllable + whitespace + next) - measure(syllable) - measure(next)
+						
 						let glue = document.createElement("span")
 						glue.classList.add("glue")
 						let ws = document.createElement("span")
 						ws.classList.add("ws")
-						ws.append(" ")
+						ws.append(whitespace)
 						glue.append(ws)
 						
 						let br = document.createElement("span")
