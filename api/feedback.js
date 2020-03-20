@@ -1,20 +1,15 @@
-import bucket from "./_bucket.js"
-import util from "util"
+import mongodb from "mongodb"
+let {MongoClient} = mongodb
 
 export default async ({query: {name}, body: {message}}, res) =>
 {
-	if (!(await bucket.file(`/${name}.md`).exists())[0] || !message)
-	{
-		res.statusCode = 400
-		res.end()
-		return
-	}
+	let mongo = await MongoClient.connect(process.env.mongo_url)
 	
-	let file = await bucket.file(`/${name}/${Date.now()}.md`).createWriteStream()
-	await util.promisify((...args) => file.end(...args))(message)
+	await mongo.db(process.env.mongo_database).collection("stories").updateOne({name}, {$push: {feedback: {date: new Date(), message}}})
+	
+	await mongo.close()
 	
 	res.statusCode = 303
 	res.setHeader("location", `/${name}`)
-	
 	res.end()
 }

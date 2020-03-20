@@ -3,7 +3,7 @@ zambonifofex’s stories
 
 A collection of *potentially mildly lewd*, yet *hopefully heartwarming* stories.
 
-This repository contains a [Now][ZEIT Now] [website] to hold the aforementioned style of stories, as well as anonymous feedback shared by readers, which are all stored in a [Google Cloud] [Storage][GCS] [bucket][GCS bucket].
+This repository contains a [Now] [website] to hold the aforementioned style of stories, as well as anonymous feedback shared by readers, which are all stored in [MongoDB] [Atlas].
 
 license
 ---
@@ -12,13 +12,12 @@ The software herein is licensed under the [0BSD license][0BSD], whereas the stor
 
 <!-- -- -- -- -- -- -->
 
-[ZEIT Now]: https://zeit.co/home "ZEIT Now"
+[Now]: https://zeit.co/home "ZEIT Now"
 
 [website]: https://fanstories.now.sh
 
-[Google Cloud]: https://cloud.google.com "Google Cloud website"
-[GCS]: https://cloud.google.com/storage "Google Cloud Storage website"
-[GCS bucket]: https://cloud.google.com/storage/docs/key-terms#buckets 'The definition of “bucket” in Google Cloud Storage’s documentation'
+[MongoDB]: https://mongodb.com
+[Atlas]: https://mongodb.com/cloud/atlas
 
 [0BSD]: license.md "the copy of the 0BSD license applied to the software"
 [CC BY 4.0]: https://creativecommons.org/licenses/by/4.0 "the CC BY 4.0 license in its website"

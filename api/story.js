@@ -1,6 +1,6 @@
 import md from "commonmark"
-import download from "./_download.js"
-import bucket from "./_bucket.js"
+import mongodb from "mongodb"
+let {MongoClient} = mongodb
 
 let prepare = (strings, ...values) =>
 {
@@ -185,7 +185,6 @@ let formatDate = date =>
 
 let parser = new md.Parser()
 let renderer = new md.HtmlRenderer({safe: true})
-let unsafeRenderer = new md.HtmlRenderer()
 
 let feedbackRegex = /^([1-9][0-9]*)\.md*$/
 let responsesRegex = /^([1-9][0-9]*)\/reply\.md$/
@@ -240,66 +239,45 @@ let processStory = md =>
 		break
 	}
 	
-	return {title: title.toLowerCase(), main: unsafeRenderer.render(tree)}
+	return {title: title.toLowerCase(), main: renderer.render(tree)}
 }
+
+let mongo
 
 export default async ({query: {name}}, res) =>
 {
-	let page = await download(bucket.file(`/${name}.md`), processStory, `/${name}.md`)
+	if (!mongo || !mongo.isConnected())
+		mongo = await MongoClient.connect(process.env.mongo_url)
 	
-	if (!page)
+	let story = await mongo.db(process.env.mongo_database).collection("stories").findOne({name})
+	
+	if (!story)
 	{
 		res.statusCode = 404
 		res.end()
 		return
 	}
 	
-	let length = name.length + 2
-	
-	let messages = []
-	
-	let responses = {}
-	
-	for (let file of (await bucket.getFiles({prefix: `/${name}/`}))[0])
-	{
-		let filename = file.metadata.name.slice(length)
-		
-		let match
-		
-		if (match = filename.match(feedbackRegex))
-			messages.push({
-				text: await download(file, processFeedback),
-				time: Number(match[1])
-			})
-		else if (match = filename.match(responsesRegex))
-			responses[match[1]] = await download(file, processFeedback)
-	}
-	
-	messages.sort(({time: a}, {time: b}) => a - b)
+	let page = processStory(story.text)
 	
 	res.setHeader("content-type", "text/html")
 	
 	let feedback = async () =>
 	{
-		for (let {text, time} of messages)
+		for (let {message, response, date} of story.feedback)
 		{
 			res.write(`<article><header><p>On `)
-			
-			let date = new Date(time)
-			
 			res.write(formatDate(date))
-			
 			res.write(`, someone said:</p></header>`)
 			
-			res.write(text)
+			res.write(processFeedback(message))
 			
 			res.write(`</article>`)
 			
-			let response = responses[time]
 			if (response)
 			{
 				res.write(`<article class="response"><header><p>Response from the author:</p></header>`)
-				res.write(response)
+				res.write(processFeedback(response))
 				res.write(`</article>`)
 			}
 		}

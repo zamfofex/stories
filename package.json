@@ -3,11 +3,11 @@
 		"build": "./build.bash"
 	},
 	"dependencies": {
-		"@google-cloud/storage": "4.5.0",
 		"commonmark": "0.29.1",
 		"hypher": "0.2.5",
 		"hyphenation.en-us": "0.2.1",
-		"tex-linebreak": "0.5.2"
+		"tex-linebreak": "0.5.2",
+		"mongodb": "3.5.5"
 	},
 	"license": "0BSD"
 }

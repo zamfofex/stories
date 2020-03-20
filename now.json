@@ -14,8 +14,8 @@
 	],
 	"env":
 	{
-		"google_credentials_json": "@google-credentials",
-		"bucket_name": "@bucket-name"
+		"mongo_database": "@mongo-database",
+		"mongo_url": "@mongo-url"
 	},
 	"github": {"silent": true}
 }
