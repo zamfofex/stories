@@ -249,12 +249,23 @@ export default async ({query: {name}}, res) =>
 	if (!mongo || !mongo.isConnected())
 		mongo = await MongoClient.connect(process.env.mongo_url)
 	
-	let story = await mongo.db(process.env.mongo_database).collection("stories").findOne({name})
+	let stories = mongo.db(process.env.mongo_database).collection("stories")
+	let story = await stories.findOne({name})
 	
 	if (!story)
 	{
-		res.statusCode = 404
-		res.end()
+		let other = await stories.findOne({aliases: name}, {name: true})
+		if (other)
+		{
+			res.statusCode = 307
+			res.setHeader("location", `/${other.name}`)
+			res.end()
+		}
+		else
+		{
+			res.statusCode = 404
+			res.end()
+		}
 		return
 	}
 	
