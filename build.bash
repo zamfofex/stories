@@ -17,11 +17,10 @@ mv style.css public
 npx google-closure-compiler \
 	--module_resolution=NODE \
 	--dependency_mode=PRUNE \
-	--compilation_level=ADVANCED \
-	--jscomp_off=checkTypes \
 	--process_common_js_modules \
 	--entry_point=script.js script.js \
 	'node_modules/**.{mjs,js,esm,cjs,json}' \
+	'scripts/*' \
 	--language_out=ECMASCRIPT_2019 \
 	> public/script.js
 

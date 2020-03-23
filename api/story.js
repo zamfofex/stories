@@ -51,7 +51,7 @@ let template = prepare`
 				<p>
 					guide rulers:
 					&#x20;
-					<span class="radio-buttons" id="guidelines-labels">
+					<span class="radio-group" id="guidelines-labels">
 						<label for="guidelines-none" id="guidelines-none-label">disabled</label>
 						&#x20;
 						<label for="guidelines-3" id="guidelines-3-label">3</label>
@@ -84,6 +84,17 @@ let template = prepare`
 			<form method="POST" action="/${"name"}/feedback">
 				<p>
 					<textarea name="message" required minlength="12"></textarea>
+				</p>
+				<p class="radio-group disabled">
+					<label>
+						<input type="radio" name="style" id="markdown" checked disabled>
+						markdown
+					</label>
+					&#x20;
+					<label>
+						<input type="radio" name="style" id="prosemirror" disabled>
+						prosemirror
+					</label>
 				</p>
 				<p class="submit">
 					<button>submit feedback</button>

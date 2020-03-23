@@ -7,7 +7,10 @@
 		"hypher": "0.2.5",
 		"hyphenation.en-us": "0.2.1",
 		"tex-linebreak": "0.5.2",
-		"mongodb": "3.5.5"
+		"mongodb": "3.5.5",
+		"prosemirror-markdown": "1.4.4",
+		"prosemirror-example-setup": "1.1.2",
+		"punycode": "2.1.1"
 	},
 	"license": "0BSD"
 }

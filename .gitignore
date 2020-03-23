@@ -10,3 +10,5 @@
 !build.bash
 !style.css
 !script.js
+!scripts
+!scripts/*
