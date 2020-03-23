@@ -99,7 +99,9 @@ let prepare = () =>
 		{
 			let text = hypher.hyphenateText(textNode.data)
 			
-			let syllables = text.split(/([^\p{WSpace}\xAD]*[\p{L}\p{N}\p{Pc}]+[^\p{WSpace}\xAD]*)(\xAD?)/gu)
+			// TODO: Use the upper line when Firefox supports Unicode property escapes.
+			// let syllables = text.split(/([^\p{WSpace}\xAD]*[\p{L}\p{N}\p{Pc}]+[^\p{WSpace}\xAD]*)(\xAD?)/gu)
+			let syllables = text.split(/([^\s\xAD]*[\w_]+[^\s\xAD]*)(\xAD?)/g)
 			
 			let length = syllables.length
 			
