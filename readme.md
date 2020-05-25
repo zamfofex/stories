@@ -3,7 +3,7 @@ zambonifofex’s stories
 
 A collection of *potentially mildly lewd*, yet *hopefully heartwarming* stories.
 
-This repository contains a [Now] [website] to hold the aforementioned style of stories, as well as anonymous feedback shared by readers, which are all stored in [MongoDB] [Atlas].
+This repository contains a [Vercel] [website] to hold the aforementioned style of stories, as well as anonymous feedback shared by readers, which are all stored in [MongoDB] [Atlas].
 
 license
 ---
@@ -12,7 +12,7 @@ The software herein is licensed under the [0BSD license][0BSD], whereas the stor
 
 <!-- -- -- -- -- -- -->
 
-[Now]: https://zeit.co/home "ZEIT Now"
+[Now]: https://vercel.com/home
 
 [website]: https://fanstories.now.sh
 
