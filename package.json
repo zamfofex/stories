@@ -9,8 +9,10 @@
 		"tex-linebreak": "0.5.2",
 		"mongodb": "3.5.5",
 		"prosemirror-markdown": "1.4.4",
-		"prosemirror-example-setup": "1.1.2",
-		"punycode": "2.1.1"
+		"prosemirror-example-setup": "1.1.2"
+	},
+	"resolutions": {
+		"prosemirror-markdown/markdown-it": "./commonmark-it"
 	},
 	"license": "0BSD"
 }

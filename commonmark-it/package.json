@@ -1,0 +1,6 @@
+{
+	"version": "0.0.1",
+	"license": "0BSD",
+	"type": "module",
+	"main": "main.js"
+}
