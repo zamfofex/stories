@@ -51,6 +51,7 @@ let template = prepare`
 				<p>
 					<label id="theme" class="disabled">
 						theme:
+						&#x20;
 						<select disabled>
 							<option value="milk">milk</option>
 							<option value="" selected>caramel</option>
