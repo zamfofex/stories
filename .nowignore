@@ -1,7 +1,7 @@
 *
 !/api
 !/api/*
-!/now.json
+!/vercel.json
 !/package.json
 !/build.bash
 !/style.css
