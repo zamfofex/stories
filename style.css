@@ -36,9 +36,12 @@
 
 body
 {
+	--text-color: #741;
+	--background-color: #FED;
+	--highlight-color: #7412;
 	font-family: "Lora", serif;
-	background: #FED;
-	color: #741;
+	background: var(--background-color);
+	color: var(--text-color);
 	margin: 2em auto;
 	padding: 0 2em;
 	width: 25em;
@@ -49,11 +52,33 @@ body
 	line-height: 1.75em;
 	text-align: justify;
 	position: relative;
+	transition: 0.5s ease --background-color, 0.5s ease --text-color;
+}
+
+body[data-theme="cocoa"]
+{
+	--text-color: #FDA;
+	--background-color: #531;
+	--highlight-color: #FDA3;
+}
+
+body[data-theme="milk"]
+{
+	--text-color: #532;
+	--background-color: #FDFAEE;
+	--highlight-color: #5322;
+}
+
+body[data-theme="coffee"]
+{
+	--text-color: #DB8;
+	--background-color: #310;
+	--highlight-color: #DB83;
 }
 
 ::selection
 {
-	background: #EDC;
+	background: var(--highlight-color);
 }
 
 html
@@ -99,7 +124,7 @@ p
 
 ::-webkit-scrollbar-thumb
 {
-	background: #741;
+	background: var(--text-color);
 	border-radius: 1em;
 }
 
@@ -118,16 +143,22 @@ hr
 	height: 1em;
 }
 
-a, button
+a, button, select
 {
 	all: unset;
 	cursor: pointer;
 	text-decoration: underline;
 }
 
+option
+{
+	background: initial;
+	color: initial;
+}
+
 a:focus, button:focus
 {
-	outline: 0.0625em solid #741;
+	outline: 0.0625em solid var(--text-color);
 }
 
 blockquote
@@ -142,7 +173,7 @@ blockquote::before
 	content: "";
 	width: 0.25em;
 	margin: 0.5em 0 0.5em;
-	background: #741;
+	background: var(--text-color);
 	border-radius: 1em;
 	position: absolute;
 	top: 0;
@@ -153,8 +184,8 @@ blockquote::before
 :not(pre) > code
 {
 	border-radius: 0.25em;
-	background: #EDC;
 	padding: 0.25em;
+	border: 0.0625em solid var(--text-color);
 }
 
 code, pre
@@ -166,9 +197,9 @@ pre, textarea
 {
 	padding: 0.5em 0.75em;
 	border-radius: 0.5em;
-	border: 0.125em solid #741;
+	border: 0.125em solid var(--text-color);
 	overflow: auto;
-	box-shadow: #3333 0 0 1em inset;
+	box-shadow: var(--highlight-color) 0 0 1em inset;
 	text-align: left;
 }
 
@@ -249,14 +280,14 @@ main > footer
 	pointer-events: none;
 }
 
-#options label::before,
+#options label[for]::before,
 input[type="checkbox"],
 input[type="radio"]
 {
 	content: "";
 	width: 0.5em;
 	height: 0.5em;
-	border: 0.0625em solid #741;
+	border: 0.0625em solid var(--text-color);
 	display: inline-block;
 	margin: 0 0.5em 0 0;
 	border-radius: 0.125em;
@@ -288,7 +319,7 @@ p.radio-group > label:first-child { margin-left: 0; }
 input[type="radio"]:checked,
 input[type="checkbox"]:checked
 {
-	background: radial-gradient(#741 40%, #7410 40%);
+	background: radial-gradient(var(--text-color) 40%, #0000 40%);
 }
 
 #capitalization:focus ~ #options #capitalization-label,
@@ -302,7 +333,7 @@ input[type="checkbox"]:checked
 :not(.radio-group) > label:focus-within,
 .radio-group:focus-within
 {
-	outline: 0.0625em solid #741;
+	outline: 0.0625em solid var(--text-color);
 }
 
 #typesetting:disabled ~ #options #typesetting-label::before,
@@ -326,10 +357,10 @@ input[type="checkbox"]:checked
 	right: 1em;
 	top: 2.5em;
 	position: absolute;
-	border: 0.0625em solid #741;
+	border: 0.0625em solid var(--text-color);
 	border-radius: 0.5em;
 	padding: 0 1em;
-	background: #FED;
+	background: var(--background-color);
 	max-width: calc(100% - 2em);
 	opacity: 0;
 	pointer-events: none;
@@ -372,7 +403,7 @@ label { cursor: pointer; }
 #guidelines-4:checked ~ main p,
 #guidelines-5:checked ~ main p
 {
-	background: linear-gradient(#FED, #FED 1em, #FED0 1em, #FED0 calc(100% - 4em), #FED calc(100% - 4em)), repeating-linear-gradient(#7418 0.0625em, #7418 0.125em, #7410 0.125em, #7410 calc(var(--guidelines) * 1.75em + 0.0625em));
+	background: linear-gradient(var(--background-color), var(--background-color) 1em, #0000 1em, #0000 calc(100% - 4em), var(--background-color) calc(100% - 4em)), repeating-linear-gradient(var(--text-color) 0.0625em, var(--text-color) 0.125em, #0000 0.125em, #0000 calc(var(--guidelines) * 1.75em + 0.0625em));
 }
 
 :focus ~ #options,
@@ -427,10 +458,11 @@ ol > li::before
 	
 	body
 	{
-		color: #000;
 		margin: 2em;
 		width: unset;
 		text-align: justify;
+		--text-color: #000 !important;
+		--background-color: #0000 !important;
 	}
 	
 	#options, form, ::-webkit-scrollbar, #list, #display-options
@@ -449,15 +481,12 @@ ol > li::before
 		word-break: break-word;
 	}
 	
-	pre { white-space: pre-wrap; border-color: #333; }
+	pre { white-space: pre-wrap; }
 	
 	:not(pre) > code
 	{
 		background: none;
-		border: 0.0625em solid #333;
 	}
-	
-	blockquote::before { background: #333; }
 	
 	ul > li::before
 	{
@@ -535,7 +564,7 @@ main
 	grid-auto-flow: column;
 	margin: 0;
 	justify-content: space-between;
-	border: 0.0625em solid #741;
+	border: 0.0625em solid var(--text-color);
 	border-radius: 0.5em;
 	padding: 0;
 	grid-gap: 1em;
