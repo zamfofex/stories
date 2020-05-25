@@ -22,6 +22,6 @@ npx google-closure-compiler@20200517.0.0 \
 	'node_modules/**.{mjs,js,esm,cjs,json}' \
 	'scripts/*' \
 	--language_out=ECMASCRIPT_2019 \
-	> public/script.js
+	--js_output_file public/script.js
 
 yarn licenses generate-disclaimer > public/licenses.txt
