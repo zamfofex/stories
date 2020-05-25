@@ -49,18 +49,6 @@ let template = prepare`
 					<label for="capitalization" id="capitalization-label">enable capitalization</label>
 				</p>
 				<p>
-					<label id="theme" class="disabled">
-						theme:
-						&#x20;
-						<select disabled>
-							<option value="milk">milk</option>
-							<option value="" selected>caramel</option>
-							<option value="cocoa">cocoa</option>
-							<option value="coffee">coffee</option>
-						</select>
-					</label>
-				</p>
-				<p>
 					guide rulers:
 					&#x20;
 					<span class="radio-group" id="guidelines-labels">
@@ -81,6 +69,18 @@ let template = prepare`
 				</p>
 				<p>
 					<label for="typesetting-hyphens" id="typesetting-hyphens-label">hyphenation</label>
+				</p>
+				<p>
+					<label id="theme" class="disabled">
+						theme:
+						&#x20;
+						<select disabled>
+							<option value="milk">milk</option>
+							<option value="" selected>caramel</option>
+							<option value="cocoa">cocoa</option>
+							<option value="coffee">coffee</option>
+						</select>
+					</label>
 				</p>
 			</div>
 			<main>

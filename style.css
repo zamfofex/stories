@@ -407,6 +407,7 @@ label { cursor: pointer; }
 }
 
 :focus ~ #options,
+#options:focus-within,
 #options:hover
 {
 	display: block;
