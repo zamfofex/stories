@@ -14,7 +14,7 @@ curl -L https://github.com/Omnibus-Type/Asap/raw/master/fonts/webfonts/woff2/Asa
 
 mv style.css public
 
-npx google-closure-compiler \
+npx google-closure-compiler@20200517.0.0 \
 	--module_resolution=NODE \
 	--dependency_mode=PRUNE \
 	--process_common_js_modules \
