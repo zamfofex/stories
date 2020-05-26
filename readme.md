@@ -12,7 +12,7 @@ The software herein is licensed under the [0BSD license][0BSD], whereas the stor
 
 <!-- -- -- -- -- -- -->
 
-[Now]: https://vercel.com/home
+[Vercel]: https://vercel.com/home
 
 [website]: https://fanstories.now.sh
 
