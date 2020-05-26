@@ -28,7 +28,7 @@ let wrap = parser => (
 			if (!types.includes(type)) continue
 			
 			if (["code_inline", "fence", "text"].includes(type)) { if (entering) tokens.push({type, content: node.literal, info: node.info}) ; continue }
-			if (["softbreak", "hardbreak"].includes(type)) { if (entering) tokens.push({type}) ; continue }
+			if (["softbreak", "hardbreak", "hr"].includes(type)) { if (entering) tokens.push({type}) ; continue }
 			
 			if (type === "list")
 			{
