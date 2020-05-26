@@ -13,6 +13,7 @@ curl -L https://github.com/cyrealtype/Lora-Cyrillic/releases/download/v2.202/Lor
 curl -L https://github.com/Omnibus-Type/Asap/raw/master/fonts/webfonts/woff2/Asap-Italic.woff2 --output public/fonts/asap-italic.woff2
 
 mv style.css public
+mv not-found/main.svg public/not-found.svg
 
 npx google-closure-compiler@20200517.0.0 \
 	--module_resolution=NODE \

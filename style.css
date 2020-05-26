@@ -583,3 +583,14 @@ main
 
 #menu > :first-child { padding-left: 1em; }
 #menu > :last-child { padding-right: 1em; }
+
+.not-found svg
+{
+	width: 100%;
+	max-height: 80vh;
+}
+
+.not-found
+{
+	text-align: center;
+}

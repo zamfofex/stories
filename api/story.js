@@ -1,6 +1,10 @@
 import md from "commonmark"
 import mongodb from "mongodb"
+import fs from "fs"
+
 let {MongoClient} = mongodb
+
+let fsp = fs.promises
 
 let prepare = (strings, ...values) =>
 {
@@ -266,11 +270,15 @@ let processStory = md =>
 }
 
 let mongo
+let notFoundPage
 
 export default async ({query: {name}}, res) =>
 {
 	if (!mongo || !mongo.isConnected())
 		mongo = await MongoClient.connect(process.env.mongo_url)
+	
+	if (!notFoundPage)
+		notFoundPage = prepare([await fsp.readFile("not-found/main.html", "utf-8")])
 	
 	let stories = mongo.db(process.env.mongo_database).collection("stories")
 	let story = await stories.findOne({name})
@@ -287,6 +295,7 @@ export default async ({query: {name}}, res) =>
 		else
 		{
 			res.statusCode = 404
+			notFoundPage(s => res.write(s))
 			res.end()
 		}
 		return
@@ -317,7 +326,7 @@ export default async ({query: {name}}, res) =>
 		}
 	}
 	
-	await template(s => res.write(s), {...page, name, feedback})
+	template(s => res.write(s), {...page, name, feedback})
 	
 	res.end()
 }

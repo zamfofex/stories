@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+	<g id="main" fill="none" stroke-linejoin="round">
+		<path
+			stroke="currentcolor"
+			d="
+				M -25 70
+				L -25 5
+				A 5 5 0 0 1 -20 0
+				L 20 0
+				A 5 5 0 0 1 25 5
+				L 25 60
+				A 5 5 0 0 1 20 65
+				L -20 65
+				A 5 5 0 0 0 -25 70
+				A 5 5 0 0 0 -20 75
+				M -15 75
+				L 20 75
+				A 5 5 0 0 0 25 70
+				L 25 60
+				M 20 65
+				A 5 5 0 0 0 15 70
+				A 5 5 0 0 0 20 75
+				Z
+				M -20 70 -20 80 -15 85 -15 70 Z
+			"
+		/>
+		<g fill="currentcolor">
+			<text text-anchor="middle" dominant-baseline="middle" y="12" style="font-size: 7px;">HTTP</text>
+			<text text-anchor="middle" dominant-baseline="middle" y="21" style="font-size: 5px;">status codes CDIV</text>
+			<text text-anchor="middle" dominant-baseline="middle" y="30" style="font-size: 6px;">not found</text>
+			<text text-anchor="middle" dominant-baseline="middle" y="55" style="font-size: 4px;">by Zambonifofex</text>
+		</g>
+	</g>
+</svg>

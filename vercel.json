@@ -8,6 +8,7 @@
 		{"src": "/fonts/(.*)", "methods": ["GET", "HEAD"]},
 		{"src": "/style.css", "methods": ["GET", "HEAD"]},
 		{"src": "/script.js", "methods": ["GET", "HEAD"]},
+		{"src": "/not-found.svg", "dest": "/not-found/main.svg", "methods": ["GET", "HEAD"]},
 		{"src": "/licenses.txt", "methods": ["GET", "HEAD"]},
 		{"src": "/license", "status": 307, "headers": {"location": "https://github.com/Zambonifofex/stories#license"}, "methods": ["GET", "HEAD"]},
 		{"src": "/(?<name>.*)", "dest": "/api/story.js?name=$name", "methods": ["GET", "HEAD"]}
@@ -16,6 +17,13 @@
 	{
 		"mongo_database": "@mongo-database",
 		"mongo_url": "@mongo-url"
+	},
+	"functions":
+	{
+		"api/story.js":
+		{
+			"includeFiles": "not-found/main.html"
+		}
 	},
 	"github": {"silent": true}
 }
