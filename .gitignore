@@ -5,7 +5,7 @@
 !/package.json
 !/license.md
 !/readme.md
-!/.nowignore
+!/.vercelignore
 !/.gitignore
 !/build.bash
 !/style.css
