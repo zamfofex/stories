@@ -32,7 +32,7 @@ let wrap = parser => (
 			
 			if (type === "list")
 			{
-				if (node.listType === "Bullet") type = "bullet_list"
+				if (node.listType === "bullet") type = "bullet_list"
 				else type = "ordered_list"
 			}
 			
