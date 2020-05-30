@@ -159,16 +159,20 @@ prosemirror.disabled = false
 markdown.disabled = false
 
 let form = document.querySelector("form")
+let submit = form.querySelector(".submit button")
 form.addEventListener("submit", event =>
 {
-	form.querySelector(".submit button").disabled = true
+	submit.disabled = true
 	if (prosemirror.checked)
 	{
-		let input = document.createElement("input")
-		input.type = "hidden"
-		input.name = "message"
-		input.value = serializer.serialize(view.state.doc)
-		form.append(input)
-		form.submit()
+		textarea.value = serializer.serialize(view.state.doc)
+		editor.replaceWith(feedback)
+		view.destroy()
+		markdown.checked = true
+		if (!form.reportValidity())
+		{
+			submit.disabled = false
+			event.preventDefault()
+		}
 	}
 })
