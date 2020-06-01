@@ -649,7 +649,7 @@ div.CodeMirror-dragcursors,
 
 .cm-em { font-style: italic; }
 .cm-strong { font-weight: bold; }
-.cm-hr { margin-left: 50%; transform: translate(-50%); }
+.cm-hr { margin-left: 50%; transform: translate(-50%); display: inline-block; }
 .cm-formatting-quote { font-weight: bold; margin-left: 2em; }
 
 .CodeMirror-code { outline: none; }
