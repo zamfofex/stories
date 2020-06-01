@@ -108,8 +108,8 @@ let template = prepare`
 					</label>
 					&#x20;
 					<label>
-						<input type="radio" name="style" id="prosemirror" disabled>
-						prosemirror
+						<input type="radio" name="style" id="easy-mde" disabled>
+						easy mde
 					</label>
 				</p>
 				<p class="submit">

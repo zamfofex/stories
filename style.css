@@ -188,12 +188,18 @@ blockquote::before
 	border: 0.0625em solid var(--text-color);
 }
 
-code, pre
+code, pre, .cm-comment
 {
 	font-family: "Oxygen Mono", monospace, sans-serif;
 }
 
-pre, textarea
+.cm-comment
+{
+	background: var(--highlight-color);
+	padding: 0.25em 0;
+}
+
+pre, textarea, .CodeMirror-lines
 {
 	padding: 0.5em 0.75em;
 	border-radius: 0.5em;
@@ -203,7 +209,7 @@ pre, textarea
 	text-align: left;
 }
 
-h1, h2, h3, h4, h5, h6
+h1, h2, h3, h4, h5, h6, .cm-header
 {
 	font-family: "Asap", sans-serif;
 	font-style: italic;
@@ -220,11 +226,11 @@ h5 { font-size: 1.125em; }
 h6 { font-size: 1.0625em; }
 h5, h6 { font-weight: bold; }
 
-#feedback h1 { font-size: 1.5em; }
-#feedback h2 { font-size: 1.25em; }
-#feedback h3 { font-size: 1.125em; }
-#feedback h4, h5, h6 { font-size: 1.0625em; }
-#feedback h3, h4 { font-weight: bold; }
+.cm-header-1 { font-size: 1.5em; }
+.cm-header-2 { font-size: 1.25em; }
+.cm-header-3 { font-size: 1.125em; }
+.cm-header-4, .cm-header-5, .cm-header-6 { font-size: 1.0625em; }
+.cm-header-3, .cm-header-4 { font-weight: bold; }
 
 textarea
 {
@@ -242,16 +248,7 @@ textarea
 	padding: 0.75em
 }
 
-textarea:not(:focus) { box-shadow: none; }
-
-#feedback > .ProseMirror { outline: none; }
-
-#feedback
-{
-	display: grid;
-	min-height: 16em;
-	grid-template: auto 1fr / auto;
-}
+textarea:not(:focus), .CodeMirror:not(.CodeMirror-focused) .CodeMirror-lines { box-shadow: none; }
 
 .submit
 {
@@ -559,31 +556,6 @@ main
 	overflow: hidden;
 }
 
-#menu
-{
-	display: grid;
-	grid-auto-flow: column;
-	margin: 0;
-	justify-content: space-between;
-	border: 0.0625em solid var(--text-color);
-	border-radius: 0.5em;
-	padding: 0;
-	grid-gap: 1em;
-	overflow: auto hidden;
-}
-
-#menu svg
-{
-	height: 1.5em;
-	fill: currentcolor;
-	display: block;
-}
-
-#menu > button { display: grid; }
-
-#menu > :first-child { padding-left: 1em; }
-#menu > :last-child { padding-right: 1em; }
-
 .not-found svg
 {
 	width: 100%;
@@ -594,3 +566,87 @@ main
 {
 	text-align: center;
 }
+
+.CodeMirror-cursor
+{
+	border-left: 0.0625em solid currentcolor;
+	width: 0;
+}
+
+.CodeMirror
+{
+	position: relative;
+}
+
+.CodeMirror-lines
+{
+	cursor: text;
+	min-height: 1px;
+	cursor: text;
+	min-height: 16em;
+	padding: 0.75em;
+	line-height: 1;
+}
+.CodeMirror pre.CodeMirror-line,
+.CodeMirror pre.CodeMirror-line-like
+{
+	all: unset;
+	display: block;
+	position: relative;
+	font-variant-ligatures: contextual;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	word-break: normal;
+	font: inherit;
+	margin: 0;
+}
+
+.CodeMirror-linebackground
+{
+	position: absolute;
+	left: 0; right: 0; top: 0; bottom: 0;
+}
+
+.CodeMirror-cursor
+{
+	position: absolute;
+	pointer-events: none;
+}
+
+div.CodeMirror-cursors
+{
+	visibility: hidden;
+	position: relative;
+}
+div.CodeMirror-dragcursors,
+.CodeMirror-focused div.CodeMirror-cursors
+{
+	visibility: visible;
+}
+
+.CodeMirror-selected { background: var(--highlight-color); }
+
+.cm-tab-wrap-hack::after { content: ""; }
+
+.CodeMirror-measure
+{
+	position: absolute;
+	width: 100%;
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+}
+.CodeMirror-measure pre { position: static; }
+
+.CodeMirror-hscrollbar,
+.CodeMirror-vscrollbar
+{
+	display: none !important;
+}
+
+.CodeMirror-scroll { outline: none; }
+
+.cm-em { font-style: italic; }
+.cm-strong { font-weight: bold; }
+.cm-hr { margin-left: 50%; transform: translate(-50%); }
+.cm-formatting-quote { font-weight: bold; margin-left: 2em; }

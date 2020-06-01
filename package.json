@@ -8,11 +8,10 @@
 		"hyphenation.en-us": "0.2.1",
 		"tex-linebreak": "0.5.2",
 		"mongodb": "3.5.5",
-		"prosemirror-markdown": "1.4.4",
-		"prosemirror-example-setup": "1.1.2"
+		"easymde": "2.10.1"
 	},
 	"resolutions": {
-		"prosemirror-markdown/markdown-it": "./commonmark-it"
+		"**/codemirror-spell-checker": "./fake-spellchecker"
 	},
 	"license": "0BSD"
 }
