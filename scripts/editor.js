@@ -28,7 +28,8 @@ mde.addEventListener("change", () =>
 			togglePreview: null,
 			toggleSideBySide: null,
 			toggleFullScreen: null,
-		}
+		},
+		forceSync: true,
 	})
 })
 
@@ -37,3 +38,16 @@ markdown.addEventListener("change", () => easyMDE.toTextArea())
 mde.disabled = false
 markdown.disabled = false
 mde.closest("p").classList.remove("disabled")
+
+let form = textarea.closest("form")
+
+form.querySelector(".submit button").addEventListener("click", event =>
+{
+	if (mde.checked && !form.checkValidity())
+	{
+		event.preventDefault()
+		easyMDE.toTextArea()
+		markdown.checked = true
+		form.reportValidity()
+	}
+})
