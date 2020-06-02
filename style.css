@@ -196,7 +196,6 @@ code, pre, .cm-comment
 .cm-comment
 {
 	background: var(--highlight-color);
-	padding: 0.25em 0;
 }
 
 pre, textarea, .CodeMirror-lines
@@ -588,17 +587,15 @@ main
 	padding: 0.75em;
 	line-height: 1;
 	transition: 0.125s ease box-shadow;
+	text-align: justify;
 }
-.CodeMirror pre.CodeMirror-line,
-.CodeMirror pre.CodeMirror-line-like
+.CodeMirror-line,
+.CodeMirror-line-like
 {
 	all: unset;
 	display: block;
 	position: relative;
-	font-variant-ligatures: contextual;
-	word-wrap: break-word;
 	white-space: pre-wrap;
-	word-break: normal;
 	font: inherit;
 	margin: 0;
 }
@@ -651,6 +648,8 @@ div.CodeMirror-dragcursors,
 .cm-em { font-style: italic; }
 .cm-strong { font-weight: bold; }
 .cm-hr { margin-left: 50%; transform: translate(-50%); display: inline-block; }
-.cm-formatting-quote { font-weight: bold; margin-left: 2em; }
+.cm-formatting-quote { font-weight: bold; }
 
 .CodeMirror-code { outline: none; }
+
+.cm-url, .cm-formatting-link { opacity: 0.6; }
