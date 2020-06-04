@@ -14,7 +14,7 @@ The software herein is licensed under the [0BSD license][0BSD], whereas the stor
 
 [Vercel]: https://vercel.com/home
 
-[website]: https://fanstories.now.sh
+[website]: https://zamstories.now.sh
 
 [MongoDB]: https://mongodb.com
 [Atlas]: https://mongodb.com/cloud/atlas
