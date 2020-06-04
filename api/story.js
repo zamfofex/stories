@@ -17,11 +17,7 @@ let prepare = (strings, ...values) =>
 		for (let i = 0 ; i < length ; i++)
 		{
 			write(unindented[i])
-			let value = object[values[i]]
-			if (typeof value === "function")
-				value()
-			else
-				write(value)
+			write(object[values[i]])
 		}
 		
 		write(unindented[length])
@@ -236,46 +232,13 @@ let processFeedback = md =>
 	return renderer.render(tree)
 }
 
-let processStory = md =>
-{
-	let title = "unknown"
-	let tree = parser.parse(md)
-	
-	let walker = tree.walker()
-	while (true)
-	{
-		let event = walker.next()
-		if (!event) break
-		let {entering, node} = event
-		if (entering) continue
-		if (node.type !== "heading") continue
-		if (node.level !== 1) continue
-		
-		title = ""
-		let hWalker = node.walker()
-		while (true)
-		{
-			let event = hWalker.next()
-			if (!event) break
-			let {node} = event
-			if (node.type !== "text") continue
-			
-			title += node.literal
-			break
-		}
-		break
-	}
-	
-	return {title: title.toLowerCase(), main: renderer.render(tree)}
-}
-
 let mongo
 let notFoundPage
 
 export default async ({query: {name}}, res) =>
 {
 	if (!mongo || !mongo.isConnected())
-		mongo = await MongoClient.connect(process.env.mongo_url)
+		mongo = await MongoClient.connect(process.env.mongo_url, {useUnifiedTopology: true})
 	
 	if (!notFoundPage)
 		notFoundPage = prepare([await fsp.readFile("not-found/main.html", "utf-8")])
@@ -301,32 +264,32 @@ export default async ({query: {name}}, res) =>
 		return
 	}
 	
-	let page = processStory(story.text)
+	let main = renderer.render(parser.parse(story.text))
+	let {title} = story
 	
 	res.setHeader("content-type", "text/html")
 	
-	let feedback = async () =>
+	let feedback = ""
+	
+	for (let {message, response, date} of story.feedback || [])
 	{
-		for (let {message, response, date} of story.feedback)
+		feedback += `<article><header><p>on `
+		feedback += formatDate(date)
+		feedback += `, someone said:</p></header>`
+		
+		feedback += processFeedback(message)
+		
+		feedback += `</article>`
+		
+		if (response)
 		{
-			res.write(`<article><header><p>On `)
-			res.write(formatDate(date))
-			res.write(`, someone said:</p></header>`)
-			
-			res.write(processFeedback(message))
-			
-			res.write(`</article>`)
-			
-			if (response)
-			{
-				res.write(`<article class="response"><header><p>Response from the author:</p></header>`)
-				res.write(processFeedback(response))
-				res.write(`</article>`)
-			}
+			feedback += `<article class="response"><header><p>response from the author:</p></header>`
+			feedback += processFeedback(response)
+			feedback += `</article>`
 		}
 	}
 	
-	template(s => res.write(s), {...page, name, feedback})
+	template(s => res.write(s), {main, title, name, feedback})
 	
 	res.end()
 }
