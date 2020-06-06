@@ -100,7 +100,7 @@ let template = prepare`
 				</p>
 				<p class="submit">
 					<input type="hidden" name="name" value="${g("name")}">
-					<button>save settings</button>
+					<button>apply settings</button>
 				</p>
 				<p class="submit"><small>note: settings use cookies</small></p>
 			</form>
