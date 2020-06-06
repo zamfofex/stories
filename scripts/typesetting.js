@@ -292,5 +292,8 @@ let typeset = () =>
 typesetting.disabled = false
 typesetting.closest("label").classList.remove("disabled")
 
-if (typesetting.checked) prepare()
-else typesetting.addEventListener("change", prepare)
+addEventListener("load", () =>
+{
+	if (typesetting.checked) prepare()
+	else typesetting.addEventListener("change", prepare)
+})
