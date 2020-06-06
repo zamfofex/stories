@@ -4,6 +4,7 @@
 	[
 		{"src": "/(?<path>.*?)/+", "status": 307, "headers": {"location": "/$path"}, "methods": ["GET", "HEAD"]},
 		{"src": "/", "dest": "/api/list.js"},
+		{"src": "/settings", "dest": "/api/settings.js", "methods": ["POST"]},
 		{"src": "/(?<name>.*)/feedback", "dest": "/api/feedback.js?name=$name", "methods": ["POST"]},
 		{"src": "/fonts/(.*)", "methods": ["GET", "HEAD"]},
 		{"src": "/style.css", "methods": ["GET", "HEAD"]},

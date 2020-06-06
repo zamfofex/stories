@@ -1,7 +1,5 @@
-let theme = document.querySelector("#theme")
-let select = theme.querySelector("select")
-theme.classList.remove("disabled")
-select.disabled = false
+let select = document.querySelector(`#settings select[name="theme"]`)
+let theme = select.closest("label")
 select.addEventListener("change", () => document.body.dataset.theme = select.value)
 
 if (CSS.registerProperty)

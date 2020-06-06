@@ -1,3 +1,6 @@
+import "./scripts/settings"
+import "./scripts/capitalization"
 import "./scripts/themes"
 import "./scripts/typesetting"
 import "./scripts/editor"
+import "./scripts/guide-rulers"

@@ -13,10 +13,13 @@ let font = element =>
 	return `${fontStyle} ${fontWeight} ${fontSize} ${fontFamily}`
 }
 
-let typesetting = document.querySelector("#typesetting")
-let pull = document.querySelector("#typesetting-pull")
-let hyphens = document.querySelector("#typesetting-hyphens")
-let capitalization = document.querySelector("#capitalization")
+let typesetting = document.querySelector(`#settings input[name="typesetting"]`)
+let pull = document.querySelector(`#settings input[name="optical-alignment"]`)
+let hyphens = document.querySelector(`#settings input[name="hyphenation"]`)
+let capitalization = document.querySelector(`#settings input[name="capitalization"]`)
+
+typesetting.addEventListener("change", () => document.body.classList.toggle("typesetting", typesetting.checked))
+pull.addEventListener("change", () => document.body.classList.toggle("optical-alignment", pull.checked))
 
 let measure = text => ctx.measureText(capitalization.checked ? text : text.toLowerCase()).width
 
@@ -204,10 +207,17 @@ let prepare = () =>
 	typeset()
 }
 
+let pullLabel = pull.closest("label")
+let hyphensLabel = hyphens.closest("label")
+
 let typeset = () =>
 {
 	pull.disabled = !typesetting.checked
 	hyphens.disabled = !typesetting.checked
+	
+	pullLabel.classList.toggle("disabled", pull.disabled)
+	hyphensLabel.classList.toggle("disabled", hyphens.disabled)
+	
 	if (!typesetting.checked) return
 	
 	for (let current of document.querySelectorAll(".break"))
@@ -280,4 +290,7 @@ let typeset = () =>
 }
 
 typesetting.disabled = false
-typesetting.addEventListener("change", prepare)
+typesetting.closest("label").classList.remove("disabled")
+
+if (typesetting.checked) prepare()
+else typesetting.addEventListener("change", prepare)

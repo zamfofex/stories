@@ -8,7 +8,7 @@ let fsp = fs.promises
 
 let prepare = (strings, ...values) =>
 {
-	let unindented = strings.map(string => string.replace(/[\t\n]/g, ""))
+	let unindented = strings.map(string => string.replace(/[\t\n]+/g, "").replace(/&#x20;/g, " "))
 	return (write, object) =>
 	{
 		write("<!doctype html>\n")
@@ -17,7 +17,7 @@ let prepare = (strings, ...values) =>
 		for (let i = 0 ; i < length ; i++)
 		{
 			write(unindented[i])
-			write(object[values[i]])
+			write(values[i](object))
 		}
 		
 		write(unindented[length])
@@ -25,66 +25,87 @@ let prepare = (strings, ...values) =>
 	}
 }
 
+let g = key => object => String(object[key])
+let input = (attributes, key, value = "on") => object => `<input ${attributes}${object[key] === value ? " checked" : ""}>`
+let check = (string, key, value = "on") => object => object[key] === value ? string : ""
+let cl = name => check(" "+ name, name)
+
 let template = prepare`
 	<html lang="en">
 		<head>
 			<meta charset="utf-8">
-			<title>${"title"} — zambonifofex’s stories</title>
+			<title>${g("title")} — zambonifofex’s stories</title>
 			<meta name="viewport" content="width=device-width">
 			<link rel="stylesheet" href="/style.css">
 			<script type="module" src="/script.js"></script>
 		</head>
-		<body>
-			<p tabindex="-1" id="display-options">layout configurations</p>
-			<input type="checkbox" id="capitalization" class="option">
-			<input type="radio" class="option" name="guidelines" id="guidelines-none" checked>
-			<input type="radio" class="option" name="guidelines" id="guidelines-3">
-			<input type="radio" class="option" name="guidelines" id="guidelines-4">
-			<input type="radio" class="option" name="guidelines" id="guidelines-5">
-			<input type="checkbox" class="option" id="typesetting" disabled>
-			<input type="checkbox" class="option" id="typesetting-pull" disabled checked>
-			<input type="checkbox" class="option" id="typesetting-hyphens" disabled checked>
-			<div id="options">
+		<body class="${cl("capitalization")}${cl("typesetting")}${cl("optical-alignment")}" data-guide-rulers="${g("guide-rulers")}" data-theme="${g("theme")}">
+			<p tabindex="-1" id="display-settings">layout configurations</p>
+			<form id="settings" method="POST" action="/settings">
 				<p>
-					<label for="capitalization" id="capitalization-label">enable capitalization</label>
+					<label>
+						${input(`type="checkbox" name="capitalization"`, "capitalization")} enable capitalization
+					</label>
 				</p>
 				<p>
 					guide rulers:
 					&#x20;
-					<span class="radio-group" id="guidelines-labels">
-						<label for="guidelines-none" id="guidelines-none-label">disabled</label>
-						&#x20;
-						<label for="guidelines-3" id="guidelines-3-label">3</label>
-						&#x20;
-						<label for="guidelines-4" id="guidelines-4-label">4</label>
-						&#x20;
-						<label for="guidelines-5" id="guidelines-5-label">5</label>
+					<span class="radio-group">
+						<label>
+							${input(`type="radio" name="guide-rulers" value="none"`, "guide-rulers", "none")} disabled
+						</label>
+						<label>
+							${input(`type="radio" name="guide-rulers" value="3"`, "guide-rulers", "3")} 3
+						</label>
+						<label>
+							${input(`type="radio" name="guide-rulers" value="4"`, "guide-rulers", "4")} 4
+						</label>
+						<label>
+							${input(`type="radio" name="guide-rulers" value="5"`, "guide-rulers", "5")} 5
+						</label>
 					</span>
 				</p>
 				<p>
-					<label for="typesetting" id="typesetting-label">custom typesetting</label>
+					<label class="disabled">
+						${input(`type="checkbox" name="typesetting" disabled`, "typesetting")}
+						&#x20;
+						custom typesetting
+					</label>
 				</p>
 				<p>
-					<label for="typesetting-pull" id="typesetting-pull-label">optical alignment</label>
+					<label class="disabled">
+						${input(`type="checkbox" name="optical-alignment" disabled`, "optical-alignment")}
+						&#x20;
+						optical alignment
+					</label>
 				</p>
 				<p>
-					<label for="typesetting-hyphens" id="typesetting-hyphens-label">hyphenation</label>
+					<label class="disabled">
+						${input(`type="checkbox" name="hyphenation" disabled`, "hyphenation")}
+						&#x20;
+						hyphenation
+					</label>
 				</p>
 				<p>
-					<label id="theme" class="disabled">
+					<label>
 						theme:
 						&#x20;
-						<select disabled>
-							<option value="milk">milk</option>
-							<option value="" selected>caramel</option>
-							<option value="cocoa">cocoa</option>
-							<option value="coffee">coffee</option>
+						<select name="theme">
+							<option value="milk"${check(" selected", "theme", "milk")}>milk</option>
+							<option value="caramel"${check(" selected", "theme", "caramel")}>caramel</option>
+							<option value="cocoa"${check(" selected", "theme", "cocoa")}>cocoa</option>
+							<option value="coffee"${check(" selected", "theme", "coffee")}>coffee</option>
 						</select>
 					</label>
 				</p>
-			</div>
+				<p class="submit">
+					<input type="hidden" name="name" value="${g("name")}">
+					<button>save settings</button>
+				</p>
+				<p class="submit"><small>note: settings use cookies</small></p>
+			</form>
 			<main>
-				${"main"}
+				${g("main")}
 				<footer>
 					This story is licensed under <a href="https://creativecommons.org/licenses/by/4.0" rel="license">Creative Commons Attribution 4.0 International</a>.
 				</footer>
@@ -93,7 +114,7 @@ let template = prepare`
 				<a href="/">list of stories</a>
 			</p>
 			<h2>feedback</h2>
-			<form method="POST" action="/${"name"}/feedback">
+			<form method="POST" action="/${g("name")}/feedback">
 				<p>
 					<textarea name="message" required minlength="12"></textarea>
 				</p>
@@ -112,7 +133,7 @@ let template = prepare`
 					<button>submit feedback</button>
 				</p>
 			</form>
-			${"feedback"}
+			${g("feedback")}
 			<footer>this website makes use of <a href="/licenses.txt">various free software</a>.</footer>
 		</body>
 	</html>
@@ -235,7 +256,7 @@ let processFeedback = md =>
 let mongo
 let notFoundPage
 
-export default async ({query: {name}}, res) =>
+export default async ({query: {name}, cookies}, res) =>
 {
 	if (!mongo || !mongo.isConnected())
 		mongo = await MongoClient.connect(process.env.mongo_url, {useUnifiedTopology: true})
@@ -289,7 +310,31 @@ export default async ({query: {name}}, res) =>
 		}
 	}
 	
-	template(s => res.write(s), {main, title, name, feedback})
+	let
+	{
+		capitalization = "false",
+		"guide-rulers": guideRulers = "none",
+		typesetting = "false",
+		"optical-alignment": opticalAlignment = "on",
+		hyphenation = "on",
+		theme = "caramel",
+	} = cookies
+	
+	let value =
+	{
+		capitalization,
+		"guide-rulers": guideRulers,
+		typesetting,
+		"optical-alignment": opticalAlignment,
+		hyphenation,
+		theme,
+		main,
+		title,
+		name,
+		feedback,
+	}
+	
+	template(s => res.write(s), value)
 	
 	res.end()
 }

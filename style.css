@@ -276,7 +276,6 @@ main > footer
 	pointer-events: none;
 }
 
-#options label[for]::before,
 input[type="checkbox"],
 input[type="radio"]
 {
@@ -297,59 +296,31 @@ input[type="radio"]
 
 .radio-group label { margin-left: 1em; }
 
-#options .radio-group label::before,
-input[type="radio"]
-{ border-radius: 100%; }
+input[type="radio"] { border-radius: 100%; }
 
 :not(p).radio-group { display: inline-block; }
 
 p.radio-group > label:first-child { margin-left: 0; }
 
-#capitalization:checked ~ #options #capitalization-label::before,
-#guidelines-none:checked ~ #options #guidelines-none-label::before,
-#guidelines-3:checked ~ #options #guidelines-3-label::before,
-#guidelines-4:checked ~ #options #guidelines-4-label::before,
-#guidelines-5:checked ~ #options #guidelines-5-label::before,
-#typesetting:checked ~ #options #typesetting-label::before,
-#typesetting-pull:checked ~ #options #typesetting-pull-label::before,
-#typesetting-hyphens:checked ~ #options #typesetting-hyphens-label::before,
 input[type="radio"]:checked,
 input[type="checkbox"]:checked
 {
 	background: radial-gradient(var(--text-color) 40%, #0000 40%);
 }
 
-#capitalization:focus ~ #options #capitalization-label,
-#typesetting:focus ~ #options #typesetting-label,
-#typesetting-pull:focus ~ #options #typesetting-pull-label,
-#typesetting-hyphens:focus ~ #options #typesetting-hyphens-label,
-#guidelines-none:focus ~ #options #guidelines-labels,
-#guidelines-3:focus ~ #options #guidelines-labels,
-#guidelines-4:focus ~ #options #guidelines-labels,
-#guidelines-5:focus ~ #options #guidelines-labels,
-:not(.radio-group) > label:focus-within,
-.radio-group:focus-within
-{
-	outline: 0.0625em solid var(--text-color);
-}
-
-#typesetting:disabled ~ #options #typesetting-label::before,
-#typesetting-pull:disabled ~ #options #typesetting-pull-label::before,
-#typesetting-hyphens:disabled ~ #options #typesetting-hyphens-label::before
+.disabled input[type="radio"],
+.disabled input[type="checkbox"]
 {
 	background: none;
 }
 
-#typesetting:disabled ~ #options #typesetting-label,
-#typesetting-pull:disabled ~ #options #typesetting-pull-label,
-#typesetting-hyphens:disabled ~ #options #typesetting-hyphens-label,
 .disabled
 {
 	opacity: 0.5;
 	pointer-events: none;
 }
 
-#options
+#settings
 {
 	right: 1em;
 	top: 2.5em;
@@ -370,7 +341,7 @@ label { cursor: pointer; }
 
 #options label { white-space: nowrap; }
 
-#display-options
+#display-settings
 {
 	text-align: right;
 	cursor: pointer;
@@ -380,32 +351,32 @@ label { cursor: pointer; }
 	text-decoration: underline;
 }
 
-#display-options:focus
+#display-settings:focus
 {
 	pointer-events: none;
 }
 
-#capitalization:not(:checked) ~ main,
-#capitalization:not(:checked) ~ article > header,
-#capitalization:not(:checked) ~ main > footer
+body:not(.capitalization) > main,
+body:not(.capitalization) > article > header,
+body:not(.capitalization) > main > footer
 {
 	text-transform: lowercase;
 }
 
-#guidelines-3:checked ~ main { --guidelines: 3; }
-#guidelines-4:checked ~ main { --guidelines: 4; }
-#guidelines-5:checked ~ main { --guidelines: 5; }
+body[data-guide-rulers="3"] { --guide-rulers: 3; }
+body[data-guide-rulers="4"] { --guide-rulers: 4; }
+body[data-guide-rulers="5"] { --guide-rulers: 5; }
 
-#guidelines-3:checked ~ main p,
-#guidelines-4:checked ~ main p,
-#guidelines-5:checked ~ main p
+body[data-guide-rulers="3"] > main p,
+body[data-guide-rulers="4"] > main p,
+body[data-guide-rulers="5"] > main p
 {
-	background: linear-gradient(var(--background-color), var(--background-color) 1em, #0000 1em, #0000 calc(100% - 4em), var(--background-color) calc(100% - 4em)), repeating-linear-gradient(var(--text-color) 0.0625em, var(--text-color) 0.125em, #0000 0.125em, #0000 calc(var(--guidelines) * 1.75em + 0.0625em));
+	background: linear-gradient(var(--background-color), var(--background-color) 1em, #0000 1em, #0000 calc(100% - 4em), var(--background-color) calc(100% - 4em)), repeating-linear-gradient(var(--text-color) 0.0625em, var(--text-color) 0.125em, #0000 0.125em, #0000 calc(var(--guide-rulers) * 1.75em + 0.0625em));
 }
 
-:focus ~ #options,
-#options:focus-within,
-#options:hover
+#display-settings:focus ~ #settings,
+#settings:focus-within,
+#settings:hover
 {
 	display: block;
 	opacity: unset;
@@ -463,7 +434,7 @@ ol > li::before
 		--background-color: #0000 !important;
 	}
 	
-	#options, form, ::-webkit-scrollbar, #list, #display-options
+	#settings, form, ::-webkit-scrollbar, #list, #display-settings
 	{ display: none; }
 	
 	@media (max-width: 32em)
@@ -497,14 +468,14 @@ article, blockquote { break-inside: avoid; }
 
 h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 
- #typesetting:checked ~ main .p
+body.typesetting > main .p
 {
 	white-space: nowrap;
 	text-align-last: justify;
 	word-spacing: -0.2em;
 }
 
-#typesetting:checked ~ main .p::after
+body.typesetting > main .p::after
 {
 	content: "";
 	display: inline-block;
@@ -512,30 +483,30 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	height: 0;
 }
 
-#typesetting:checked ~ main .break > .br::after
+body.typesetting > main .break > .br::after
 {
 	content: "\A";
 	white-space: pre;
 }
 
-#typesetting:checked ~ main .last-line
+body.typesetting > main .last-line
 { word-spacing: normal; }
 
-#typesetting:checked ~ #typesetting-pull:checked ~ main .break::before
+body.typesetting.optical-alignment > main .break::before
 {
 	content: "";
 	margin-right: var(--pull-left);
 	display: inline-block;
 }
 
-#typesetting:checked ~ #typesetting-pull:checked ~ main .break::after
+body.typesetting.optical-alignment > main .break::after
 {
 	content: "";
 	margin-left: var(--pull-right);
 	display: inline-block;
 }
 
-#typesetting:checked ~ main .shy.break::before { content: "\2010" !important; }
+body.typesetting > main .shy.break::before { content: "\2010" !important; }
 
 .shy, .glue, .br
 {
@@ -547,6 +518,11 @@ body > footer
 	text-align: center;
 	font-size: 0.75em;
 	content: "";
+}
+
+small
+{
+	font-size: 0.75em;
 }
 
 main
