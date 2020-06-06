@@ -156,11 +156,6 @@ option
 	color: initial;
 }
 
-a:focus, button:focus
-{
-	outline: 0.0625em solid var(--text-color);
-}
-
 blockquote
 {
 	padding: 0 0 0 1em;
@@ -306,6 +301,13 @@ input[type="radio"]:checked,
 input[type="checkbox"]:checked
 {
 	background: radial-gradient(var(--text-color) 40%, #0000 40%);
+}
+
+a:focus, button:focus,
+:not(.radio-group) > label:focus-within,
+.radio-group:focus-within
+{
+	outline: 0.0625em solid var(--text-color);
 }
 
 .disabled input[type="radio"],
@@ -545,7 +547,7 @@ main
 
 .CodeMirror-cursor
 {
-	border-left: 0.0625em solid currentcolor;
+	border-left: 0.0625em solid var(--text-color);
 	width: 0;
 }
 
