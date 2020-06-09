@@ -341,6 +341,7 @@ let typeset = () =>
 				let right = rights[i] || 0
 				
 				width -= left + right
+				width = Math.max(0, width)
 				
 				if (base.type === "glue")
 				{
