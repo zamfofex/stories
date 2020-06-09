@@ -2,6 +2,7 @@ import Hypher from "hypher"
 import english from "hyphenation.en-us"
 import linebreak from "tex-linebreak"
 let {breakLines} = linebreak
+import parse from "compromise"
 
 let hypher = new Hypher(english)
 
@@ -17,9 +18,11 @@ let typesetting = document.querySelector(`#settings input[name="typesetting"]`)
 let pull = document.querySelector(`#settings input[name="optical-alignment"]`)
 let hyphens = document.querySelector(`#settings input[name="hyphenation"]`)
 let capitalization = document.querySelector(`#settings input[name="capitalization"]`)
+let spacing = document.querySelector(`#settings input[name="semantic-spacing"]`)
 
 typesetting.addEventListener("change", () => document.body.classList.toggle("typesetting", typesetting.checked))
 pull.addEventListener("change", () => document.body.classList.toggle("optical-alignment", pull.checked))
+spacing.addEventListener("change", () => document.body.classList.toggle("semantic-spacing", spacing.checked))
 
 let measure = text => ctx.measureText(capitalization.checked ? text : text.toLowerCase()).width
 
@@ -55,6 +58,7 @@ let prepare = () =>
 	pull.addEventListener("change", typeset)
 	hyphens.addEventListener("change", typeset)
 	capitalization.addEventListener("change", typeset)
+	spacing.addEventListener("change", typeset)
 	window.addEventListener("resize", typeset)
 	
 	ctx.font = font(document.body)
@@ -78,10 +82,11 @@ let prepare = () =>
 		let lefts = []
 		let rights = []
 		let shys = []
+		let wides = []
 		let currentNodes
-		paragraphs.push({bases, nodes, widths, lefts, rights, node, shys})
+		paragraphs.push({bases, nodes, widths, lefts, rights, node, shys, wides})
 		
-		let push = (base, node, width, left, right) =>
+		let push = (base, node, {width, left, right, wide} = {}) =>
 		{
 			if (base.type === "penalty") shys.push(bases.length)
 			bases.push(base)
@@ -90,6 +95,7 @@ let prepare = () =>
 			widths.push(width)
 			lefts.push(left)
 			rights.push(right)
+			wides.push(wide)
 		}
 		
 		let textNodes = []
@@ -100,83 +106,64 @@ let prepare = () =>
 		
 		for (let textNode of textNodes)
 		{
-			let text = hypher.hyphenateText(textNode.data)
-			
-			// TODO: Use the upper line when Firefox supports Unicode property escapes.
-			// let syllables = text.split(/([^\p{WSpace}\xAD]*[\p{L}\p{N}\p{Pc}—–]+[^\p{WSpace}\xAD]*)(\xAD?)/gu)
-			let syllables = text.split(/([^\s\xAD]*[\w_—–]+[^\s\xAD]*)(\xAD?)/g)
-			
-			let length = syllables.length
+			let {data} = textNode
 			
 			currentNodes = []
 			
-			for (let i = 1 ; i < length ; i += 3)
+			if (/^\s+$/.test(data)) continue
+			
+			// TODO: Consider situations where a paragraph is interrupted by elements boundaries.
+			for (let {terms} of parse(data).clauses().json())
 			{
-				let syllable = syllables[i + 0]
-				let shy = syllables[i + 1]
-				let whitespace = syllables[i + 2]
-				
-				let normalized
-				if (capitalization.checked) normalized = syllable
-				else normalized = syllable.toLowerCase()
-				
-				let [whole, left, letters, right] = normalized.match(/^([\.,“”‘’—–‐:;TYCcOo]?)(.*?)([\.,“”‘’—–‐:;]?)$/)
-				if (!letters) right = left
-				if (shy) right = ""
-				let leftWidth = computedWidths[left] || 0
-				let rightWidth = computedWidths[right] || 0
-				leftWidth *= ratios[left] || 0
-				rightWidth *= ratios[right] || 0
-				
-				ctx.font = font(textNode.parentNode)
-				
-				push(
-					{type: "box"},
-					new Text(syllable),
-					measure(syllable),
-					leftWidth,
-					rightWidth,
-				)
-				
-				if (shy)
+				for (let {length} = terms, i = 0 ; i < length ; i++)
 				{
-					let shy = document.createElement("span")
-					shy.classList.add("shy")
-					let br = document.createElement("span")
-					br.classList.add("br")
-					shy.append(br)
+					let current = terms[i]
+					let next = terms[i+1]||{}
 					
-					push({type: "penalty", flagged: false}, shy)
-				}
-				else
-				{
-					if (whitespace)
+					let syllables
+					
+					if (current.tags.includes("ProperNoun")) syllables = [current.text]
+					else syllables = hypher.hyphenate(current.text)
+					
+					let post = current.post + (next.pre||"")
+					
+					for (let {length} = syllables, i = 0 ; i < length ; i++)
 					{
-						let next = syllables[i+3] || ""
-						let spaceWidth = measure(syllable + whitespace + next) - measure(syllable) - measure(next)
+						let syllable = syllables[i]
 						
-						let glue = document.createElement("span")
-						glue.classList.add("glue")
-						let ws = document.createElement("span")
-						ws.classList.add("ws")
-						ws.append(whitespace)
-						glue.append(ws)
-						
+						let shy = document.createElement("span")
+						shy.classList.add("shy")
 						let br = document.createElement("span")
 						br.classList.add("br")
-						glue.append(br)
+						shy.append(br)
 						
+						let normalized
+						if (capitalization.checked) normalized = syllable
+						else normalized = syllable.toLowerCase()
+						
+						let [whole, left, letters, right] = normalized.match(/^([TYCcOo]?)(.*?)([]?)$/)
+						if (!letters) right = left
+						if (i !== length - 1) right = ""
+						let leftWidth = computedWidths[left] || 0
+						let rightWidth = computedWidths[right] || 0
+						leftWidth *= ratios[left] || 0
+						rightWidth *= ratios[right] || 0
+						
+						ctx.font = font(textNode.parentNode)
+						
+						if (i !== 0) push({type: "penalty", flagged: false}, shy)
 						push(
+							{type: "box"},
+							new Text(syllable),
 							{
-								type: "glue",
-								stretch: spaceWidth / 2,
-								shrink: spaceWidth / 8,
-							},
-							glue,
-							spaceWidth,
+								width: measure(normalized),
+								left: leftWidth,
+								right: rightWidth,
+							}
 						)
 					}
-					else
+					
+					if (!post)
 					{
 						let glue = document.createElement("span")
 						glue.classList.add("glue")
@@ -192,9 +179,110 @@ let prepare = () =>
 								shrink: 0,
 							},
 							glue,
-							0,
+							{
+								width: 0,
+								wide: 1,
+							}
 						)
+						
+						continue
 					}
+					
+					let whitespace = post.split(/(\S+)/)
+					
+					if (whitespace.length > 1)
+					{
+						for (let {length} = whitespace, i = 0 ; i < length ; i += 2)
+						{
+							let glue = whitespace[i + 0]
+							let symbol = whitespace[i + 1]
+							
+							if (glue)
+							{
+								let glue = document.createElement("span")
+								glue.classList.add("glue")
+								let ws = document.createElement("span")
+								ws.classList.add("ws")
+								ws.append(" ")
+								glue.append(ws)
+								
+								let br = document.createElement("span")
+								br.classList.add("br")
+								glue.append(br)
+								
+								push(
+									{
+										type: "glue",
+										stretch: spaceWidth / 2,
+										shrink: 0,
+									},
+									glue,
+									{
+										width: spaceWidth,
+										wide: 1,
+									}
+								)
+							}
+							if (symbol)
+							{
+								let right = symbol[symbol.length-1]
+								let rightWidth = computedWidths[right] || 0
+								rightWidth *= ratios[right] || 0
+								
+								font(textNode.parentNode)
+								
+								push(
+									{type: "box"},
+									new Text(symbol),
+									{
+										width: measure(symbol),
+										left: 0,
+										right: rightWidth,
+									}
+								)
+							}
+						}
+						continue
+					}
+					
+					let wide = 1
+					
+					if (i === length - 1)
+					{
+						wide = 3
+					}
+					else if (current.tags.includes("Noun") && !next.tags.includes("Noun"))
+					{
+						wide = 2
+					}
+					else if (current.tags.includes("Verb") && !next.tags.includes("Verb"))
+					{
+						wide = 1.5
+					}
+					
+					let glue = document.createElement("span")
+					glue.classList.add("glue")
+					let ws = document.createElement("span")
+					ws.classList.add("ws")
+					ws.append(" ")
+					glue.append(ws)
+					
+					let br = document.createElement("span")
+					br.classList.add("br")
+					glue.append(br)
+					
+					push(
+						{
+							type: "glue",
+							stretch: spaceWidth / 2,
+							shrink: 0,
+						},
+						glue,
+						{
+							width: spaceWidth,
+							wide,
+						}
+					)
 				}
 			}
 			
@@ -209,14 +297,17 @@ let prepare = () =>
 
 let pullLabel = pull.closest("label")
 let hyphensLabel = hyphens.closest("label")
+let spacingLabel = spacing.closest("label")
 
 let typeset = () =>
 {
 	pull.disabled = !typesetting.checked
 	hyphens.disabled = !typesetting.checked
+	spacing.disabled = !typesetting.checked
 	
 	pullLabel.classList.toggle("disabled", pull.disabled)
 	hyphensLabel.classList.toggle("disabled", hyphens.disabled)
+	spacingLabel.classList.toggle("disabled", spacing.disabled)
 	
 	if (!typesetting.checked) return
 	
@@ -225,7 +316,7 @@ let typeset = () =>
 	for (let current of document.querySelectorAll(".last-line"))
 		current.classList.remove("last-line")
 	
-	for (let {bases, nodes, widths, lefts, rights, node, shys} of paragraphs)
+	for (let {bases, nodes, widths, lefts, rights, node, shys, wides} of paragraphs)
 	{
 		node.classList.remove("no-break")
 		
@@ -260,7 +351,17 @@ let typeset = () =>
 				}
 			}
 			
-			return {...base, width}
+			let result = {...base, width}
+			if (spacing.checked && base.type === "glue")
+			{
+				let wide = wides[i]
+				
+				nodes[i].style.setProperty("--spacing", `${result.width * (wide - 1) - 1}px`)
+				
+				result.width *= wide
+				result.stretch *= wide
+			}
+			return result
 		})
 		
 		let indices = breakLines(items, node.clientWidth, {doubleHyphenPenalty: 300, adjacentLooseTightPenalty: 100})

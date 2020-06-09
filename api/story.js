@@ -39,7 +39,7 @@ let template = prepare`
 			<link rel="stylesheet" href="/style.css">
 			<script type="module" src="/script.js"></script>
 		</head>
-		<body class="${cl("capitalization")}${cl("typesetting")}${cl("optical-alignment")}" data-guide-rulers="${g("guide-rulers")}" data-theme="${g("theme")}">
+		<body class="${cl("capitalization")}${cl("typesetting")}${cl("optical-alignment")}${cl("semantic-spacing")}" data-guide-rulers="${g("guide-rulers")}" data-theme="${g("theme")}">
 			<p tabindex="-1" id="display-settings">layout configurations</p>
 			<form id="settings" method="POST" action="/settings">
 				<p>
@@ -84,6 +84,13 @@ let template = prepare`
 						${input(`type="checkbox" name="hyphenation" disabled`, "hyphenation")}
 						&#x20;
 						hyphenation
+					</label>
+				</p>
+				<p>
+					<label class="disabled">
+						${input(`type="checkbox" name="semantic-spacing" disabled`, "semantic-spacing")}
+						&#x20;
+						semantic spacing
 					</label>
 				</p>
 				<p>
@@ -318,6 +325,7 @@ export default async ({query: {name}, cookies}, res) =>
 		"optical-alignment": opticalAlignment = "on",
 		hyphenation = "on",
 		theme = "caramel",
+		"semantic-spacing": semanticSpacing = "off",
 	} = cookies
 	
 	let value =
@@ -328,6 +336,7 @@ export default async ({query: {name}, cookies}, res) =>
 		"optical-alignment": opticalAlignment,
 		hyphenation,
 		theme,
+		"semantic-spacing": semanticSpacing,
 		main,
 		title,
 		name,

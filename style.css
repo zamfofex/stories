@@ -474,7 +474,12 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	{
 		white-space: nowrap;
 		text-align-last: justify;
-		word-spacing: -0.2em;
+		word-spacing: -1px;
+	}
+	
+	body.typesetting.semantic-spacing > main .glue
+	{
+		word-spacing: var(--spacing, unset);
 	}
 	
 	body.typesetting > main .p::after
@@ -489,6 +494,13 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	{
 		content: "\A";
 		white-space: pre;
+	}
+	
+	body.typesetting > main .break > .ws
+	{
+		display: inline-block;
+		white-space: pre;
+		width: 0;
 	}
 	
 	body.typesetting > main .last-line
@@ -509,11 +521,6 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	}
 	
 	body.typesetting > main .shy.break::before { content: "\2010" !important; }
-}
-
-.shy, .glue, .br
-{
-	display: contents;
 }
 
 body > footer
