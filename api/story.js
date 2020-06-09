@@ -92,6 +92,8 @@ let template = prepare`
 						&#x20;
 						semantic spacing
 					</label>
+					&#x20;
+					— <a href="https://github.com/Zambonifofex/stories/issues/10">beta</a>
 				</p>
 				<p>
 					<label>
