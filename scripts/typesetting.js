@@ -251,11 +251,11 @@ let prepare = () =>
 					{
 						wide = 3
 					}
-					else if (current.tags.includes("Noun") && !next.tags.includes("Noun"))
+					else if (current.tags.includes("Noun") !== (!next.tags.includes("Noun")))
 					{
 						wide = 2
 					}
-					else if (current.tags.includes("Verb") && !next.tags.includes("Verb"))
+					else if (current.tags.includes("Verb") !== (!next.tags.includes("Verb")))
 					{
 						wide = 1.5
 					}
