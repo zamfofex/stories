@@ -163,30 +163,7 @@ let prepare = () =>
 						)
 					}
 					
-					if (!post)
-					{
-						let glue = document.createElement("span")
-						glue.classList.add("glue")
-						
-						let br = document.createElement("span")
-						br.classList.add("br")
-						glue.append(br)
-						
-						push(
-							{
-								type: "glue",
-								stretch: spaceWidth / 2,
-								shrink: 0,
-							},
-							glue,
-							{
-								width: 0,
-								wide: 1,
-							}
-						)
-						
-						continue
-					}
+					if (!post) continue
 					
 					let whitespace = post.split(/(\S+)/)
 					
