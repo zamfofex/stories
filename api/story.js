@@ -129,12 +129,12 @@ let template = prepare`
 				</p>
 				<p class="radio-group disabled">
 					<label>
-						<input type="radio" name="style" id="markdown" checked disabled>
+						<input type="radio" name="mode" id="markdown" checked disabled>
 						markdown
 					</label>
 					&#x20;
 					<label>
-						<input type="radio" name="style" id="easy-mde" disabled>
+						<input type="radio" name="mode" id="easy-mde" disabled>
 						easy mde
 					</label>
 				</p>
