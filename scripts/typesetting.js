@@ -159,7 +159,7 @@ let prepare = () =>
 								width: measure(normalized),
 								left: leftWidth,
 								right: rightWidth,
-							}
+							},
 						)
 					}
 					
@@ -197,7 +197,7 @@ let prepare = () =>
 									{
 										width: spaceWidth,
 										wide: 1,
-									}
+									},
 								)
 							}
 							if (symbol)
@@ -215,7 +215,7 @@ let prepare = () =>
 										width: measure(symbol),
 										left: 0,
 										right: rightWidth,
-									}
+									},
 								)
 							}
 						}
@@ -258,14 +258,25 @@ let prepare = () =>
 						{
 							width: spaceWidth,
 							wide,
-						}
+						},
 					)
 				}
 			}
 			
-			let end = document.createElement("span")
-			end.classList.add("paragraph-end")
-			textNode.replaceWith(...currentNodes, end)
+			textNode.replaceWith(...currentNodes)
+			
+			push(
+				{
+					type: "glue",
+					stretch: spaceWidth / 2,
+					shrink: 0,
+				},
+				null,
+				{
+					width: spaceWidth,
+					wide: 1,
+				},
+			)
 		}
 	}
 	
@@ -334,7 +345,8 @@ let typeset = () =>
 			{
 				let wide = wides[i]
 				
-				nodes[i].style.setProperty("--spacing", `${result.width * (wide - 1) - 1}px`)
+				let node = nodes[i]
+				if (node) node.style.setProperty("--spacing", `${result.width * (wide - 1) - 1}px`)
 				
 				result.width *= wide
 				result.stretch *= wide
@@ -348,6 +360,7 @@ let typeset = () =>
 		for (let i of indices)
 		{
 			let node = nodes[i]
+			if (!node) continue
 			
 			node.classList.add("break")
 			
@@ -364,7 +377,7 @@ let typeset = () =>
 		
 		let length = nodes.length
 		for (let i = (indices[indices.length - 1] || -1) + 1 ; i < length ; i++)
-			if (bases[i].type === "glue") nodes[i].classList.add("last-line")
+			if (bases[i].type === "glue" && nodes[i]) nodes[i].classList.add("last-line")
 	}
 }
 
