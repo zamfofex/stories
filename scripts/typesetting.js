@@ -151,7 +151,11 @@ let prepare = () =>
 						
 						ctx.font = font(textNode.parentNode)
 						
-						if (i !== 0) push({type: "penalty", flagged: false}, shy)
+						if (i === 0) { }
+						else if (i === 1 && syllables[0].length < 4) { }
+						else if (i === length - 1 && syllables[i].length < 4) { }
+						else push({type: "penalty", flagged: false}, shy)
+						
 						push(
 							{type: "box"},
 							new Text(syllable),
