@@ -524,6 +524,13 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		display: inline-block;
 	}
 	
+	body.typesetting.optical-alignment > main .p::before
+	{
+		content: "";
+		margin-left: var(--pull-before);
+		display: inline-block;
+	}
+	
 	body.typesetting > main .shy.break::before { content: "\2010" !important; }
 }
 

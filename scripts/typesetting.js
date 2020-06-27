@@ -141,8 +141,9 @@ let prepare = () =>
 						if (capitalization.checked) normalized = syllable
 						else normalized = syllable.toLowerCase()
 						
-						let [whole, left, letters, right] = normalized.match(/^([TYCcOo]?)(.*?)([]?)$/)
-						if (!letters) right = left
+						let [whole, left, letters, right] = normalized.match(/^([TYCcOo]?)(.*?)([TYCcOo]?)$/)
+						if (i !== 0) left = ""
+						if (!letters && !right) right = left
 						if (i !== length - 1) right = ""
 						let leftWidth = computedWidths[left] || 0
 						let rightWidth = computedWidths[right] || 0
@@ -361,6 +362,8 @@ let typeset = () =>
 		let indices = breakLines(items, node.clientWidth, {doubleHyphenPenalty: 300, adjacentLooseTightPenalty: 100})
 		indices.shift()
 		
+		if (pull.checked) node.style.setProperty("--pull-before", `${-lefts[0]}px`)
+		
 		for (let i of indices)
 		{
 			let node = nodes[i]
@@ -371,11 +374,11 @@ let typeset = () =>
 			if (pull.checked)
 			{
 				if (bases[i].type === "penalty")
-					node.style.setProperty("--pull-left", -hyphenWidth * 0.75 + "px")
+					node.style.setProperty("--pull-left", `${-hyphenWidth * 0.75}px`)
 				else
-					node.style.setProperty("--pull-left", -rights[i - 1] + "px")
+					node.style.setProperty("--pull-left", `${-rights[i - 1]}px`)
 				
-				node.style.setProperty("--pull-right", -lefts[i + 1] + "px")
+				node.style.setProperty("--pull-right", `${-lefts[i + 1]}px`)
 			}
 		}
 		
