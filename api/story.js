@@ -40,7 +40,7 @@ let template = prepare`
 			<script type="module" src="/script.js"></script>
 		</head>
 		<body class="${cl("capitalization")}${cl("typesetting")}${cl("optical-alignment")}${cl("semantic-spacing")}" data-guide-rulers="${g("guide-rulers")}" data-theme="${g("theme")}">
-			<p tabindex="-1" id="display-settings">layout settings</p>
+			<p tabindex="0" id="display-settings">layout settings</p>
 			<form id="settings" method="POST" action="/settings">
 				<p>
 					<label>
