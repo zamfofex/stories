@@ -43,7 +43,7 @@ export default async (req, res) =>
 		`<link rel="stylesheet" href="/style.css">` +
 		`</head><body><h1>zambonifofex’s stories</h1>` +
 		`<ul>` + list + `</ul>` +
-		`<p><small>this website’s infrastucture is free software ` +
+		`<p><small>this website’s infrastructure is free software ` +
 		`<a href="https://github.com/Zambonifofex/stories" title="this website’s repository on github">available on github</a>. ` +
 		`contributions and issue reports are welcome!</small></p></body></html>\n`
 	
