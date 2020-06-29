@@ -141,9 +141,9 @@ let prepare = () =>
 						if (capitalization.checked) normalized = syllable
 						else normalized = syllable.toLowerCase()
 						
-						let [whole, left, letters, right] = normalized.match(/^([TYCcOo]?)(.*?)([TYCcOo]?)$/)
+						let [whole, left, middle, right] = normalized.match(/^([TYCcOo]?)(.*?)([TYCcOo]?)$/)
 						if (i !== 0) left = ""
-						if (!letters && !right) right = left
+						if (!middle && !right) right = left
 						if (i !== length - 1) right = ""
 						let leftWidth = computedWidths[left] || 0
 						let rightWidth = computedWidths[right] || 0
@@ -207,6 +207,10 @@ let prepare = () =>
 							}
 							if (symbol)
 							{
+								let left = symbol[0]
+								let leftWidth = computedWidths[left] || 0
+								leftWidth *= ratios[left] || 0
+								
 								let right = symbol[symbol.length-1]
 								let rightWidth = computedWidths[right] || 0
 								rightWidth *= ratios[right] || 0
@@ -218,7 +222,7 @@ let prepare = () =>
 									new Text(symbol),
 									{
 										width: measure(symbol),
-										left: 0,
+										left: leftWidth,
 										right: rightWidth,
 									},
 								)
