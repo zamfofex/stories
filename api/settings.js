@@ -6,7 +6,6 @@ let settings =
 	"optical-alignment",
 	"hyphenation",
 	"theme",
-	"semantic-spacing",
 ]
 
 export default async ({body}, res) =>
