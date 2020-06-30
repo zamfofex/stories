@@ -8,7 +8,6 @@
 		"hyphenation.en-us": "0.2.1",
 		"tex-linebreak": "0.5.2",
 		"mongodb": "3.5.8",
-		"easymde": "2.10.1",
 		"compromise": "13.2.0"
 	},
 	"resolutions": {

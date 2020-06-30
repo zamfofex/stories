@@ -189,17 +189,12 @@ blockquote::before
 	border: 0.0625em solid var(--text-color);
 }
 
-code, pre, .cm-comment
+code, pre
 {
 	font-family: "Oxygen Mono", monospace, sans-serif;
 }
 
-.cm-comment
-{
-	background: var(--highlight-color);
-}
-
-pre, textarea, .CodeMirror-lines
+pre, textarea
 {
 	padding: 0.5em 0.75em;
 	border-radius: 0.5em;
@@ -209,7 +204,7 @@ pre, textarea, .CodeMirror-lines
 	text-align: left;
 }
 
-h1, h2, h3, h4, h5, h6, .cm-header
+h1, h2, h3, h4, h5, h6
 {
 	font-family: "Asap", sans-serif;
 	font-style: italic;
@@ -225,12 +220,6 @@ h4 { font-size: 1.25em; }
 h5 { font-size: 1.125em; }
 h6 { font-size: 1.0625em; }
 h5, h6 { font-weight: bold; }
-
-.cm-header-1 { font-size: 1.5em; }
-.cm-header-2 { font-size: 1.25em; }
-.cm-header-3 { font-size: 1.125em; }
-.cm-header-4, .cm-header-5, .cm-header-6 { font-size: 1.0625em; }
-.cm-header-3, .cm-header-4 { font-weight: bold; }
 
 textarea
 {
@@ -248,7 +237,7 @@ textarea
 	padding: 0.75em
 }
 
-textarea:not(:focus), .CodeMirror:not(.CodeMirror-focused) .CodeMirror-lines { box-shadow: none; }
+textarea:not(:focus) { box-shadow: none; }
 
 .submit
 {
@@ -268,13 +257,6 @@ header
 main > footer
 {
 	font-style: italic;
-}
-
-.option
-{
-	position: absolute;
-	opacity: 0;
-	pointer-events: none;
 }
 
 input[type="checkbox"],
@@ -346,8 +328,6 @@ a:focus, button:focus,
 }
 
 label { cursor: pointer; }
-
-#options label { white-space: nowrap; }
 
 #display-settings
 {
@@ -563,90 +543,3 @@ main
 {
 	text-align: center;
 }
-
-.CodeMirror-cursor
-{
-	border-left: 0.0625em solid var(--text-color);
-	width: 0;
-}
-
-.CodeMirror
-{
-	position: relative;
-}
-
-.CodeMirror-lines
-{
-	cursor: text;
-	min-height: 1px;
-	cursor: text;
-	min-height: 16em;
-	padding: 0.75em;
-	line-height: 1;
-	transition: 0.125s ease box-shadow;
-	text-align: justify;
-}
-.CodeMirror-line,
-.CodeMirror-line-like
-{
-	all: unset;
-	display: block;
-	position: relative;
-	white-space: pre-wrap;
-	font: inherit;
-	margin: 0;
-}
-
-.CodeMirror-linebackground
-{
-	position: absolute;
-	left: 0; right: 0; top: 0; bottom: 0;
-}
-
-.CodeMirror-cursor
-{
-	position: absolute;
-	pointer-events: none;
-}
-
-div.CodeMirror-cursors
-{
-	visibility: hidden;
-	position: relative;
-}
-div.CodeMirror-dragcursors,
-.CodeMirror-focused div.CodeMirror-cursors
-{
-	visibility: visible;
-}
-
-.CodeMirror-selected { background: var(--highlight-color); }
-
-.cm-tab-wrap-hack::after { content: ""; }
-
-.CodeMirror-measure
-{
-	position: absolute;
-	width: 100%;
-	height: 0;
-	overflow: hidden;
-	visibility: hidden;
-}
-.CodeMirror-measure pre { position: static; }
-
-.CodeMirror-hscrollbar,
-.CodeMirror-vscrollbar
-{
-	display: none !important;
-}
-
-.CodeMirror-scroll { outline: none; }
-
-.cm-em { font-style: italic; }
-.cm-strong { font-weight: bold; }
-.cm-hr { margin-left: 50%; transform: translate(-50%); display: inline-block; }
-.cm-formatting-quote { font-weight: bold; }
-
-.CodeMirror-code { outline: none; }
-
-.cm-url, .cm-formatting-link { opacity: 0.6; }

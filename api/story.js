@@ -128,17 +128,6 @@ let template = prepare`
 				<p>
 					<textarea name="message" required minlength="12" aria-label="feedback"></textarea>
 				</p>
-				<p class="radio-group disabled">
-					<label>
-						<input type="radio" name="mode" id="markdown" checked disabled>
-						markdown
-					</label>
-					&#x20;
-					<label>
-						<input type="radio" name="mode" id="easy-mde" disabled>
-						easy mde
-					</label>
-				</p>
 				<p class="submit">
 					<button>submit feedback</button>
 				</p>
