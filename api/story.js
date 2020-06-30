@@ -38,6 +38,7 @@ let template = prepare`
 			<meta name="viewport" content="width=device-width">
 			<link rel="stylesheet" href="/style.css">
 			<script type="module" src="/script.js"></script>
+			${({description}) => description ? `<meta name="description" content="${description}">` : ""}
 		</head>
 		<body class="${cl("capitalization")}${cl("typesetting")}${cl("optical-alignment")}${cl("semantic-spacing")}" data-guide-rulers="${g("guide-rulers")}" data-theme="${g("theme")}">
 			<p tabindex="0" id="display-settings">layout settings</p>
@@ -295,7 +296,7 @@ export default async ({query: {name}, cookies}, res) =>
 	}
 	
 	let main = renderer.render(parser.parse(story.text))
-	let {title} = story
+	let {title, description} = story
 	
 	res.setHeader("content-type", "text/html")
 	
@@ -343,6 +344,7 @@ export default async ({query: {name}, cookies}, res) =>
 		title,
 		name,
 		feedback,
+		description,
 	}
 	
 	template(s => res.write(s), value)
