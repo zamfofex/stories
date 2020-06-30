@@ -108,6 +108,7 @@ let prepare = () =>
 			
 			for (let {length} = syllables, i = 1 ; i < length ; i += 3)
 			{
+				let previous = syllables[i - 1]
 				let syllable = syllables[i + 0]
 				let shy = syllables[i + 1]
 				let symbols = syllables[i + 2]
@@ -117,9 +118,9 @@ let prepare = () =>
 				else normalized = syllable.toLowerCase()
 				
 				let [whole, left, middle, right] = normalized.match(/^([TYCcOo]?)(.*?)([TYCcOo]?)$/)
-				if (i !== 0) left = ""
+				if (!previous) left = ""
 				if (!middle && !right) right = left
-				if (i !== length - 1) right = ""
+				if (!symbols) right = ""
 				let leftWidth = computedWidths[left] || 0
 				let rightWidth = computedWidths[right] || 0
 				leftWidth *= ratios[left] || 0
