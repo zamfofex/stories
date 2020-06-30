@@ -10,8 +10,5 @@
 		"mongodb": "3.5.8",
 		"compromise": "13.2.0"
 	},
-	"resolutions": {
-		"**/codemirror-spell-checker": "./fake-spellchecker"
-	},
 	"license": "0BSD"
 }
