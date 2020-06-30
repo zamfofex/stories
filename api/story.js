@@ -125,7 +125,7 @@ let template = prepare`
 			<h2>feedback</h2>
 			<form method="POST" action="/${g("name")}/feedback">
 				<p>
-					<textarea name="message" required minlength="12"></textarea>
+					<textarea name="message" required minlength="12" aria-label="feedback"></textarea>
 				</p>
 				<p class="radio-group disabled">
 					<label>
