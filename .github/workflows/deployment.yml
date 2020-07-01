@@ -8,6 +8,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12'
+      - run: npm i
       - run: >
           neocities_auth="${{secrets.neocities_auth}}"
           mongo_url="${{secrets.mongo_url}}"
