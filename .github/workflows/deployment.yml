@@ -9,7 +9,7 @@ jobs:
         with:
           node-version: '12'
       - run: >
-          neocities_auth=${{secrets.neocities_auth}}
-          mongo_url=${{secrets.mongo_url}}
-          mongo_database=${{secrets.mongo_database}}
+          neocities_auth="${{secrets.neocities_auth}}"
+          mongo_url="${{secrets.mongo_url}}"
+          mongo_database="${{secrets.mongo_database}}"
           build/build.bash
