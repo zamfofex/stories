@@ -13,10 +13,10 @@ let font = element =>
 	return `${fontStyle} ${fontWeight} ${fontSize} ${fontFamily}`
 }
 
-let typesetting = document.querySelector(`#settings input[name="typesetting"]`)
-let pull = document.querySelector(`#settings input[name="optical-alignment"]`)
-let hyphens = document.querySelector(`#settings input[name="hyphenation"]`)
-let capitalization = document.querySelector(`#settings input[name="capitalization"]`)
+let typesetting = document.querySelector("#typesetting")
+let pull = document.querySelector("#optical-alignment")
+let hyphens = document.querySelector("#hyphenation")
+let capitalization = document.querySelector("#capitalization")
 
 typesetting.addEventListener("change", () => document.body.classList.toggle("typesetting", typesetting.checked))
 pull.addEventListener("change", () => document.body.classList.toggle("optical-alignment", pull.checked))
