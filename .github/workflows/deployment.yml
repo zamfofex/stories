@@ -8,8 +8,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '12'
-      - run:
-        neocities_auth=${{secrets.neocities_auth}} \
-        mongo_url=${{secrets.mongo_url}} \
-        mongo_database=${{secrets.mongo_database}} \
-        build/build.bash
+      - run: >
+          neocities_auth=${{secrets.neocities_auth}}
+          mongo_url=${{secrets.mongo_url}}
+          mongo_database=${{secrets.mongo_database}}
+          build/build.bash
