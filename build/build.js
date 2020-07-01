@@ -47,7 +47,7 @@ let main = async () =>
 		if (!publication) continue
 		
 		let [year, month] = publication.split("-")
-		list += `<li><a href="/${name}">${title}</a> — `
+		list += `<li><a href="/${name}/">${title}</a> — `
 		list += `${months[month - 1].toLowerCase()} ${year}</li>`
 	}
 	
