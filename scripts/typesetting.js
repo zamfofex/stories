@@ -20,6 +20,7 @@ let capitalization = document.querySelector("#capitalization")
 
 typesetting.addEventListener("change", () => document.body.classList.toggle("typesetting", typesetting.checked))
 pull.addEventListener("change", () => document.body.classList.toggle("optical-alignment", pull.checked))
+if (pull.checked) document.body.classList.add("optical-alignment")
 
 let measure = text => ctx.measureText(capitalization.checked ? text : text.toLowerCase()).width
 
@@ -31,10 +32,7 @@ let ratios =
 	"”": 1,
 	"‘": 1,
 	"’": 1,
-	":": 1,
-	";": 1,
-	"‐": 0.75,
-	"–": 0.5,
+	"‐": 1,
 	"—": 0.25,
 	"T": 0.2,
 	"Y": 0.2,
@@ -102,25 +100,22 @@ let prepare = () =>
 		{
 			let text = hypher.hyphenateText(textNode.data)
 			
-			let syllables = text.split(/([^\p{WSpace}\xAD]*[\p{L}\p{N}\p{Pc}—–]+[^\p{WSpace}\xAD]*)(\xAD?)/gu)
+			let syllables = text.split(/([^\s\xAD]*)(\xAD?)/g)
 			
 			currentNodes = []
 			
 			for (let {length} = syllables, i = 1 ; i < length ; i += 3)
 			{
-				let previous = syllables[i - 1]
 				let syllable = syllables[i + 0]
 				let shy = syllables[i + 1]
-				let symbols = syllables[i + 2]
+				let whitespace = syllables[i + 2]
 				
 				let normalized
 				if (capitalization.checked) normalized = syllable
 				else normalized = syllable.toLowerCase()
 				
-				let [whole, left, middle, right] = normalized.match(/^([TYCcOo]?)(.*?)([TYCcOo]?)$/)
-				if (!previous) left = ""
-				if (!middle && !right) right = left
-				if (!symbols) right = ""
+				let left = normalized[0]
+				let right = normalized[normalized.length-1]
 				let leftWidth = computedWidths[left] || 0
 				let rightWidth = computedWidths[right] || 0
 				leftWidth *= ratios[left] || 0
@@ -148,61 +143,30 @@ let prepare = () =>
 					push({type: "penalty", flagged: false}, shy)
 				}
 				
-				let whitespace = symbols.split(/(\p{WSpace}+)/u)
-				
-				for (let {length} = whitespace, i = 0 ; i < length ; i += 2)
+				if (whitespace)
 				{
-					let symbol = whitespace[i + 0]
-					let glue = whitespace[i + 1]
+					let glue = document.createElement("span")
+					glue.classList.add("glue")
+					let ws = document.createElement("span")
+					ws.classList.add("ws")
+					ws.append(" ")
+					glue.append(ws)
 					
-					if (symbol)
-					{
-						let left = symbol[0]
-						let leftWidth = computedWidths[left] || 0
-						leftWidth *= ratios[left] || 0
-						
-						let right = symbol[symbol.length-1]
-						let rightWidth = computedWidths[right] || 0
-						rightWidth *= ratios[right] || 0
-						
-						font(textNode.parentNode)
-						
-						push(
-							{type: "box"},
-							new Text(symbol),
-							{
-								width: measure(symbol),
-								left: leftWidth,
-								right: rightWidth,
-							},
-						)
-					}
+					let br = document.createElement("span")
+					br.classList.add("br")
+					glue.append(br)
 					
-					if (glue)
-					{
-						let glue = document.createElement("span")
-						glue.classList.add("glue")
-						let ws = document.createElement("span")
-						ws.classList.add("ws")
-						ws.append(" ")
-						glue.append(ws)
-						
-						let br = document.createElement("span")
-						br.classList.add("br")
-						glue.append(br)
-						
-						push(
-							{
-								type: "glue",
-								stretch: spaceWidth / 2,
-								shrink: 0,
-							},
-							glue,
-							{
-								width: spaceWidth,
-							},
-						)
-					}
+					push(
+						{
+							type: "glue",
+							stretch: spaceWidth / 2,
+							shrink: 0,
+						},
+						glue,
+						{
+							width: spaceWidth,
+						},
+					)
 				}
 			}
 			
@@ -247,13 +211,8 @@ let typeset = () =>
 	{
 		node.classList.remove("no-break")
 		
-		let shyWidth
-		
-		if (pull.checked) shyWidth = hyphenWidth * 0.75
-		else shyWidth = hyphenWidth
-		
 		if (hyphens.checked)
-			for (let i of shys) { bases[i].cost = 200 ; widths[i] = shyWidth }
+			for (let i of shys) { bases[i].cost = 200 ; widths[i] = hyphenWidth }
 		else
 			// 1000 is a special value that disallows line breaks.
 			for (let i of shys) bases[i].cost = 1000
@@ -297,7 +256,7 @@ let typeset = () =>
 			if (pull.checked)
 			{
 				if (bases[i].type === "penalty")
-					node.style.setProperty("--pull-left", `${-hyphenWidth * 0.75}px`)
+					node.style.setProperty("--pull-left", `${-hyphenWidth}px`)
 				else
 					node.style.setProperty("--pull-left", `${-rights[i - 1]}px`)
 				
