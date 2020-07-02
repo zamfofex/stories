@@ -44,7 +44,7 @@ export default async ({query: {name}, body: {message}}, res) =>
 	
 	let {headers, stream} = data
 	
-	let request = https.request("https://neocities.org/api/upload", {method: "POST", headers: {...headers, authorization: `Bearer ${auth: process.env.neocities_token}`}})
+	let request = https.request("https://neocities.org/api/upload", {method: "POST", headers: {...headers, authorization: `Bearer ${process.env.neocities_token}`}})
 	stream.pipe(request)
 	await new Promise(f => request.on("response", f))
 	
