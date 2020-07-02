@@ -29,6 +29,3 @@ npx google-closure-compiler@20200517.0.0 \
 yarn licenses generate-disclaimer > public/licenses.txt
 
 node build/build.js
-
-cd public
-find . -type f | sed -e 's/^.*$/-F \0=@\0/' | xargs curl "https://$neocities_auth@neocities.org/api/upload"

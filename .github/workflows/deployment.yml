@@ -13,7 +13,10 @@ jobs:
           node-version: '12'
       - run: npm i
       - run: >
-          neocities_auth="${{secrets.neocities_auth}}"
           mongo_url="${{secrets.mongo_url}}"
           mongo_database="${{secrets.mongo_database}}"
           build/build.bash
+      - uses: bcomnes/deploy-to-neocities@v1
+        with:
+          api_token: ${{secrets.neocities_token}}
+          cleanup: true
