@@ -1,5 +1,9 @@
 {
 	"version": 2,
-	"rewrites": [{"source": "(.*)", "destination": "/api/feedback.js"}],
+	"routes":
+		[
+			{"src": "/submit", "dest": "/api/feedback.js", "methods": ["POST"]},
+			{"src": ".*", "status": 307, "headers": {"location": "https://zamstories.neocities.org"}}
+		],
 	"github": {"silent": true}
 }
