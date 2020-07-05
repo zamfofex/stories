@@ -98,9 +98,9 @@ let prepare = () =>
 		
 		for (let textNode of textNodes)
 		{
-			let text = hypher.hyphenateText(textNode.data)
+			let text = hypher.hyphenateText(textNode.data, 8)
 			
-			let syllables = text.split(/([^\s\xAD]*)(\xAD?)/g)
+			let syllables = text.split(/([^\s\xAD]+)(\xAD?)/g)
 			
 			currentNodes = []
 			
