@@ -26,7 +26,7 @@ let main = async () =>
 	
 	let list = ""
 	
-	for await (let {aliases = [], title, description = "", text, feedback: feedbackMessages = [], name, publication} of stories.find().sort({publication: -1}))
+	for await (let {title, description = "", text, feedback: feedbackMessages = [], name, publication} of stories.find().sort({publication: -1}))
 	{
 		let main = renderer.render(parser.parse(text))
 		
