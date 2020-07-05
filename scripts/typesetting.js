@@ -100,7 +100,7 @@ let prepare = () =>
 		
 		for (let textNode of textNodes)
 		{
-			let text = hypher.hyphenateText(textNode.data, 8)
+			let text = hypher.hyphenateText(textNode.data)
 			
 			let syllables = text.split(/([^\s\xAD]+)(\xAD?)/g)
 			
