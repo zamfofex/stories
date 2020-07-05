@@ -19,6 +19,8 @@ let hyphens = document.querySelector("#hyphenation")
 let capitalization = document.querySelector("#capitalization")
 
 typesetting.addEventListener("change", () => document.body.classList.toggle("typesetting", typesetting.checked))
+if (typesetting.checked) document.body.classList.add("typesetting")
+
 pull.addEventListener("change", () => document.body.classList.toggle("optical-alignment", pull.checked))
 if (pull.checked) document.body.classList.add("optical-alignment")
 

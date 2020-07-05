@@ -5,5 +5,6 @@ group.closest("p").classList.remove("disabled")
 for (let radio of group.querySelectorAll("input"))
 {
 	radio.disabled = false
-	radio.addEventListener("change", () => document.body.setAttribute("data-guide-rulers", radio.value))
+	radio.addEventListener("change", () => document.body.dataset.guideRulers = radio.value)
+	if (radio.checked) document.body.dataset.guideRulers = radio.value
 }

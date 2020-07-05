@@ -1,6 +1,6 @@
 let select = document.querySelector("#theme")
 let theme = select.closest("label")
-select.addEventListener("change", () => document.body.dataset.theme = select.value)
+select.addEventListener("change", () => document.documentElement.dataset.theme = select.value)
 
 select.disabled = false
 theme.classList.remove("disabled")

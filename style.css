@@ -60,21 +60,21 @@ body
 	transition: 0.5s ease --background-color, 0.5s ease --text-color;
 }
 
-body[data-theme="cocoa"]
+[data-theme="cocoa"] body
 {
 	--text-color: #FDA;
 	--background-color: #531;
 	--highlight-color: #FDA3;
 }
 
-body[data-theme="milk"]
+[data-theme="milk"] body
 {
 	--text-color: #532;
 	--background-color: #FDFAEE;
 	--highlight-color: #5322;
 }
 
-body[data-theme="coffee"]
+[data-theme="coffee"] body
 {
 	--text-color: #DB8;
 	--background-color: #310;
