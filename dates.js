@@ -66,7 +66,8 @@ export default date =>
 	let hours = date.getUTCHours()
 	title += hours.toString().padStart(2, "0") + ":"
 	title += date.getUTCMinutes().toString().padStart(2, "0") + " "
-	if (0 < hours && hours < 13) title += "a.m. (UTC)"
+	if (0 < hours && hours < 12) title += "a.m. (UTC)"
+	else if (hours === 12) title += "p.m. (UTC)"
 	else title += "UTC"
 	
 	return `<time datetime="${date.toISOString()}" title="${title}">${result}</time>`
