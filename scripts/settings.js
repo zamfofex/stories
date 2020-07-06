@@ -7,7 +7,7 @@ for (let input of settings.querySelectorAll("input, select"))
 	{
 		if (input.type === "checkbox")
 		{
-			if (value !== "off") input.checked = true
+			input.checked = value !== "off"
 		}
 		else if (input.type === "radio")
 		{
