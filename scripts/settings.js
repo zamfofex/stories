@@ -26,3 +26,7 @@ for (let input of settings.querySelectorAll("input, select"))
 	else
 		input.addEventListener("change", () => localStorage.setItem(input.id, input.value||"off"))
 }
+
+let details = settings.closest("#display-settings")
+
+settings.querySelector(".submit button").addEventListener("click", () => details.open = false)
