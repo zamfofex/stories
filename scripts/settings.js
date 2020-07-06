@@ -29,4 +29,12 @@ for (let input of settings.querySelectorAll("input, select"))
 
 let details = settings.closest("#display-settings")
 
-settings.querySelector(".submit button").addEventListener("click", () => details.open = false)
+let submit = settings.querySelector(".submit")
+submit.textContent = ""
+
+let confirm = document.createElement("button")
+confirm.append("confirm changes")
+
+submit.append(confirm)
+
+confirm.addEventListener("click", () => details.open = false)
