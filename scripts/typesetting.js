@@ -100,76 +100,95 @@ let prepare = () =>
 		
 		for (let textNode of textNodes)
 		{
-			let text = hypher.hyphenateText(textNode.data)
-			
-			let syllables = text.split(/([^\s\xAD]+)(\xAD?)/g)
+			let words = textNode.data.split(/([a-z]+|[^a-z\s]+)/ig)
 			
 			currentNodes = []
 			
-			for (let {length} = syllables, i = 1 ; i < length ; i += 3)
+			for (let {length} = words, j = 1 ; j < length ; j += 2)
 			{
-				let syllable = syllables[i + 0]
-				let shy = syllables[i + 1]
-				let whitespace = syllables[i + 2]
+				let word = words[j + 0]
+				let whitespace = words[j + 1]
 				
-				let normalized
-				if (capitalization.checked) normalized = syllable
-				else normalized = syllable.toLowerCase()
-				
-				let left = normalized[0]
-				let right = normalized[normalized.length-1]
-				let leftWidth = computedWidths[left] || 0
-				let rightWidth = computedWidths[right] || 0
-				leftWidth *= ratios[left] || 0
-				rightWidth *= ratios[right] || 0
-				
-				ctx.font = font(textNode.parentNode)
-				
-				push(
-					{type: "box"},
-					new Text(syllable),
-					{
-						width: measure(normalized),
-						left: leftWidth,
-						right: rightWidth,
-					},
-				)
-				
-				if (shy)
+				let syllables
+				if (/[^a-z]/i.test(word) || word.length < 4)
 				{
-					let shy = document.createElement("span")
-					shy.classList.add("shy")
-					let br = document.createElement("span")
-					br.classList.add("br")
-					shy.append(br)
-					push({type: "penalty", flagged: false}, shy)
+					syllables = [word]
+				}
+				else
+				{
+					syllables = hypher.hyphenate(word)
+					
+					let first = ""
+					while (first.length < 4) first += syllables.shift()
+					syllables.unshift(first)
+					
+					let last = ""
+					while (last.length < 4) last = syllables.pop() + last
+					syllables.push(last)
 				}
 				
-				if (whitespace)
+				let flag = false
+				for (let syllable of syllables)
 				{
-					let glue = document.createElement("span")
-					glue.classList.add("glue")
-					let ws = document.createElement("span")
-					ws.classList.add("ws")
-					ws.append(" ")
-					glue.append(ws)
+					if (flag)
+					{
+						let shy = document.createElement("span")
+						shy.classList.add("shy")
+						let br = document.createElement("span")
+						br.classList.add("br")
+						shy.append(br)
+						push({type: "penalty", flagged: false}, shy)
+					}
+					flag = true
 					
-					let br = document.createElement("span")
-					br.classList.add("br")
-					glue.append(br)
+					let normalized
+					if (capitalization.checked) normalized = syllable
+					else normalized = syllable.toLowerCase()
+					
+					let left = normalized[0]
+					let right = normalized[normalized.length-1]
+					let leftWidth = computedWidths[left] || 0
+					let rightWidth = computedWidths[right] || 0
+					leftWidth *= ratios[left] || 0
+					rightWidth *= ratios[right] || 0
+					
+					ctx.font = font(textNode.parentNode)
 					
 					push(
+						{type: "box"},
+						new Text(syllable),
 						{
-							type: "glue",
-							stretch: spaceWidth / 2,
-							shrink: 0,
-						},
-						glue,
-						{
-							width: spaceWidth,
+							width: measure(normalized),
+							left: leftWidth,
+							right: rightWidth,
 						},
 					)
 				}
+				
+				if (!whitespace) continue
+				
+				let glue = document.createElement("span")
+				glue.classList.add("glue")
+				let ws = document.createElement("span")
+				ws.classList.add("ws")
+				ws.append(" ")
+				glue.append(ws)
+				
+				let br = document.createElement("span")
+				br.classList.add("br")
+				glue.append(br)
+				
+				push(
+					{
+						type: "glue",
+						stretch: spaceWidth / 2,
+						shrink: 0,
+					},
+					glue,
+					{
+						width: spaceWidth,
+					},
+				)
 			}
 			
 			textNode.replaceWith(...currentNodes)
@@ -214,7 +233,7 @@ let typeset = () =>
 		node.classList.remove("no-break")
 		
 		if (hyphens.checked)
-			for (let i of shys) { bases[i].cost = 200 ; widths[i] = hyphenWidth }
+			for (let i of shys) { bases[i].cost = 400 ; widths[i] = hyphenWidth }
 		else
 			// 1000 is a special value that disallows line breaks.
 			for (let i of shys) bases[i].cost = 1000
