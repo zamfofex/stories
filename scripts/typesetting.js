@@ -348,6 +348,7 @@ let typeset = () =>
 		}
 		
 		let first = nodes[prev + 1]
+		if (!first) continue
 		if (bases[prev + 1].type !== "glue") first = first.parentNode
 		
 		for (let node = first ; node ; node = node.nextElementSibling)
