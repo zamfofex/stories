@@ -21,6 +21,7 @@
 	→ paper print
 	→ settings: custom typesetting
 	→ not found error page
+	→ settings: spacing harmony
 */
 
 @font-face
@@ -520,8 +521,7 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		width: 0;
 	}
 	
-	body.typesetting > main .last-line
-	{ word-spacing: normal; }
+	body.typesetting > main .last-line { word-spacing: normal; }
 	
 	body.typesetting.optical-alignment > main .break::before
 	{
@@ -558,4 +558,11 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 .not-found
 {
 	text-align: center;
+}
+
+/* → settings: spacing harmony */
+
+body.typesetting.spacing-harmony > main .word
+{
+	letter-spacing: var(--spacing);
 }
