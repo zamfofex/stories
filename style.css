@@ -498,11 +498,6 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	{
 		white-space: nowrap;
 		text-align-last: justify;
-		margin-left: -2em;
-		margin-right: -2em;
-		background-size: calc(100% - 4em) auto;
-		background-repeat: no-repeat repeat;
-		background-position: center;
 	}
 	
 	body.typesetting > main .p::after
@@ -551,6 +546,15 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		content: "";
 		margin-left: calc(2em - var(--pull-before));
 		display: inline-block;
+	}
+	
+	body.typesetting.optical-alignment > main .p
+	{
+		margin-left: -2em;
+		margin-right: -2em;
+		background-size: calc(100% - 4em) auto;
+		background-repeat: no-repeat repeat;
+		background-position: center;
 	}
 	
 	/* → settings: spacing harmony */
