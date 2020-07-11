@@ -271,11 +271,17 @@ let typeset = () =>
 		})
 		
 		let {clientWidth} = node
-		clientWidth -= 64 // 2em + 2em (compensation for negative margins)
+		
+		if (pull.checked)
+		{
+			// 2em + 2em (compensation for negative margins)
+			clientWidth -= 64
+			
+			node.style.setProperty("--pull-before", `${lefts[0]}px`)
+		}
+		
 		let indices = breakLines(items, clientWidth, {doubleHyphenPenalty: 300, adjacentLooseTightPenalty: 100})
 		indices.shift()
-		
-		if (pull.checked) node.style.setProperty("--pull-before", `${lefts[0]}px`)
 		
 		for (let i of indices)
 		{
