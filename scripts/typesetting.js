@@ -305,14 +305,19 @@ let typeset = () =>
 		
 		if (!spacing.checked) continue
 		
-		let prev = -1
+		let prev = 0
+		
+		let length = bases.length - 1
+		
+		for (let i = 0 ; i < length ; i++)
+			nodes[i].classList.remove("spacing-offset")
 		
 		for (let i of indices)
 		{
 			let width = 0
 			let glues = 0
 			let gaps = -1
-			for (let j = prev + 1 ; j < i ; j++)
+			for (let j = prev ; j < i ; j++)
 			{
 				let base = bases[j]
 				if (base.type === "glue")
@@ -330,14 +335,16 @@ let typeset = () =>
 			if (spacing > 0) value = `${spacing}px`
 			else value = "0"
 			
-			for (let j = prev + 1 ; j <= i ; j++)
-				nodes[j].style.setProperty("--spacing", value)
+			for (let j = prev ; j < i ; j++)
+				if (bases[j].type === "box") nodes[j].style.setProperty("--spacing", value)
 			
-			prev = i
+			nodes[i - 1].classList.add("spacing-offset")
+			
+			prev = i + 1
 		}
 		
-		for (let length = nodes.length - 1, j = prev + 1 ; j < length ; j++)
-			nodes[j].style.setProperty("--spacing", "0")
+		for (let j = prev ; j < length ; j++)
+			if (bases[j].type === "box") nodes[j].style.setProperty("--spacing", "0")
 	}
 }
 

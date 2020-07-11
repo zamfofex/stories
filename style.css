@@ -566,8 +566,8 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	
 	body.typesetting.spacing-harmony > main .shy { letter-spacing: 0; }
 	
-	body.typesetting.spacing-harmony > main .break::before
-	{ margin-left: calc(-1 * var(--spacing, 0)); }
+	body.typesetting > main .spacing-offset
+	{ margin-right: calc(-1 * var(--spacing, 0)); }
 }
 
 /* → not found error page */
