@@ -138,9 +138,12 @@ let prepare = () =>
 						let br = document.createElement("span")
 						br.classList.add("br")
 						shy.append(br)
-						push({type: "penalty", flagged: false}, shy)
+						push({type: "penalty"}, shy)
 					}
-					flag = true
+					else
+					{
+						flag = true
+					}
 					
 					let normalized
 					if (capitalization.checked) normalized = syllable
@@ -156,7 +159,7 @@ let prepare = () =>
 					ctx.font = font(textNode.parentNode)
 					
 					let span = document.createElement("span")
-					span.classList.add("syllable")
+					span.classList.add("box")
 					span.append(syllable)
 					
 					push(
@@ -256,15 +259,16 @@ let typeset = () =>
 				let right = rights[i] || 0
 				
 				width -= left + right
-				width = Math.max(0, width)
 				
-				if (base.type === "glue")
+				if (base.type !== "box")
 				{
 					let next = lefts[i + 1] || 0
 					let prev = rights[i - 1] || 0
 					
 					width += next + prev
 				}
+				
+				if (width < 0) width = 0
 			}
 			
 			return {...base, width}
