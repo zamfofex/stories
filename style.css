@@ -20,8 +20,9 @@
 	→ lists
 	→ paper print
 	→ settings: custom typesetting
-	→ not found error page
 	→ settings: spacing harmony
+	→ settings: optical alignment
+	→ not found error page
 */
 
 @font-face
@@ -489,15 +490,19 @@ article, blockquote { break-inside: avoid; }
 
 h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 
-/* → settings: custom typesetting */
-
 @media not print
 {
+	/* → settings: custom typesetting */
+	
 	body.typesetting > main .p
 	{
 		white-space: nowrap;
 		text-align-last: justify;
-		word-spacing: -1px;
+		margin-left: -2em;
+		margin-right: -2em;
+		background-size: calc(100% - 4em) auto;
+		background-repeat: no-repeat repeat;
+		background-position: center;
 	}
 	
 	body.typesetting > main .p::after
@@ -514,37 +519,51 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		white-space: pre;
 	}
 	
-	body.typesetting > main .break > .ws
+	body.typesetting > main .glue.break > .ws
 	{
 		display: inline-block;
 		white-space: pre;
 		width: 0;
 	}
 	
-	body.typesetting > main .last-line { word-spacing: normal; }
+	body.typesetting > main .glue.break > .ws::selection { background: #0000; }
+	
+	body.typesetting > main .shy.break::before { content: "\2010" !important; }
+	
+	/* → settings: optical alignment */
 	
 	body.typesetting.optical-alignment > main .break::before
 	{
 		content: "";
-		margin-right: var(--pull-left);
+		margin-right: calc(2em - var(--pull-left));
 		display: inline-block;
 	}
 	
 	body.typesetting.optical-alignment > main .break::after
 	{
 		content: "";
-		margin-left: var(--pull-right);
+		margin-left: calc(2em - var(--pull-right));
 		display: inline-block;
 	}
 	
 	body.typesetting.optical-alignment > main .p::before
 	{
 		content: "";
-		margin-left: var(--pull-before);
+		margin-left: calc(2em - var(--pull-before));
 		display: inline-block;
 	}
 	
-	body.typesetting > main .shy.break::before { content: "\2010" !important; }
+	/* → settings: spacing harmony */
+	
+	body.typesetting.spacing-harmony > main .syllable
+	{
+		letter-spacing: var(--spacing);
+	}
+	
+	body.typesetting.spacing-harmony > main .shy { letter-spacing: 0; }
+	
+	body.typesetting.spacing-harmony > main .break::before
+	{ margin-left: calc(-1 * var(--spacing, 0)); }
 }
 
 /* → not found error page */
@@ -558,11 +577,4 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 .not-found
 {
 	text-align: center;
-}
-
-/* → settings: spacing harmony */
-
-body.typesetting.spacing-harmony > main .word
-{
-	letter-spacing: var(--spacing);
 }

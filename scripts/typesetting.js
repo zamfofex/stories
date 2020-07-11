@@ -25,7 +25,7 @@ for (let checkbox of [typesetting, pull, spacing])
 	document.body.classList.toggle(checkbox.id, checkbox.checked)
 }
 
-let measure = text => ctx.measureText(capitalization.checked ? text : text.toLowerCase()).width
+let measure = text => ctx.measureText(text).width
 
 let ratios =
 {
@@ -80,7 +80,6 @@ let prepare = () =>
 		let rights = []
 		let shys = []
 		let currentNodes
-		let word = []
 		paragraphs.push({bases, nodes, widths, lefts, rights, node, shys})
 		
 		let push = (base, node, {width, left, right} = {}) =>
@@ -88,18 +87,7 @@ let prepare = () =>
 			if (base.type === "penalty") shys.push(bases.length)
 			bases.push(base)
 			nodes.push(node)
-			if (base.type === "glue")
-			{
-				let span = document.createElement("span")
-				span.classList.add("word")
-				span.append(...word)
-				currentNodes.push(span, node)
-				word = []
-			}
-			else
-			{
-				word.push(node)
-			}
+			currentNodes.push(node)
 			widths.push(width)
 			lefts.push(left)
 			rights.push(right)
@@ -167,9 +155,13 @@ let prepare = () =>
 					
 					ctx.font = font(textNode.parentNode)
 					
+					let span = document.createElement("span")
+					span.classList.add("syllable")
+					span.append(syllable)
+					
 					push(
 						{type: "box"},
-						new Text(syllable),
+						span,
 						{
 							width: measure(normalized),
 							left: leftWidth,
@@ -194,7 +186,7 @@ let prepare = () =>
 				push(
 					{
 						type: "glue",
-						stretch: spaceWidth / 2,
+						stretch: 1,
 						shrink: 0,
 					},
 					glue,
@@ -204,10 +196,12 @@ let prepare = () =>
 				)
 			}
 			
+			textNode.replaceWith(...currentNodes)
+			
 			push(
 				{
 					type: "glue",
-					stretch: spaceWidth / 2,
+					stretch: 1,
 					shrink: 0,
 				},
 				null,
@@ -215,10 +209,6 @@ let prepare = () =>
 					width: spaceWidth,
 				},
 			)
-			
-			currentNodes.pop()
-			
-			textNode.replaceWith(...currentNodes)
 		}
 	}
 	
@@ -243,13 +233,15 @@ let typeset = () =>
 	
 	for (let current of document.querySelectorAll(".break"))
 		current.classList.remove("break")
-	for (let current of document.querySelectorAll(".last-line"))
-		current.classList.remove("last-line")
+	
+	let shyWidth
+	if (pull.checked) shyWidth = 0
+	else shyWidth = hyphenWidth
 	
 	for (let {bases, nodes, widths, lefts, rights, node, shys} of paragraphs)
 	{
 		if (hyphens.checked)
-			for (let i of shys) { bases[i].cost = 400 ; widths[i] = hyphenWidth }
+			for (let i of shys) { bases[i].cost = 400 ; widths[i] = shyWidth }
 		else
 			// 1000 is a special value that disallows line breaks.
 			for (let i of shys) bases[i].cost = 1000
@@ -279,32 +271,27 @@ let typeset = () =>
 		})
 		
 		let {clientWidth} = node
+		clientWidth -= 64 // 2em + 2em (compensation for negative margins)
 		let indices = breakLines(items, clientWidth, {doubleHyphenPenalty: 300, adjacentLooseTightPenalty: 100})
 		indices.shift()
 		
-		if (pull.checked) node.style.setProperty("--pull-before", `${-lefts[0]}px`)
+		if (pull.checked) node.style.setProperty("--pull-before", `${lefts[0]}px`)
 		
 		for (let i of indices)
 		{
 			let node = nodes[i]
-			if (!node) continue
-			
 			node.classList.add("break")
 			
 			if (pull.checked)
 			{
 				if (bases[i].type === "penalty")
-					node.style.setProperty("--pull-left", `${-hyphenWidth}px`)
+					node.style.setProperty("--pull-left", `${hyphenWidth}px`)
 				else
-					node.style.setProperty("--pull-left", `${-rights[i - 1]}px`)
+					node.style.setProperty("--pull-left", `${rights[i - 1]}px`)
 				
-				node.style.setProperty("--pull-right", `${-lefts[i + 1]}px`)
+				node.style.setProperty("--pull-right", `${lefts[i + 1]}px`)
 			}
 		}
-		
-		let length = indices.length
-		for (let i = (indices[length - 1] || -1) + 1 ; i < length ; i++)
-			if (bases[i].type === "glue" && nodes[i]) nodes[i].classList.add("last-line")
 		
 		if (!spacing.checked) continue
 		
@@ -314,19 +301,17 @@ let typeset = () =>
 		{
 			let width = 0
 			let glues = 0
-			let gaps = 0
+			let gaps = -1
 			for (let j = prev + 1 ; j < i ; j++)
 			{
 				let base = bases[j]
 				if (base.type === "glue")
-					glues++
+					glues++, gaps--
 				else
 					width += widths[j]
 				
 				if (base.type === "box")
-					gaps += nodes[j].data.length
-				else
-					gaps--
+					gaps += nodes[j].childNodes[0].data.length
 			}
 			
 			let spacing = ((clientWidth - width) / glues - 1.75 * spaceWidth) * glues / gaps / 1.25
@@ -335,24 +320,14 @@ let typeset = () =>
 			if (spacing > 0) value = `${spacing}px`
 			else value = "0"
 			
-			let first = nodes[prev + 1]
-			if (bases[prev + 1].type !== "glue") first = first.parentNode
-			
-			let last = nodes[i]
-			if (bases[i].type !== "glue") last = last.parentNode
-			
-			for (let node = first ; node !== last ; node = node.nextElementSibling)
-				if (!node.matches(".glue")) node.style.setProperty("--spacing", value)
+			for (let j = prev + 1 ; j <= i ; j++)
+				nodes[j].style.setProperty("--spacing", value)
 			
 			prev = i
 		}
 		
-		let first = nodes[prev + 1]
-		if (!first) continue
-		if (bases[prev + 1].type !== "glue") first = first.parentNode
-		
-		for (let node = first ; node ; node = node.nextElementSibling)
-			if (!node.matches(".glue")) node.style.setProperty("--spacing", "0")
+		for (let length = nodes.length - 1, j = prev + 1 ; j < length ; j++)
+			nodes[j].style.setProperty("--spacing", "0")
 	}
 }
 
