@@ -67,11 +67,7 @@
 
 ::selection { background: var(--highlight-color); }
 
-html
-{
-	width: 100%;
-	height: 100%;
-}
+html { width: 100%; }
 
 body
 {
@@ -87,19 +83,17 @@ body
 	width: 25em;
 	min-width: calc(50% + 4em);
 	max-width: 100%;
-	overflow-x: hidden;
-	overflow-y: scroll;
 	line-height: 1.75em;
 	text-align: justify;
 	position: relative;
 	transition: 0.5s ease --background-color, 0.5s ease --text-color;
+	word-break: break-word;
 }
 
 main
 {
 	padding: 0 2em;
 	margin: 0 -2em;
-	overflow: hidden;
 }
 
 @media (max-width: 800px)
@@ -498,6 +492,8 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	{
 		white-space: nowrap;
 		text-align-last: justify;
+		overflow: hidden;
+		position: relative;
 	}
 	
 	body.typesetting > main .p::after
