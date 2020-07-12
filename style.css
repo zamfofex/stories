@@ -493,6 +493,12 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		white-space: nowrap;
 		text-align-last: justify;
 		overflow: hidden;
+		margin-left: -1em;
+		margin-right: -1em;
+		padding: 0 1em;
+		background-size: calc(100% - 2em) auto;
+		background-repeat: no-repeat repeat;
+		background-position: center;
 	}
 	
 	body.typesetting > main .p::after
@@ -525,31 +531,27 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	body.typesetting.optical-alignment > main .break::before
 	{
 		content: "";
-		margin-right: calc(2em - var(--pull-left));
+		margin-right: calc(1em - var(--pull-left));
 		display: inline-block;
 	}
 	
 	body.typesetting.optical-alignment > main .break::after
 	{
 		content: "";
-		margin-left: calc(2em - var(--pull-right));
+		margin-left: calc(1em - var(--pull-right));
 		display: inline-block;
 	}
 	
 	body.typesetting.optical-alignment > main .p::before
 	{
 		content: "";
-		margin-left: calc(2em - var(--pull-before));
+		margin-left: calc(1em - var(--pull-before));
 		display: inline-block;
 	}
 	
 	body.typesetting.optical-alignment > main .p
 	{
-		margin-left: -2em;
-		margin-right: -2em;
-		background-size: calc(100% - 4em) auto;
-		background-repeat: no-repeat repeat;
-		background-position: center;
+		padding: 0;
 	}
 	
 	/* → settings: spacing harmony */
