@@ -94,7 +94,7 @@ main
 	margin: 0 -1em;
 }
 
-@media (max-width: 800px)
+@media (max-width: 450px)
 {
 	body { text-align: left; }
 }
@@ -462,11 +462,6 @@ ol > li::before
 	
 	#settings, #list, #list ~ * { display: none; }
 	::-webkit-scrollbar { display: none; }
-	
-	@media (max-width: 400px)
-	{
-		body { text-align: left; }
-	}
 	
 	a { text-decoration: none; }
 	
