@@ -98,6 +98,14 @@ body > footer
 	content: "";
 }
 
+.end
+{
+	font-weight: bold;
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 4em;
+}
+
 /* → themes */
 
 [data-theme="cocoa"] body

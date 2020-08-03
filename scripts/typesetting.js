@@ -66,7 +66,7 @@ let prepare = () =>
 	hyphenWidth = measure("\u2010")
 	spaceWidth = measure(" ")
 	
-	for (let node of document.querySelectorAll("main > p, main > :not(footer) p"))
+	for (let node of document.querySelectorAll("main > p, main > :not(footer):not(.end) p"))
 	{
 		node.classList.add("p")
 		
