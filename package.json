@@ -1,6 +1,7 @@
 {
 	"license": "0BSD",
 	"dependencies": {
+		"commonmark": "0.29.1",
 		"mongodb": "3.6.0",
 		"formdata-node": "2.2.1"
 	},
