@@ -1,7 +1,4 @@
-import Hypher from "hypher"
-import english from "hyphenation.en-us"
-import linebreak from "tex-linebreak"
-let {breakLines} = linebreak
+import {Hypher, english, breakLines} from "./dependencies.js"
 
 let hypher = new Hypher(english)
 

@@ -20,46 +20,12 @@
 	→ lists
 	→ paper print
 	→ settings: custom typesetting
-	→ settings: spacing harmony
 	→ settings: optical alignment
+	→ settings: spacing harmony
 	→ not found error page
 */
 
-@font-face
-{
-	font-family: "Lora";
-	font-style: normal;
-	font-weight: 400;
-	src: url("/fonts/lora.ttf") format("truetype");
-	font-display: swap;
-}
-
-@font-face
-{
-	font-family: "Lora";
-	font-style: italic;
-	font-weight: 400;
-	src: url("/fonts/lora-italic.ttf") format("truetype");
-	font-display: swap;
-}
-
-@font-face
-{
-	font-family: "Oxygen Mono";
-	font-style: normal;
-	font-weight: 400;
-	src: url("/fonts/oxygen-mono.ttf") format("truetype");
-	font-display: swap;
-}
-
-@font-face
-{
-	font-family: "Asap";
-	font-style: italic;
-	font-weight: 400;
-	src: url("/fonts/asap-italic.woff2") format("woff2");
-	font-display: swap;
-}
+@import "https://fonts.googleapis.com/css2?family=Asap:ital@1&family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Oxygen+Mono&display=swap";
 
 /* → main layout and page */
 

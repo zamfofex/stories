@@ -1,11 +1,7 @@
 {
 	"license": "0BSD",
 	"dependencies": {
-		"commonmark": "0.29.1",
-		"hypher": "0.2.5",
-		"hyphenation.en-us": "0.2.1",
-		"tex-linebreak": "0.5.2",
-		"mongodb": "3.5.8",
+		"mongodb": "3.6.0",
 		"formdata-node": "2.2.1"
 	},
 	"type": "module"

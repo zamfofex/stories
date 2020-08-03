@@ -1,10 +1,8 @@
 import md from "commonmark"
 import mongodb from "mongodb"
 import fs from "fs"
-import formatDate, {months} from "../dates.js"
+import {months} from "../dates.js"
 import buildFeedback from "./feedback.js"
-import https from "https"
-import util from "util"
 
 let parser = new md.Parser()
 let renderer = new md.HtmlRenderer({safe: true})
