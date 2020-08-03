@@ -3,7 +3,7 @@
 set -e
 
 mkdir -p public
-rm -r public/*
+rm -rf public/*
 
 ln style.css script.js public
 ln -s ../scripts public
