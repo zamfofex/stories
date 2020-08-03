@@ -2,8 +2,8 @@
 
 set -e
 
-mkdir -p public/scripts
 rm -rf public/*
+mkdir -p public/scripts
 
 ln style.css script.js public
 ln scripts/* public/scripts
