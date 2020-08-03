@@ -89,22 +89,21 @@
 			<div class="end">
 				<p>The End</p>
 			</div>
-			<footer>
-				This story is licensed under <a href="https://creativecommons.org/licenses/by/4.0" rel="license">Creative Commons Attribution 4.0 International</a>.
-			</footer>
 		</main>
-		<p id="list">
-			<a href="/">list of stories</a>
-		</p>
-		<h2>feedback</h2>
-		<form method="POST" action="https://zamstories-feedback.vercel.app/submit?name=((name))">
-			<p>
-				<textarea name="message" required minlength="12" aria-label="feedback"></textarea>
-			</p>
-			<p class="submit">
-				<button>submit feedback</button>
-			</p>
-		</form>
-		((feedback))
+		<p>This story is published under the <a href="https://creativecommons.org/licenses/by/4.0" rel="license">Creative Commons Attribution 4.0 International</a> license</p>
+		<p><a href="/">Read more stories like this</a></p>
+		<details id="feedback">
+			<summary>Share feedback</summary>
+			<form method="POST" action="https://zamstories-feedback.vercel.app/submit?name=((name))">
+				<p>
+					<textarea name="message" required minlength="12" aria-label="feedback"></textarea>
+				</p>
+				<div class="submit">
+					<p>Feedback is public and anonymous</p>
+					<p><button>submit feedback</button></p>
+				</div>
+			</form>
+			((feedback))
+		</details>
 	</body>
 </html>

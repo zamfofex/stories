@@ -44,7 +44,7 @@ body
 	font-size: 16px;
 	background: var(--background-color);
 	color: var(--text-color);
-	margin: 2em auto;
+	margin: 2em auto 4em;
 	padding: 0 2em;
 	width: min(64em, 100%, max(32em, 50% + 4em));
 	line-height: 1.75em;
@@ -57,7 +57,7 @@ body
 main
 {
 	padding: 0 1em;
-	margin: 0 -1em;
+	margin: 0 -1em 8em;
 }
 
 @media (max-width: 450px)
@@ -103,7 +103,6 @@ body > footer
 	font-weight: bold;
 	font-style: italic;
 	text-align: center;
-	margin-bottom: 4em;
 }
 
 /* → themes */
@@ -291,7 +290,7 @@ input[type="checkbox"]:checked
 a:focus, button:focus,
 :not(.radio-group) > label:focus-within,
 .radio-group:focus-within,
-#display-settings > summary:focus
+summary:focus
 {
 	outline: 0.0625em solid var(--text-color);
 }
@@ -346,8 +345,11 @@ label { cursor: pointer; }
 /* → settings: capitalization */
 
 body:not(.capitalization) > main,
-body:not(.capitalization) > article > header,
-body:not(.capitalization) > main > footer
+body:not(.capitalization) > main > footer,
+body:not(.capitalization) > main ~ p,
+body:not(.capitalization) #feedback > article > header,
+body:not(.capitalization) #feedback .submit,
+body:not(.capitalization) #feedback > summary
 {
 	text-transform: lowercase;
 }
@@ -434,7 +436,7 @@ ol > li::before
 		--background-color: #0000 !important;
 	}
 	
-	#settings, #list, #list ~ * { display: none; }
+	#settings, main ~ * { display: none; }
 	::-webkit-scrollbar { display: none; }
 	
 	a { text-decoration: none; }
@@ -545,4 +547,18 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 .not-found
 {
 	text-align: center;
+}
+
+/* → feedback section */
+
+#feedback > summary { cursor: pointer; display: block; }
+#feedback > summary::-webkit-details-marker { display: none; }
+
+#feedback:not([open]) > summary { text-decoration: underline; }
+#feedback[open] > summary
+{
+	font-family: "Asap", sans-serif;
+	font-style: italic;
+	margin: 0.75em 0;
+	font-size: 1.75em;
 }
