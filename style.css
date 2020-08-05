@@ -436,22 +436,23 @@ ol > li::before
 		--background-color: #0000 !important;
 	}
 	
-	#settings, main ~ * { display: none; }
+	#display-settings, main ~ * { display: none; }
 	::-webkit-scrollbar { display: none; }
 	
 	a { text-decoration: none; }
 	
 	pre { white-space: pre-wrap; }
 	
-	:not(pre) > code
-	{
-		background: none;
-	}
+	:not(pre) > code { background: none; }
+	
+	main { margin-bottom: 0; }
 }
 
 article, blockquote { break-inside: avoid; }
 
 h1, h2, h3, h4, h5, h6 { break-after: avoid; }
+
+.end { break-before: avoid; }
 
 @media not print
 {
