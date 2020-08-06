@@ -436,7 +436,9 @@ ol > li::before
 		--background-color: #0000 !important;
 	}
 	
-	#display-settings, main ~ * { display: none; }
+	#display-settings, main ~ p,
+	#feedback > summary, #feedback > form
+	{ display: none !important; }
 	::-webkit-scrollbar { display: none; }
 	
 	a { text-decoration: none; }
