@@ -46,7 +46,10 @@ body
 	color: var(--text-color);
 	margin: 2em auto 4em;
 	padding: 0 2em;
-	width: min(64em, 100%, max(32em, 50% + 4em));
+	max-width:  64em;
+	min-width: 32em;
+	min-width: min(32em, 100%);
+	width: calc(50% + 4em);
 	line-height: 1.75em;
 	text-align: justify;
 	position: relative;
