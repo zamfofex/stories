@@ -424,7 +424,7 @@ ol > li::before
 
 @media print
 {
-	* { background: none !important; }
+	p { background: none !important; }
 	
 	body
 	{
