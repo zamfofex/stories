@@ -29,6 +29,10 @@ let main = async () =>
 	
 	let items = []
 	
+	let robots = "user-agent: *\n"
+	robots += "disallow: /\n"
+	robots += "allow: /$\n"
+	
 	for await (let {title, description = "", text, feedback: feedbackMessages = [], name, publication} of stories.find().sort({publication: -1}))
 	{
 		let main = renderer.render(parser.parse(text))
@@ -55,6 +59,8 @@ let main = async () =>
 		
 		// Publication dates have only year and month information, but JSON feed requires full date and time, so I just set it to 16:00 of the tenth day of the month.
 		items.push({title, description, text, main, publication: `${publication}-10T16:00:00-03:00`, url: `https://zamstories.neocities.org/${name}/`})
+		
+		robots += `allow: /${name}/$\n`
 	}
 	
 	await fsp.writeFile("public/index.html", index.replace("((list))", list))
@@ -64,6 +70,8 @@ let main = async () =>
 	await fsp.writeFile("public/feed.json", feedJSON)
 	await fsp.writeFile("public/rss.xml", toRSS(feed, {feedURLFn: () => "https://zamstories.neocities.org/rss.json", copyright: "© 2020 Zambonifofex"}))
 	await fsp.writeFile("public/atom.xml", toAtom(feed, {feedURLFn: () => "https://zamstories.neocities.org/atom.json"}))
+	
+	await fsp.writeFile("public/robots.txt", robots)
 	
 	await mongo.close()
 }
