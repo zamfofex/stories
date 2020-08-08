@@ -6,7 +6,7 @@
 !/api
 !/api/feedback.js
 !/build
-!/build/*
+!/build/**
 !/dates.js
 !/license.md
 !/not-found

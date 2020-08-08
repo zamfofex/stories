@@ -1,0 +1,19 @@
+{
+	"version": "https://jsonfeed.org/version/1",
+	"feed_url": "https://zamstories.neocities.org/feed.json",
+	"home_page_url": "https://zamstories.neocities.org",
+	
+	"user_comment": "This file allows for syndication feed readers to be used to read updates to publications in the website.",
+	
+	"language": "en",
+	
+	"title": "zambonifofex’s stories",
+	"description": "a collection of potentially mildly lewd, yet hopefully heartwarming stories",
+	"author": {"name": "Zambonifofex", "url": "https://github.com/Zambonifofex"},
+	"authors": [{"name": "Zambonifofex", "url": "https://github.com/Zambonifofex"}],
+	
+	"items":
+	[
+		((items))
+	]
+}
