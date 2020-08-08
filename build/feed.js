@@ -6,6 +6,7 @@ export default async items =>
 	let text = await fsp.readFile("build/feed/main.txt", "utf-8")
 	let itemText = await fsp.readFile("build/feed/item.txt", "utf-8")
 	
+	itemText = itemText.replace(/\n*$/, "")
 	itemText = itemText.replace(/\n/g, "\n\t\t")
 	
 	let itemTexts = []
