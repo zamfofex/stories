@@ -94,13 +94,6 @@ main > footer { font-style: italic; }
 
 small { font-size: 0.75em; }
 
-body > footer
-{
-	text-align: center;
-	font-size: 0.75em;
-	line-height: 1.5em;
-}
-
 .end
 {
 	font-weight: bold;
