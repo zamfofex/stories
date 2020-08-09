@@ -68,8 +68,8 @@ let main = async () =>
 	let feedJSON = await buildFeed(items)
 	let feed = JSON.parse(feedJSON)
 	await fsp.writeFile("public/feed.json", feedJSON)
-	await fsp.writeFile("public/rss.xml", toRSS(feed, {feedURLFn: () => "https://zamstories.neocities.org/rss.json", copyright: "© 2020 Zambonifofex"}))
-	await fsp.writeFile("public/atom.xml", toAtom(feed, {feedURLFn: () => "https://zamstories.neocities.org/atom.json"}))
+	await fsp.writeFile("public/rss.xml", toRSS(feed, {feedURLFn: () => "https://zamstories.neocities.org/rss.xml", copyright: "© 2019–2020 Zambonifofex"}))
+	await fsp.writeFile("public/atom.xml", toAtom(feed, {feedURLFn: () => "https://zamstories.neocities.org/atom.xml"}))
 	
 	await fsp.writeFile("public/robots.txt", robots)
 	
