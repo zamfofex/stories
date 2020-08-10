@@ -23,6 +23,7 @@
 	→ settings: optical alignment
 	→ settings: spacing harmony
 	→ not found error page
+	→ miscelaneous compatibility fixes
 */
 
 @import "https://fonts.googleapis.com/css2?family=Asap:ital@1&family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Oxygen+Mono&display=swap";
@@ -42,7 +43,9 @@ body
 	--highlight-color: #7412;
 	font-family: "Lora", serif;
 	font-size: 16px;
+	background: #FED;
 	background: var(--background-color);
+	color: #741;
 	color: var(--text-color);
 	margin: 2em auto 4em;
 	padding: 0 2em;
@@ -561,3 +564,7 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	margin: 0.75em 0;
 	font-size: 1.75em;
 }
+
+/* → miscelaneous compatibility fixes */
+
+details:not([open]) > :not(summary) { display: none; }
