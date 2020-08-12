@@ -197,19 +197,19 @@ let prepare = () =>
 			}
 			
 			textNode.replaceWith(...currentNodes)
-			
-			push(
-				{
-					type: "glue",
-					stretch: 1,
-					shrink: 0,
-				},
-				null,
-				{
-					width: spaceWidth,
-				},
-			)
 		}
+		
+		push(
+			{
+				type: "glue",
+				stretch: 1,
+				shrink: 0,
+			},
+			null,
+			{
+				width: spaceWidth,
+			},
+		)
 	}
 	
 	typeset()
