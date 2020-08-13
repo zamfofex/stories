@@ -236,6 +236,7 @@ h1, h2, h3, h4, h5, h6
 	font-weight: normal;
 	margin: 0.75em 0;
 	text-align: left;
+	line-height: 1.25em;
 }
 
 h1 { font-size: 2em; }
@@ -337,6 +338,7 @@ label { cursor: pointer; }
 	outline: none;
 	text-decoration: underline;
 	margin-left: 1em;
+	line-height: 2.5em;
 }
 
 #display-settings > summary::-webkit-details-marker { display: none; }
