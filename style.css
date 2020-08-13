@@ -328,14 +328,13 @@ summary:focus
 
 label { cursor: pointer; }
 
+#display-settings { float: right; }
+
 #display-settings > summary
 {
 	display: block;
-	text-align: right;
 	cursor: pointer;
 	outline: none;
-	margin: 0 0 0 auto;
-	width: max-content;
 	text-decoration: underline;
 }
 
