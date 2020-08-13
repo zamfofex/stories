@@ -336,6 +336,7 @@ label { cursor: pointer; }
 	cursor: pointer;
 	outline: none;
 	text-decoration: underline;
+	margin-left: 1em;
 }
 
 #display-settings > summary::-webkit-details-marker { display: none; }
