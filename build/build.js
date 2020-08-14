@@ -39,6 +39,8 @@ let main = async () =>
 		
 		let feedback = buildFeedback(feedbackMessages)
 		
+		let end = publication ? "the end" : "to be continued…"
+		
 		let values =
 		{
 			main,
@@ -46,6 +48,7 @@ let main = async () =>
 			name,
 			feedback,
 			description,
+			end,
 		}
 		
 		await fsp.mkdir(`public/${name}`, {recursive: true})
