@@ -34,13 +34,15 @@
 
 ::selection { background: var(--highlight-color); }
 
-html { width: 100%; }
-
-body
+html
 {
 	--text-color: #741;
 	--background-color: #FED;
 	--highlight-color: #7412;
+}
+
+body
+{
 	font-family: "Lora", serif;
 	font-size: 16px;
 	background: #FED;
@@ -106,21 +108,21 @@ small { font-size: 0.75em; }
 
 /* → themes */
 
-[data-theme="cocoa"] body
+html[data-theme="cocoa"]
 {
 	--text-color: #FDA;
 	--background-color: #531;
 	--highlight-color: #FDA3;
 }
 
-[data-theme="milk"] body
+html[data-theme="milk"]
 {
 	--text-color: #532;
 	--background-color: #FDFAEE;
 	--highlight-color: #5322;
 }
 
-[data-theme="coffee"] body
+html[data-theme="coffee"]
 {
 	--text-color: #DB8;
 	--background-color: #310;
@@ -146,6 +148,9 @@ small { font-size: 0.75em; }
 	background: var(--text-color);
 	border-radius: 1em;
 }
+
+html { scrollbar-color: var(--text-color) #0000; }
+* { scrollbar-width: thin; }
 
 /* → user fields */
 
