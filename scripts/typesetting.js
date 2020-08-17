@@ -21,7 +21,7 @@ for (let checkbox of [typesetting, pull, spacing])
 	let update = () => document.body.classList.toggle(checkbox.id, checkbox.checked)
 	checkbox.addEventListener("change", update)
 	new BroadcastChannel(checkbox.id).addEventListener("message", update)
-	update
+	update()
 }
 
 let measure = text => ctx.measureText(text).width
