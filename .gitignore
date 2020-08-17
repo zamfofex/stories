@@ -19,3 +19,4 @@
 !/scripts/*
 !/style.css
 !/vercel.json
+!/sw.js
