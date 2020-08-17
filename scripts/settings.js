@@ -2,29 +2,37 @@ let settings = document.querySelector("#settings")
 
 for (let input of settings.querySelectorAll("input, select"))
 {
-	let value = localStorage.getItem(input.id || input.name)
-	if (value)
+	let name = input.id || input.name
+	
+	let channel = new BroadcastChannel(name)
+	
+	let update = value =>
 	{
 		if (input.type === "checkbox")
-		{
 			input.checked = value !== "off"
-		}
 		else if (input.type === "radio")
-		{
-			if (value === input.value) input.checked = true
-		}
+			value === input.value && (input.checked = true)
 		else
-		{
 			input.value = value
-		}
+	}
+	
+	let value = localStorage.getItem(name)
+	if (value) update(value)
+	
+	let broadcast = async value =>
+	{
+		localStorage.setItem(name, value)
+		channel.postMessage(value)
 	}
 	
 	if (input.type === "checkbox")
-		input.addEventListener("change", () => localStorage.setItem(input.id, input.checked ? input.value : "off"))
+		input.addEventListener("change", () => broadcast(input.checked ? input.value : "off"))
 	else if (input.type === "radio")
-		input.addEventListener("change", () => { if (input.checked) localStorage.setItem(input.name, input.value) })
+		input.addEventListener("change", () => { if (input.checked) broadcast(input.value) })
 	else
-		input.addEventListener("change", () => localStorage.setItem(input.id, input.value||"off"))
+		input.addEventListener("change", () => broadcast(input.value||"off"))
+	
+	channel.addEventListener("message", ({data}) => update(data))
 }
 
 let details = settings.closest("#display-settings")

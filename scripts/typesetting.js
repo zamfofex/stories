@@ -18,8 +18,10 @@ let spacing = document.querySelector("#spacing-harmony")
 
 for (let checkbox of [typesetting, pull, spacing])
 {
-	checkbox.addEventListener("change", () => document.body.classList.toggle(checkbox.id, checkbox.checked))
-	document.body.classList.toggle(checkbox.id, checkbox.checked)
+	let update = () => document.body.classList.toggle(checkbox.id, checkbox.checked)
+	checkbox.addEventListener("change", update)
+	new BroadcastChannel(checkbox.id).addEventListener("message", update)
+	update
 }
 
 let measure = text => ctx.measureText(text).width
@@ -52,13 +54,19 @@ let paragraphs = []
 
 let prepare = () =>
 {
-	typesetting.removeEventListener("change", prepare)
 	typesetting.addEventListener("change", typeset)
 	pull.addEventListener("change", typeset)
 	hyphens.addEventListener("change", typeset)
 	capitalization.addEventListener("change", typeset)
 	spacing.addEventListener("change", typeset)
-	window.addEventListener("resize", typeset)
+	
+	new BroadcastChannel("typesetting").addEventListener("message", typeset)
+	new BroadcastChannel("optical-alignment").addEventListener("message", typeset)
+	new BroadcastChannel("hyphenation").addEventListener("message", typeset)
+	new BroadcastChannel("capitalization").addEventListener("message", typeset)
+	new BroadcastChannel("spacing-harmony").addEventListener("message", typeset)
+	
+	addEventListener("resize", typeset)
 	
 	ctx.font = font(document.body)
 	
@@ -345,11 +353,25 @@ let typeset = () =>
 	}
 }
 
-typesetting.disabled = false
-typesetting.closest("label").classList.remove("disabled")
-
 addEventListener("load", () =>
 {
-	if (typesetting.checked) prepare()
-	else typesetting.addEventListener("change", prepare)
+	typesetting.disabled = false
+	typesetting.closest("label").classList.remove("disabled")
+	
+	if (typesetting.checked)
+	{
+		prepare()
+	}
+	else
+	{
+		let channel = new BroadcastChannel("typesetting")
+		let prepare2 = () =>
+		{
+			channel.stop()
+			typesetting.romoveEventListener("change", prepare2)
+			prepare()
+		}
+		typesetting.addEventListener("change", prepare2)
+		channel.addEventListener("message", prepare2)
+	}
 })
