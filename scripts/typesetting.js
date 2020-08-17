@@ -32,7 +32,8 @@ let ratios =
 	"”": 1,
 	"‘": 1,
 	"’": 1,
-	"‐": 1,
+	"\u2010": 1,
+	"-": 1,
 	";": 1,
 	":": 1,
 	"—": 0.25,
@@ -65,7 +66,7 @@ let prepare = () =>
 	
 	for (let letter in ratios) computedWidths[letter] = measure(letter)
 	
-	hyphenWidth = measure("\u2010")
+	hyphenWidth = measure("-")
 	spaceWidth = measure(" ")
 	
 	for (let node of document.querySelectorAll("main > p, main > :not(footer):not(.end) p"))

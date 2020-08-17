@@ -504,7 +504,7 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	
 	body.typesetting > main .glue.break > .ws::selection { background: #0000; }
 	
-	body.typesetting > main .shy.break::before { content: "\2010" !important; }
+	body.typesetting > main .shy.break::before { content: "-" !important; }
 	
 	/* → settings: optical alignment */
 	
