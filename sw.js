@@ -22,14 +22,10 @@ let main = async () =>
 	
 	let cache = await caches.open(cacheName)
 	
-	for (let url of essential) cache.put(url, await fetch(url, {redirect: "manual"}))
-	
-	let feed = await (await fetch("feed.json")).json()
-	
-	for (let {url} of feed.items)
+	for (let url of essential)
 	{
-		let {pathname} = new URL(url)
-		cache.put(pathname, await fetch(pathname, {redirect: "manual"}))
+		let response = await fetch(url)
+		if (response.ok) cache.put(url, response)
 	}
 	
 	skipWaiting()
@@ -43,55 +39,60 @@ let cacheFirst = async request =>
 	let cache = await caches.open(cacheName)
 	let response = await cache.match(request.url)
 	if (response) return response
-	response = await fetch(request, {redirect: "manual"})
-	await cache.put(request.url, response.clone())
+	response = await fetch(request)
+	if (response.ok) await cache.put(request.url, response.clone())
 	return response
 }
 
-let networkOnly = request => fetch(request, {redirect: "manual"})
+let networkOnly = request => fetch(request)
 
-let staleWhileRevalidate = async request =>
+let staleWhileRevalidate = async (request, cachedOnly) =>
 {
+	// Currently, this is only used for same‐origin requests (which is assumed by parts of it).
+	
 	let cache = await caches.open(cacheName)
+	
+	let pathname = new URL(request.url).pathname.replace(/\/index\.html$/, "/")
 	
 	let refresh = async () =>
 	{
-		let response = await fetch(request, {redirect: "manual"})
-		
-		if (response.ok) await cache.put(request.url, response.clone())
-		
+		let response = await fetch(request)
+		if (!cachedOnly && response.ok) await cache.put(pathname, response.clone())
 		return response
 	}
 	
-	let response = await cache.match(new URL(request.url).pathname)
+	let response = await cache.match(pathname)
 	
 	if (!response) response = await refresh()
-	else refresh()
+	else if (!cachedOnly) refresh()
 	
 	return response
 }
 
 let strategy = ({origin, pathname}) =>
 {
-	if (origin === "https://jspm.dev" || origin === "https://fonts.googleapis.com")
+	if (origin === "https://jspm.dev" || origin === "https://fonts.googleapis.com" || origin === "https://fonts.gstatic.com")
 		return "cache-first"
-	if (origin !== location.origin) return "network-only"
-	if (pathname === "/style.css"|| pathname === "/script.js" || pathname.startsWith("/scripts/") || pathname === "/" || /^\/.*\//.test(pathname))
+	if (origin !== location.origin)
+		return "network-only"
+	if (pathname === "/style.css"|| pathname === "/script.js" || pathname.startsWith("/scripts/") || pathname === "/")
 		return "stale-while-revalidate"
+	if (pathname.match(/^\/.+\//))
+		return "stale-while-revalidate-if-cached"
 	
 	return "network-only"
 }
 
 let respond = ({request}) =>
 {
-	let url = new URL(request.url)
-	if (origin === location.origin) url.pathname = url.pathname.replace(/\/index\.html$/, "/")
+	if (request.method !== "GET") return networkOnly(request)
 	
-	switch (strategy(url))
+	switch (strategy(new URL(request.url)))
 	{
 		case "cache-first": return cacheFirst(request)
 		case "network-only": return networkOnly(request)
 		case "stale-while-revalidate": return staleWhileRevalidate(request)
+		case "stale-while-revalidate-if-cached": return staleWhileRevalidate(request, true)
 	}
 }
 
