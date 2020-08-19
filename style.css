@@ -223,7 +223,6 @@ textarea
 	width: 100%;
 	height: 16em;
 	font: unset;
-	outline: none;
 	transition: 0.125s ease box-shadow;
 	display: block;
 	line-height: 1.5em;
@@ -269,7 +268,6 @@ input[type="radio"]
 	appearance: none;
 	font: inherit;
 	cursor: unset;
-	outline: none;
 }
 
 .radio-group label { margin-left: 1em; }
@@ -292,13 +290,10 @@ input[type="checkbox"]:checked
 
 /* → focus */
 
-a:focus, button:focus,
-:not(.radio-group) > label:focus-within,
-.radio-group:focus-within,
-summary:focus
-{
-	outline: 0.0625em solid var(--text-color);
-}
+:focus { outline: 0.0625em solid var(--text-color); outline-offset: 0.25em; }
+
+:not(:focus-visible) { outline: none !important; }
+:not(:-moz-focusring) { outline: none !important; }
 
 /* → disabledness */
 
@@ -340,7 +335,6 @@ label { cursor: pointer; }
 {
 	display: block;
 	cursor: pointer;
-	outline: none;
 	text-decoration: underline;
 	margin-left: 1em;
 	line-height: 2.5em;
@@ -562,7 +556,13 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 
 /* → feedback section */
 
-#feedback > summary { cursor: pointer; display: block; }
+#feedback > summary
+{
+	display: block;
+	cursor: pointer;
+	width: max-content;
+	width: fit-content;
+}
 #feedback > summary::-webkit-details-marker { display: none; }
 
 #feedback:not([open]) > summary { text-decoration: underline; }
