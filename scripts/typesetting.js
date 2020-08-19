@@ -367,8 +367,8 @@ addEventListener("load", () =>
 		let channel = new BroadcastChannel("typesetting")
 		let prepare2 = () =>
 		{
-			channel.stop()
-			typesetting.romoveEventListener("change", prepare2)
+			channel.close()
+			typesetting.removeEventListener("change", prepare2)
 			prepare()
 		}
 		typesetting.addEventListener("change", prepare2)
