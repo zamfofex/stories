@@ -179,7 +179,7 @@ let revalidate = async () =>
 			if (hash !== hash3) throw new Error()
 			await fresh.put(url, response)
 			if (url === "/scripts/dependencies.js") copyJSPM = false
-			if (url === "/style.css") copyFonts = false
+			if (url === "/dependencies.css") copyFonts = false
 		}
 		
 		if (copyJSPM || copyFonts)
