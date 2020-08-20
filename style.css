@@ -13,7 +13,6 @@
 	→ headings
 	→ checkboxes and radio buttons
 	→ focus
-	→ disabledness
 	→ settings box
 	→ settings: capitalization
 	→ settings: guide rulers
@@ -169,6 +168,10 @@ option
 	color: initial;
 }
 
+.disabled { opacity: 0.5; }
+
+.disabled, .disabled * { cursor: unset; }
+
 /* → blockquote */
 
 blockquote
@@ -227,7 +230,8 @@ textarea
 	transition: 0.125s ease box-shadow;
 	display: block;
 	line-height: 1.5em;
-	padding: 0.75em
+	padding: 0.75em;
+	outline: none;
 }
 
 textarea:not(:focus) { box-shadow: none; }
@@ -297,14 +301,6 @@ input[type="checkbox"]:checked
 
 :not(:focus-visible) { outline: none !important; }
 :not(:-moz-focusring) { outline: none !important; }
-
-/* → disabledness */
-
-.disabled
-{
-	opacity: 0.5;
-	pointer-events: none;
-}
 
 /* → settings box */
 

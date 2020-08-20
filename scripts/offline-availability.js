@@ -10,6 +10,8 @@ dbRequest.addEventListener("success", async () =>
 	
 	checkbox.addEventListener("change", async () =>
 	{
+		if (!checkbox.checked && !navigator.onLine) disable()
+		
 		db
 			.transaction("offline-pages", "readwrite")
 			.objectStore("offline-pages")
@@ -37,6 +39,15 @@ dbRequest.addEventListener("success", async () =>
 	
 	checkbox.checked = result
 	
-	checkbox.disabled = false
-	checkbox.closest("label").classList.remove("disabled")
+	let label = checkbox.closest("label")
+	
+	let disable = () => { checkbox.disabled = true ; label.classList.add("disabled") }
+	let enable = () => { checkbox.disabled = false ; label.classList.remove("disabled") }
+	
+	if (navigator.onLine) enable()
+	
+	let offline = () => !checkbox.checked && disable()
+	
+	addEventListener("offline", offline)
+	addEventListener("online", enable)
 })
