@@ -102,7 +102,13 @@ let staleWhileRevalidate = async (request, waitUntil) =>
 	
 	let refresh = async () =>
 	{
-		let hashes = await (await cache.match("/hashes.json")).json()
+		let hashesResponse = await cache.match("/hashes.json")
+		if (!hashesResponse)
+		{
+			await revalidate()
+			return fetch(request)
+		}
+		let hashes = await hashesResponse.json()
 		let {hash} = hashes[pathname]||{}
 		
 		let response = await fetch(request)
@@ -154,7 +160,9 @@ let revalidate = async () =>
 		
 		let stale = await caches.open(cacheName)
 		
-		let staleHashes = await (await stale.match("/hashes.json")).json()
+		let hashesResponse = await stale.match("/hashes.json")
+		let staleHashes
+		if (hashesResponse) staleHashes = await hashesResponse.json()
 		
 		let fresh = await caches.open(freshName)
 		
@@ -165,7 +173,7 @@ let revalidate = async () =>
 		for (let url in freshHashes)
 		{
 			let {hash, essential} = freshHashes[url]
-			let hash2 = staleHashes[url].hash
+			let hash2 = staleHashes && staleHashes[url] && staleHashes[url].hash
 			if (hash === hash2)
 			{
 				let response = await stale.match(url)
