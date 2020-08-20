@@ -4,6 +4,7 @@ import buildFeedback from "../build/feedback.js"
 import https from "https"
 import util from "util"
 import FormData from "formdata-node"
+import crypto from "crypto"
 
 let streamToBuffer = stream => new Promise((resolve, reject) =>
 {
@@ -12,6 +13,10 @@ let streamToBuffer = stream => new Promise((resolve, reject) =>
 	stream.on("error", reject)
 	stream.on("end", () => resolve(Buffer.concat(chunks)))
 })
+
+let computeHash = buffer => crypto.createHash("sha256").update(buffer).digest("hex")
+
+let origin = "https://zamstories.neocities.org"
 
 export default async ({query: {name}, body: {message}}, res) =>
 {
@@ -31,16 +36,29 @@ export default async ({query: {name}, body: {message}}, res) =>
 	
 	await mongo.close()
 	
-	let url = `https://zamstories.neocities.org/${name}/`
+	if (!story)
+	{
+		res.statusCode = 400
+		res.end()
+		return
+	}
+	
+	let url = `${origin}/${name}/`
 	
 	let page = (await streamToBuffer(await new Promise(f => https.get(url, f)))).toString("utf-8")
 	
 	let feedback = buildFeedback(story.feedback)
 	
-	let buffer = Buffer.from(page.replace(/<!--#feedback-->[^]*?<!--\/#feedback-->/, feedback))
+	let buffer = Buffer.from(page.replace(/<!--#feedback-->[^]*<!--\/#feedback-->/, feedback))
+	
+	let json = (await streamToBuffer(await new Promise(f => https.get(`${origin}/hashes.json`, f)))).toString("utf-8")
+	let hashes = JSON.parse(json)
+	
+	hashes[`/${name}/`] = computeHash(buffer)
 	
 	let data = new FormData()
 	data.set(`${name}/index.html`, buffer, "index.html")
+	data.set("hashes.json", Buffer.from(JSON.strigify(hashes)), "hashes.json")
 	
 	let {headers, stream} = data
 	

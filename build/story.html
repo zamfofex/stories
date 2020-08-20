@@ -12,17 +12,24 @@
 	</head>
 	<body>
 		<details id="display-settings">
-			<summary>layout settings</summary>
+			<summary>settings</summary>
 			<div id="settings">
+				<h2>page settings</h2>
+				<p>
+					<label class="disabled">
+						<input type="checkbox" id="available-offline" class="local" checked disabled>
+						available offline
+					</label>
+				</p>
+				<h2>global settings</h2>
 				<p>
 					<label class="disabled">
 						<input type="checkbox" id="capitalization" disabled>
 						enable capitalization
 					</label>
 				</p>
-				<p class="disabled">
-					guide rulers:
-					&#x20;
+				<fieldset class="disabled">
+					<legend>guide rulers</legend>
 					<span class="radio-group" id="guide-rulers">
 						<label>
 							<input type="radio" name="guide-rulers" value="none" checked disabled>
@@ -41,7 +48,7 @@
 							5
 						</label>
 					</span>
-				</p>
+				</fieldset>
 				<p>
 					<label class="disabled">
 						<input type="checkbox" id="typesetting" disabled>

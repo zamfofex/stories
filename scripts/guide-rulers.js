@@ -1,6 +1,6 @@
 let group = document.querySelector("#guide-rulers")
 
-group.closest("p").classList.remove("disabled")
+group.closest("fieldset").classList.remove("disabled")
 
 for (let radio of group.querySelectorAll("input"))
 {

@@ -14,7 +14,7 @@
 	→ checkboxes and radio buttons
 	→ focus
 	→ disabledness
-	→ layout settings box
+	→ settings box
 	→ settings: capitalization
 	→ settings: guide rulers
 	→ lists
@@ -24,6 +24,7 @@
 	→ settings: spacing harmony
 	→ not found error page
 	→ miscelaneous compatibility fixes
+	→ fieldsets
 */
 
 @import "https://fonts.googleapis.com/css2?family=Asap:ital@1&family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Oxygen+Mono&display=swap";
@@ -270,11 +271,13 @@ input[type="radio"]
 	cursor: unset;
 }
 
-.radio-group label { margin-left: 1em; }
+.radio-group label { margin-right: 1em; }
 
 input[type="radio"] { border-radius: 100%; }
 
 .radio-group, .radio-group label { display: inline-block; }
+
+.radio-group { margin-right: -1em; }
 
 input[type="radio"]:checked,
 input[type="checkbox"]:checked
@@ -303,9 +306,9 @@ input[type="checkbox"]:checked
 	pointer-events: none;
 }
 
-/* → layout settings box */
+/* → settings box */
 
-@keyframes layout-settings
+@keyframes settings
 {
 	from { opacity: 0; transform: translate(0, 1em); }
 }
@@ -322,7 +325,7 @@ input[type="checkbox"]:checked
 	max-width: calc(100% - 2em);
 	transition: 0.25s ease transform, 0.25s ease opacity;
 	box-shadow: #3333 0 0 1em;
-	animation: layout-settings ease 0.25s;
+	animation: settings ease 0.25s;
 	text-align: left;
 	pointer-events: initial;
 }
@@ -341,6 +344,20 @@ label { cursor: pointer; }
 }
 
 #display-settings > summary::-webkit-details-marker { display: none; }
+
+#settings > h2
+{
+	font-size: 1em;
+	font-weight: bold;
+	text-align: center;
+	font-family: inherit;
+}
+
+#settings > h2:not(:first-child), #settings > .submit
+{
+	padding-top: 0.5em;
+	border-top: 0.0625em dashed var(--text-color);
+}
 
 /* → settings: capitalization */
 
@@ -577,3 +594,14 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 /* → miscelaneous compatibility fixes */
 
 details:not([open]) > :not(summary) { display: none; }
+
+/* → fieldsets */
+
+fieldset
+{
+	border: none;
+	padding: 0 0 0 1em;
+	margin: 1em 0;
+}
+
+legend { margin: 0 0 0 -1em; }

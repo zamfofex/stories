@@ -6,6 +6,7 @@ import buildFeedback from "./feedback.js"
 import buildFeed from "./feed.js"
 import toRSS from "jsonfeed-to-rss"
 import toAtom from "jsonfeed-to-atom"
+import crypto from "crypto"
 
 let parser = new md.Parser()
 let renderer = new md.HtmlRenderer({safe: true})
@@ -16,8 +17,34 @@ let fsp = fs.promises
 
 let unindent = string => string.replace(/[\t\n]+/g, "").replace(/&#x20;/g, " ")
 
+let computeHash = buffer => crypto.createHash("sha256").update(buffer).digest("hex")
+
+let essentials = ["/style.css", "/script.js"]
+
+let computeHashes = async (path, hashes) =>
+{
+	for (let entry of await fsp.readdir("public" + path, {withFileTypes: true}))
+	{
+		if (entry.isDirectory())
+		{
+			await computeHashes(path + entry.name + "/", hashes)
+		}
+		else
+		{
+			let name = path
+			let hash = computeHash(await fsp.readFile("public" + path + entry.name))
+			if (entry.name !== "index.html") name += entry.name
+			let essential = name.startsWith("/scripts/") || essentials.includes(name) || undefined
+			hashes[name] = {hash, essential}
+		}
+	}
+}
+
 let main = async () =>
 {
+	let hashes = {}
+	await computeHashes("/", hashes)
+	
 	let page = unindent(await fsp.readFile("build/story.html", "utf-8"))
 	let index = unindent(await fsp.readFile("build/list.html", "utf-8"))
 	
@@ -51,10 +78,14 @@ let main = async () =>
 			end,
 		}
 		
+		let buffer = Buffer.from(page.replace(/\(\((.+?)\)\)/g, (full, name) => values[name]))
+		
 		await fsp.mkdir(`public/${name}`, {recursive: true})
-		await fsp.writeFile(`public/${name}/index.html`, page.replace(/\(\((.+?)\)\)/g, (full, name) => values[name]))
+		await fsp.writeFile(`public/${name}/index.html`, buffer)
 		
 		if (!publication) continue
+		
+		hashes[`/${name}/`] = {hash: computeHash(buffer)}
 		
 		let [year, month] = publication.split("-")
 		list += `<li><a href="/${name}/">${title}</a> — `
@@ -66,7 +97,10 @@ let main = async () =>
 		robots += `allow: /${name}/$\n`
 	}
 	
-	await fsp.writeFile("public/index.html", index.replace("((list))", list))
+	let buffer = Buffer.from(index.replace("((list))", list))
+	await fsp.writeFile("public/index.html", buffer)
+	
+	hashes["/"] = {hash: computeHash(buffer), essential: true}
 	
 	let feedJSON = await buildFeed(items)
 	let feed = JSON.parse(feedJSON)
@@ -75,6 +109,8 @@ let main = async () =>
 	await fsp.writeFile("public/atom.xml", toAtom(feed, {feedURLFn: () => "https://zamstories.neocities.org/atom.xml"}))
 	
 	await fsp.writeFile("public/robots.txt", robots)
+	
+	await fsp.writeFile(`public/hashes.json`, JSON.stringify(hashes))
 	
 	await mongo.close()
 }
