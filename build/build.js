@@ -19,7 +19,7 @@ let unindent = string => string.replace(/[\t\n]+/g, "").replace(/&#x20;/g, " ")
 
 let computeHash = buffer => crypto.createHash("sha256").update(buffer).digest("hex")
 
-let essentials = ["/style.css", "/script.js"]
+let essentials = ["/style.css", "/script.js", "/dependencies.css"]
 
 let computeHashes = async (path, hashes) =>
 {
