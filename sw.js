@@ -8,15 +8,25 @@ let prepareDB = async () =>
 
 let currentCacheName
 
-let cacheNameReady = (async () =>
+let cacheNameReady = async () =>
 {
-	for (let name of await caches.keys())
+	let keys = await caches.keys()
+	if (!currentCacheName)
 	{
-		if (!currentCacheName && await (await caches.open(name)).match("/hashes.json")) currentCacheName = name
-		else await caches.delete(name)
+		for (let name of keys)
+		{
+			if (await (await caches.open(name)).match("/hashes.json"))
+			{
+				currentCacheName = name
+				break
+			}
+		}
+		if (!currentCacheName) currentCacheName = String(Date.now())
 	}
-	if (!currentCacheName) currentCacheName = String(Date.now())
-})()
+	let cacheName = currentCacheName
+	for (let name of keys)
+		if (name !== cacheName) await caches.delete(name)
+}
 
 let computeHash = async buffer =>
 {
@@ -28,7 +38,7 @@ let main = async () =>
 {
 	try
 	{
-		await cacheNameReady
+		await cacheNameReady()
 		let cacheName = currentCacheName
 		
 		let cache = await caches.open(cacheName)
@@ -69,7 +79,7 @@ addEventListener("activate", event => event.waitUntil(clients.claim()))
 
 let cacheFirst = async (request, waitUntil) =>
 {
-	await cacheNameReady
+	await cacheNameReady()
 	let cacheName = currentCacheName
 	
 	let cache = await caches.open(cacheName)
@@ -93,7 +103,7 @@ let cacheFirst = async (request, waitUntil) =>
 
 let staleWhileRevalidate = async (request, waitUntil) =>
 {
-	await cacheNameReady
+	await cacheNameReady()
 	let cacheName = currentCacheName
 	
 	let cache = await caches.open(cacheName)
@@ -147,7 +157,7 @@ let revalidating = false
 let revalidate = async () =>
 {
 	if (revalidating) return
-	await cacheNameReady
+	await cacheNameReady()
 	let cacheName = currentCacheName
 	let freshName = String(Date.now())
 	revalidating = true
