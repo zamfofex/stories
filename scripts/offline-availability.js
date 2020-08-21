@@ -91,12 +91,6 @@ dbRequest.addEventListener("success", async () =>
 	await navigator.serviceWorker.ready
 	
 	checkbox.checked = result
-	
-	if (navigator.onLine) enable()
-	else disable()
-	
-	let offline = () => !checkbox.checked && disable()
-	
-	addEventListener("offline", offline)
-	addEventListener("online", enable)
+	if (result) enable()
+	else changed()
 })
