@@ -25,8 +25,8 @@ dbRequest.addEventListener("success", async () =>
 		let available = checkbox.checked
 		try
 		{
-			if (available) enable()
-			else if (!response.ok) disable()
+			if (available || response.ok) enable()
+			else disable()
 			
 			let request = db
 				.transaction("offline-pages", "readwrite")
