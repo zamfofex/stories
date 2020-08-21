@@ -69,6 +69,7 @@ dbRequest.addEventListener("success", async () =>
 	
 	channel.addEventListener("message", ({data}) =>
 	{
+		checkbox.checked = data
 		if (!data) !response.ok && disable()
 		else enable()
 	})
