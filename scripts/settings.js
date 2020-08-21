@@ -2,11 +2,9 @@ let settings = document.querySelector("#settings")
 
 for (let input of settings.querySelectorAll("input, select"))
 {
-	let local = input.matches(".local")
+	if (input.matches(".local")) continue
 	
 	let name = input.id || input.name
-	
-	if (local) name = location.pathname.split("/")[1] + ":" + name
 	
 	let channel = new BroadcastChannel(name)
 	
@@ -20,15 +18,12 @@ for (let input of settings.querySelectorAll("input, select"))
 			input.value = value
 	}
 	
-	if (!local)
-	{
-		let value = localStorage.getItem(name)
-		if (value) update(value)
-	}
+	let value = localStorage.getItem(name)
+	if (value) update(value)
 	
 	let broadcast = async value =>
 	{
-		if (!local) localStorage.setItem(name, value)
+		localStorage.setItem(name, value)
 		channel.postMessage(value)
 	}
 	

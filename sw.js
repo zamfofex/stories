@@ -234,17 +234,3 @@ let respond = (request, waitUntil) =>
 }
 
 addEventListener("fetch", event => event.respondWith(respond(event.request, p => event.waitUntil(p))))
-
-let toggleOfflineAvailability = async ({name, available}) =>
-{
-	await cacheNameReady
-	let cacheName = currentCacheName
-	
-	let cache = await caches.open(cacheName)
-	
-	let url = "/" + name + "/"
-	if (available) cache.put(url, await respond(new Request(url)))
-	else cache.delete(url)
-}
-
-addEventListener("message", event => event.waitUntil(toggleOfflineAvailability(event.data)))
