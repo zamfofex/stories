@@ -36,42 +36,34 @@ let computeHash = async buffer =>
 
 let main = async () =>
 {
-	try
+	await cacheNameReady()
+	let cacheName = currentCacheName
+	
+	let cache = await caches.open(cacheName)
+	
+	if (await cache.match("/hashes.json")) return
+	
+	let response = await fetch("/hashes.json")
+	if (!response.ok) throw new Error()
+	
+	await cache.put("/hashes.json", response.clone())
+	
+	let hashes = await response.json()
+	
+	for (let url in hashes)
 	{
-		await cacheNameReady()
-		let cacheName = currentCacheName
+		let {hash, essential} = hashes[url]
+		if (!essential) continue
 		
-		let cache = await caches.open(cacheName)
-		
-		if (await cache.match("/hashes.json")) return
-		
-		let response = await fetch("/hashes.json")
+		let response = await fetch(url)
 		if (!response.ok) throw new Error()
-		
-		await cache.put("/hashes.json", response.clone())
-		
-		let hashes = await response.json()
-		
-		for (let url in hashes)
-		{
-			let {hash, essential} = hashes[url]
-			if (!essential) continue
-			
-			let response = await fetch(url)
-			if (!response.ok) throw new Error()
-			let buffer = await response.clone().arrayBuffer()
-			let hash2 = await computeHash(buffer)
-			if (hash !== hash2) throw new Error()
-			await cache.put(url, response)
-		}
-		
-		skipWaiting()
+		let buffer = await response.clone().arrayBuffer()
+		let hash2 = await computeHash(buffer)
+		if (hash !== hash2) throw new Error()
+		await cache.put(url, response)
 	}
-	catch (error)
-	{
-		for (let name of await caches.keys()) await caches.delete(name)
-		throw error
-	}
+	
+	skipWaiting()
 }
 
 addEventListener("install", event => event.waitUntil(main()))
@@ -212,19 +204,17 @@ let revalidate = async () =>
 		}
 		
 		await fresh.put("/hashes.json", response)
-		stale.delete("/hashes.json")
+		currentCacheName = freshName
+		await stale.delete("/hashes.json")
 	}
 	catch (error)
 	{
 		await caches.delete(freshName)
-		throw error
 	}
 	finally
 	{
 		revalidating = false
 	}
-	
-	currentCacheName = freshName
 }
 
 let respond = (request, waitUntil) =>
