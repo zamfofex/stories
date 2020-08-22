@@ -69,11 +69,10 @@ let prepare = () =>
 	new BroadcastChannel("capitalization").addEventListener("message", typeset)
 	new BroadcastChannel("spacing-harmony").addEventListener("message", typeset)
 	
-	let timeout
 	addEventListener("resize", () =>
 	{
-		if (timeout) clearTimeout(timeout), timeout = 0
-		timeout = setTimeout(() => { timeout = 0 ; typeset() }, 100)
+		if (main.getBoundingClientRect().width === lastWidth) return
+		typeset()
 	})
 	
 	ctx.font = font(document.body)
@@ -161,12 +160,8 @@ let prepare = () =>
 						flag = true
 					}
 					
-					let normalized
-					if (capitalization.checked) normalized = syllable
-					else normalized = syllable.toLowerCase()
-					
-					let left = normalized[0]
-					let right = normalized[normalized.length-1]
+					let left = syllable[0]
+					let right = syllable[syllable.length-1]
 					let leftWidth = computedWidths[left] || 0
 					let rightWidth = computedWidths[right] || 0
 					leftWidth *= ratios[left] || 0
@@ -182,7 +177,7 @@ let prepare = () =>
 						{type: "box"},
 						span,
 						{
-							width: measure(normalized),
+							width: {normal: measure(syllable), lowercase: measure(syllable.toLowerCase())},
 							left: leftWidth,
 							right: rightWidth,
 						},
@@ -254,7 +249,6 @@ let typeset = () =>
 	
 	let mainWidth = main.getBoundingClientRect().width
 	
-	if (mainWidth === lastWidth) return
 	lastWidth = mainWidth
 	
 	let y = scrollY
@@ -279,6 +273,12 @@ let typeset = () =>
 		{
 			let base = bases[i]
 			let width = widths[i]
+			
+			if (base.type === "box")
+			{
+				if (capitalization.checked) width = width.normal
+				else width = width.lowercase
+			}
 			
 			if (pull.checked)
 			{
