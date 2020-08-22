@@ -52,6 +52,9 @@ let spaceWidth
 
 let paragraphs = []
 
+let main = document.querySelector("main")
+let children = [...main.childNodes]
+
 let prepare = () =>
 {
 	typesetting.addEventListener("change", typeset)
@@ -66,7 +69,12 @@ let prepare = () =>
 	new BroadcastChannel("capitalization").addEventListener("message", typeset)
 	new BroadcastChannel("spacing-harmony").addEventListener("message", typeset)
 	
-	addEventListener("resize", typeset)
+	let timeout
+	addEventListener("resize", () =>
+	{
+		if (timeout) clearTimeout(timeout), timeout = 0
+		timeout = setTimeout(() => { timeout = 0 ; typeset() }, 100)
+	})
 	
 	ctx.font = font(document.body)
 	
@@ -77,7 +85,7 @@ let prepare = () =>
 	hyphenWidth = measure("-")
 	spaceWidth = measure(" ")
 	
-	for (let node of document.querySelectorAll("main > p, main > :not(footer):not(.end) p"))
+	for (let node of main.querySelectorAll("main > p, main > :not(footer):not(.end) p"))
 	{
 		node.classList.add("p")
 		
@@ -230,6 +238,8 @@ let pullLabel = pull.closest("label")
 let hyphensLabel = hyphens.closest("label")
 let spacingLabel = spacing.closest("label")
 
+let lastWidth
+
 let typeset = () =>
 {
 	pull.disabled = !typesetting.checked
@@ -242,8 +252,14 @@ let typeset = () =>
 	
 	if (!typesetting.checked) return
 	
-	for (let current of document.querySelectorAll(".break"))
-		current.classList.remove("break")
+	let mainWidth = main.getBoundingClientRect().width
+	
+	if (mainWidth === lastWidth) return
+	lastWidth = mainWidth
+	
+	let y = scrollY
+	
+	main.textContent = ""
 	
 	let shyWidth
 	if (pull.checked) shyWidth = 0
@@ -257,8 +273,11 @@ let typeset = () =>
 			// 1000 is a special value that disallows line breaks.
 			for (let i of shys) bases[i].cost = 1000
 		
-		let items = bases.map((base, i) =>
+		let length = bases.length - 1
+		
+		for (let i = length - 1 ; i >= 0 ; i--)
 		{
+			let base = bases[i]
 			let width = widths[i]
 			
 			if (pull.checked)
@@ -279,16 +298,14 @@ let typeset = () =>
 				if (width < 0) width = 0
 			}
 			
-			return {...base, width}
-		})
+			base.width = width
+		}
 		
-		let {clientWidth} = node
-		
-		// 2em (compensation for negative margins)
-		clientWidth -= 32
-		
-		let indices = breakLines(items, clientWidth, {doubleHyphenPenalty: 300, adjacentLooseTightPenalty: 100})
+		let indices = breakLines(bases, mainWidth, {doubleHyphenPenalty: 300, adjacentLooseTightPenalty: 100})
 		indices.shift()
+		
+		for (let i = 0 ; i < length ; i++)
+			nodes[i].classList.remove("break")
 		
 		for (let i of indices)
 		{
@@ -308,11 +325,22 @@ let typeset = () =>
 		
 		if (pull.checked) node.style.setProperty("--pull-before", `${lefts[0]}px`)
 		
+		let push = mainWidth
+		
+		for (let i = indices[indices.length-1] ; i < length ; i++)
+		{
+			let {type, width} = bases[i]
+			if (type === "box") push -= width
+			else if (type === "glue") push -= spaceWidth + spaceWidth/16
+		}
+		
+		if (push < 0) push = 0
+		
+		node.style.setProperty("--push", `${push}px`)
+		
 		if (!spacing.checked) continue
 		
 		let prev = 0
-		
-		let length = bases.length - 1
 		
 		for (let i = 0 ; i < length ; i++)
 			nodes[i].classList.remove("spacing-offset")
@@ -334,7 +362,7 @@ let typeset = () =>
 					gaps += nodes[j].childNodes[0].data.length
 			}
 			
-			let spacing = ((clientWidth - width) / glues - 1.75 * spaceWidth) * glues / gaps / 1.25
+			let spacing = ((mainWidth - width) / glues - 1.75 * spaceWidth) * glues / gaps / 1.25
 			
 			let value
 			if (spacing > 0) value = `${spacing}px`
@@ -351,13 +379,13 @@ let typeset = () =>
 		for (let j = prev ; j < length ; j++)
 			if (bases[j].type === "box") nodes[j].style.setProperty("--spacing", "0")
 	}
+	
+	main.append(...children)
+	scrollY = y
 }
 
 addEventListener("load", () =>
 {
-	typesetting.disabled = false
-	typesetting.closest("label").classList.remove("disabled")
-	
 	if (typesetting.checked)
 	{
 		prepare()
@@ -374,4 +402,7 @@ addEventListener("load", () =>
 		typesetting.addEventListener("change", prepare2)
 		channel.addEventListener("message", prepare2)
 	}
+	
+	typesetting.disabled = false
+	typesetting.closest("label").classList.remove("disabled")
 })

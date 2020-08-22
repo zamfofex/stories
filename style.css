@@ -62,11 +62,7 @@ body
 	word-break: break-word;
 }
 
-main
-{
-	padding: 0 1em;
-	margin: 0 -1em 8em;
-}
+main { margin: 0 0 8em; }
 
 @media (max-width: 450px)
 {
@@ -474,8 +470,6 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 {
 	/* → settings: custom typesetting */
 	
-	body.typesetting { overflow: auto scroll; }
-	
 	body.typesetting > main .p
 	{
 		white-space: nowrap;
@@ -493,7 +487,7 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	{
 		content: "";
 		display: inline-block;
-		width: 100%;
+		width: calc(1em + var(--push));
 		height: 0;
 	}
 	
