@@ -7,10 +7,10 @@
 	
 	"language": "en",
 	
-	"title": "zambonifofex’s stories",
+	"title": "zamfofex’s stories",
 	"description": "a collection of potentially mildly lewd, yet hopefully heartwarming stories",
-	"author": {"name": "Zambonifofex", "url": "https://github.com/Zambonifofex"},
-	"authors": [{"name": "Zambonifofex", "url": "https://github.com/Zambonifofex"}],
+	"author": {"name": "Zamfofex", "url": "https://github.com/zamfofex"},
+	"authors": [{"name": "Zamfofex", "url": "https://github.com/zamfofex"}],
 	
 	"items":
 	[
