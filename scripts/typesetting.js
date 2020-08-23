@@ -19,7 +19,6 @@ let spacing = document.querySelector("#spacing-harmony")
 for (let checkbox of [typesetting, pull, spacing])
 {
 	let update = () => document.body.classList.toggle(checkbox.id, checkbox.checked)
-	checkbox.addEventListener("change", update)
 	new BroadcastChannel(checkbox.id).addEventListener("message", update)
 	update()
 }
@@ -57,12 +56,6 @@ let children = [...main.childNodes]
 
 let prepare = () =>
 {
-	typesetting.addEventListener("change", typeset)
-	pull.addEventListener("change", typeset)
-	hyphens.addEventListener("change", typeset)
-	capitalization.addEventListener("change", typeset)
-	spacing.addEventListener("change", typeset)
-	
 	new BroadcastChannel("typesetting").addEventListener("message", typeset)
 	new BroadcastChannel("optical-alignment").addEventListener("message", typeset)
 	new BroadcastChannel("hyphenation").addEventListener("message", typeset)
