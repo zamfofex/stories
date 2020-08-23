@@ -355,8 +355,9 @@ let typeset = () =>
 				let base = bases[j]
 				if (base.type === "glue")
 					glues++, gaps--
-				else
-					width += widths[j]
+				else if (base.type === "box")
+					if (capitalization.checked) width += widths[j].normal
+					else width += widths[j].lowercase
 				
 				if (base.type === "box")
 					gaps += nodes[j].childNodes[0].data.length
