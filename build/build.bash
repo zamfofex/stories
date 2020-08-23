@@ -5,7 +5,7 @@ set -e
 rm -rf public/*
 mkdir -p public/scripts
 
-ln style.css script.js dependencies.css public
+ln style.css script.js dependencies.css icon.svg public
 ln scripts/* public/scripts
 
 node build/build.js
