@@ -22,6 +22,7 @@
 	→ not found error page
 	→ miscelaneous compatibility fixes
 	→ fieldsets
+	→ story list page
 */
 
 @import "dependencies.css";
@@ -37,6 +38,8 @@ html
 	--text-color: #741;
 	--background-color: #FED;
 	--highlight-color: #7412;
+	min-height: 100%;
+	display: grid;
 }
 
 body
@@ -239,7 +242,6 @@ h1, h2, h3, h4, h5, h6
 	font-style: italic;
 	font-weight: normal;
 	margin: 0.75em 0;
-	text-align: left;
 	line-height: 1.25em;
 }
 
@@ -594,3 +596,15 @@ fieldset
 }
 
 legend { margin: 0 0 0 -1em; }
+
+/* → story list page */
+
+#list li { margin: 1em 0; }
+#list li::before { content: none; }
+
+#list li a { text-decoration: none; display: inline-block; }
+#list li a > :first-child { text-decoration: underline; }
+#list li a > span { display: inline-block; }
+
+#list { align-content: center; }
+#list > body { text-align: center; }
