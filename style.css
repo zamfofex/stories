@@ -38,8 +38,6 @@ html
 	--text-color: #741;
 	--background-color: #FED;
 	--highlight-color: #7412;
-	min-height: 100%;
-	display: grid;
 }
 
 body
@@ -606,5 +604,11 @@ legend { margin: 0 0 0 -1em; }
 #list li a > :first-child { text-decoration: underline; }
 #list li a > span { display: inline-block; }
 
-#list { align-content: center; }
+#list
+{
+	align-content: center;
+	min-height: 100%;
+	display: grid;
+}
+
 #list > body { text-align: center; }
