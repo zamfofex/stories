@@ -227,7 +227,7 @@ let respond = (request, waitUntil) =>
 		return cacheFirst(request, waitUntil)
 	if (origin !== location.origin)
 		return fetch(request)
-	if (pathname === "/style.css"|| pathname === "/script.js" || pathname.match(/^\/.+\//) || pathname === "/")
+	if (pathname === "/style.css" || pathname === "/dependencies.css" || pathname === "/script.js" || pathname.match(/^\/.+\//) || pathname === "/")
 		return staleWhileRevalidate(request, waitUntil)
 	
 	return fetch(request)
