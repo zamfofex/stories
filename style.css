@@ -124,6 +124,21 @@ html[data-theme="coffee"]
 	--highlight-color: #DB83;
 }
 
+html[data-theme="cherry"]
+{
+	--text-color: #F5A;
+	--background-color: #FFE6F2;
+	--highlight-color: #FF55AA18;
+
+}
+
+html[data-theme="cinnamon"]
+{
+	--text-color: #FFDDE7;
+	--background-color: #B03F63;
+	--highlight-color: #FFDDE733;
+}
+
 /* → scrollbar */
 
 ::-webkit-scrollbar
