@@ -241,6 +241,7 @@ h1, h2, h3, h4, h5, h6
 	font-weight: normal;
 	margin: 0.75em 0;
 	line-height: 1.25em;
+	text-align: left;
 }
 
 h1 { font-size: 2em; }
@@ -611,4 +612,4 @@ legend { margin: 0 0 0 -1em; }
 	display: grid;
 }
 
-#list > body { text-align: center; }
+#list > body, #list body > h1 { text-align: center; }
