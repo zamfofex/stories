@@ -36,17 +36,13 @@ let computeHash = async buffer =>
 
 let main = async () =>
 {
-	await cacheNameReady()
-	let cacheName = currentCacheName
+	for (let name of await caches.keys()) await caches.delete(name)
+	currentCacheName = String(Date.now())
 	
-	let cache = await caches.open(cacheName)
-	
-	if (await cache.match("/hashes.json")) return
+	let cache = await caches.open(currentCacheName)
 	
 	let response = await fetch("/hashes.json")
 	if (!response.ok) throw new Error()
-	
-	await cache.put("/hashes.json", response.clone())
 	
 	let hashes = await response.json()
 	
@@ -62,6 +58,8 @@ let main = async () =>
 		if (hash !== hash2) throw new Error()
 		await cache.put(url, response)
 	}
+	
+	await cache.put("/hashes.json", response.clone())
 	
 	skipWaiting()
 }
