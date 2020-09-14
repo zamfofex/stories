@@ -106,14 +106,14 @@ small { font-size: 0.75em; }
 html[data-theme="cocoa"]
 {
 	--text-color: #FDA;
-	--background-color: #531;
+	--background-color: #552E11;
 	--highlight-color: #FDA3;
 }
 
 html[data-theme="milk"]
 {
 	--text-color: #532;
-	--background-color: #FDFAEE;
+	--background-color: #FFF6F1;
 	--highlight-color: #5322;
 }
 
