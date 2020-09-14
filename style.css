@@ -157,10 +157,13 @@ a, button, select
 	text-decoration: underline;
 }
 
-option
+optgroup { font-weight: bold; font-style: italic; }
+option { font-weight: normal; font-style: normal; }
+
+option, optgroup
 {
-	background: initial;
-	color: initial;
+	background: var(--background-color);
+	color: var(--text-color);
 }
 
 .disabled { opacity: 0.5; }
