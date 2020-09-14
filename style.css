@@ -401,6 +401,7 @@ body[data-guide-rulers="5"] > main p
 		);
 	background-repeat: no-repeat;
 	background-position: top 0.125em center;
+	background-size: 100% calc(100% - 1.75em * 2);
 }
 
 /* → lists */
@@ -491,7 +492,7 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		margin-left: -1em;
 		margin-right: -1em;
 		padding: 0 1em;
-		background-size: calc(100% - 2em) auto;
+		background-size: calc(100% - 2em) calc(100% - 1.75em * 2);
 	}
 	
 	body.typesetting > main .p::after
