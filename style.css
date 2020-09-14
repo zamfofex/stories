@@ -378,19 +378,14 @@ body[data-guide-rulers="4"] > main p,
 body[data-guide-rulers="5"] > main p
 {
 	background:
-		linear-gradient(
-			var(--background-color),
-			var(--background-color) 1em,
-			#0000 1em,
-			#0000 calc(100% - 4em),
-			var(--background-color) calc(100% - 4em)
-		),
 		repeating-linear-gradient(
-			var(--text-color) 0.0625em,
-			var(--text-color) 0.125em,
-			#0000 0.125em,
-			#0000 calc(var(--guide-rulers) * 1.75em + 0.0625em)
+			var(--text-color) -0.0625em,
+			var(--text-color) 0,
+			#0000 0,
+			#0000 calc(1.75em * var(--guide-rulers) - 0.0625em)
 		);
+	background-repeat: no-repeat;
+	background-position: top 0.125em center;
 }
 
 /* → lists */
@@ -482,8 +477,6 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		margin-right: -1em;
 		padding: 0 1em;
 		background-size: calc(100% - 2em) auto;
-		background-repeat: no-repeat;
-		background-position: center;
 	}
 	
 	body.typesetting > main .p::after
