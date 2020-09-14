@@ -337,18 +337,19 @@ label { cursor: pointer; }
 
 #display-settings > summary::-webkit-details-marker { display: none; }
 
-#settings > h2
+#settings > fieldset > legend
 {
 	font-size: 1em;
 	font-weight: bold;
 	text-align: center;
-	font-family: inherit;
+	font-style: italic;
 }
 
-#settings > h2:not(:first-child), #settings > .submit
+#settings > fieldset
 {
-	padding-top: 0.5em;
-	border-top: 0.0625em dashed var(--text-color);
+	margin: 0.75em 0;
+	padding: 0;
+	border-bottom: 0.0625em dashed var(--text-color);
 }
 
 /* → settings: capitalization */
@@ -594,7 +595,7 @@ fieldset
 	margin: 1em 0;
 }
 
-legend { margin: 0 0 0 -1em; }
+legend { margin: 0 0 0 -1em; padding: 0; }
 
 /* → story list page */
 

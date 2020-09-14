@@ -15,81 +15,85 @@
 		<details id="display-settings">
 			<summary>settings</summary>
 			<div id="settings">
-				<h2>page settings</h2>
-				<p>
-					<label class="disabled">
-						<input type="checkbox" id="available-offline" class="local" checked disabled>
-						available offline
-					</label>
-				</p>
-				<h2>global settings</h2>
-				<p>
-					<label class="disabled">
-						<input type="checkbox" id="capitalization" disabled>
-						enable capitalization
-					</label>
-				</p>
-				<fieldset class="disabled">
-					<legend>guide rulers</legend>
-					<span class="radio-group" id="guide-rulers">
-						<label>
-							<input type="radio" name="guide-rulers" value="none" checked disabled>
-							disabled
+				<fieldset>
+					<legend>page settings</legend>
+					<p>
+						<label class="disabled">
+							<input type="checkbox" id="available-offline" class="local" checked disabled>
+							available offline
 						</label>
-						<label>
-							<input type="radio" name="guide-rulers" value="3" disabled>
-							3
-						</label>
-						<label>
-							<input type="radio" name="guide-rulers" value="4" disabled>
-							4
-						</label>
-						<label>
-							<input type="radio" name="guide-rulers" value="5" disabled>
-							5
-						</label>
-					</span>
+					</p>
 				</fieldset>
-				<p>
-					<label class="disabled">
-						<input type="checkbox" id="typesetting" disabled>
-						&#x20;
-						custom typesetting
-					</label>
-				</p>
-				<p>
-					<label class="disabled">
-						<input type="checkbox" id="optical-alignment" disabled checked>
-						&#x20;
-						optical alignment
-					</label>
-				</p>
-				<p>
-					<label class="disabled">
-						<input type="checkbox" id="hyphenation" disabled checked>
-						&#x20;
-						hyphenation
-					</label>
-				</p>
-				<p>
-					<label class="disabled">
-						<input type="checkbox" id="spacing-harmony" disabled checked>
-						&#x20;
-						harmonized letter spacing
-					</label>
-				</p>
-				<p>
-					<label class="disabled">
-						theme:
-						&#x20;
-						<select id="theme" disabled>
-							<option value="milk">milk</option>
-							<option value="caramel" selected>caramel</option>
-							<option value="cocoa">cocoa</option>
-							<option value="coffee">coffee</option>
-						</select>
-					</label>
-				</p>
+				<fieldset>
+					<legend>global settings</legend>
+					<p>
+						<label class="disabled">
+							<input type="checkbox" id="capitalization" disabled>
+							enable capitalization
+						</label>
+					</p>
+					<fieldset class="disabled">
+						<legend>guide rulers</legend>
+						<span class="radio-group" id="guide-rulers">
+							<label>
+								<input type="radio" name="guide-rulers" value="none" checked disabled>
+								disabled
+							</label>
+							<label>
+								<input type="radio" name="guide-rulers" value="3" disabled>
+								3
+							</label>
+							<label>
+								<input type="radio" name="guide-rulers" value="4" disabled>
+								4
+							</label>
+							<label>
+								<input type="radio" name="guide-rulers" value="5" disabled>
+								5
+							</label>
+						</span>
+					</fieldset>
+					<p>
+						<label class="disabled">
+							<input type="checkbox" id="typesetting" disabled>
+							&#x20;
+							custom typesetting
+						</label>
+					</p>
+					<p>
+						<label class="disabled">
+							<input type="checkbox" id="optical-alignment" disabled checked>
+							&#x20;
+							optical alignment
+						</label>
+					</p>
+					<p>
+						<label class="disabled">
+							<input type="checkbox" id="hyphenation" disabled checked>
+							&#x20;
+							hyphenation
+						</label>
+					</p>
+					<p>
+						<label class="disabled">
+							<input type="checkbox" id="spacing-harmony" disabled checked>
+							&#x20;
+							harmonized letter spacing
+						</label>
+					</p>
+					<p>
+						<label class="disabled">
+							theme:
+							&#x20;
+							<select id="theme" disabled>
+								<option value="milk">milk</option>
+								<option value="caramel" selected>caramel</option>
+								<option value="cocoa">cocoa</option>
+								<option value="coffee">coffee</option>
+							</select>
+						</label>
+					</p>
+				</fieldset>
 				<p class="submit">(requires scripting)</p>
 			</div>
 		</details>
