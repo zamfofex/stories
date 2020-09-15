@@ -362,6 +362,8 @@ label { cursor: pointer; }
 	font-weight: bold;
 	text-align: center;
 	font-style: italic;
+	width: 100%;
+	margin: 0;
 }
 
 #settings > fieldset
