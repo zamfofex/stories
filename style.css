@@ -529,6 +529,10 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		margin-left: -1em;
 		margin-right: -1em;
 		padding: 0 1em;
+	}
+	
+	body[data-guide-rulers] > main .p
+	{
 		background-size: calc(100% - 2em) calc(100% - 1.75em * 2);
 	}
 	
