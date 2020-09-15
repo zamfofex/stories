@@ -53,6 +53,7 @@ let paragraphs = []
 
 let main = document.querySelector("main")
 let children = [...main.childNodes]
+let original = children.map(node => node.cloneNode(true))
 
 let prepare = () =>
 {
@@ -238,7 +239,12 @@ let typeset = () =>
 	hyphensLabel.classList.toggle("disabled", hyphens.disabled)
 	spacingLabel.classList.toggle("disabled", spacing.disabled)
 	
-	if (!typesetting.checked) return
+	if (!typesetting.checked)
+	{
+		main.textContent = ""
+		main.append(...original)
+		return
+	}
 	
 	let mainWidth = main.getBoundingClientRect().width
 	

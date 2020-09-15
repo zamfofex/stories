@@ -519,7 +519,7 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 {
 	/* → settings: custom typesetting */
 	
-	body.typesetting > main .p
+	main .p
 	{
 		white-space: nowrap;
 		text-align-last: justify;
@@ -530,7 +530,7 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		background-size: calc(100% - 2em) calc(100% - 1.75em * 2);
 	}
 	
-	body.typesetting > main .p::after
+	main .p::after
 	{
 		content: "";
 		display: inline-block;
@@ -538,23 +538,23 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		height: 0;
 	}
 	
-	body.typesetting > main .break > .br::after
+	main .break > .br::after
 	{
 		content: "\A";
 		content: "\A" / "";
 		white-space: pre;
 	}
 	
-	body.typesetting > main .glue.break > .ws
+	main .glue.break > .ws
 	{
 		display: inline-block;
 		white-space: pre;
 		width: 0;
 	}
 	
-	body.typesetting > main .glue.break > .ws::selection { background: #0000; }
+	main .glue.break > .ws::selection { background: #0000; }
 	
-	body.typesetting > main .shy.break::before
+	main .shy.break::before
 	{
 		content: "-" !important;
 		content: "-" / "" !important;
@@ -562,42 +562,39 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 	
 	/* → settings: optical alignment */
 	
-	body.typesetting.optical-alignment > main .break::before
+	body.optical-alignment > main .break::before
 	{
 		content: "";
 		margin-right: calc(1em - var(--pull-left));
 		display: inline-block;
 	}
 	
-	body.typesetting.optical-alignment > main .break::after
+	body.optical-alignment > main .break::after
 	{
 		content: "";
 		margin-left: calc(1em - var(--pull-right));
 		display: inline-block;
 	}
 	
-	body.typesetting.optical-alignment > main .p::before
+	body.optical-alignment > main .p::before
 	{
 		content: "";
 		margin-left: calc(1em - var(--pull-before));
 		display: inline-block;
 	}
 	
-	body.typesetting.optical-alignment > main .p
+	body.optical-alignment > main .p
 	{
 		padding: 0;
 	}
 	
 	/* → settings: spacing harmony */
 	
-	body.typesetting.spacing-harmony > main .box
-	{
-		letter-spacing: var(--spacing);
-	}
+	body.spacing-harmony > main .box { letter-spacing: var(--spacing); }
 	
-	body.typesetting.spacing-harmony > main .shy { letter-spacing: 0; }
+	body.spacing-harmony > main .shy { letter-spacing: 0; }
 	
-	body.typesetting > main .spacing-offset
+	main .spacing-offset
 	{ margin-right: calc(-1 * var(--spacing, 0)); }
 }
 
