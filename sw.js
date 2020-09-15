@@ -11,21 +11,22 @@ let currentCacheName
 let cacheNameReady = async () =>
 {
 	let keys = await caches.keys()
-	if (!currentCacheName)
+	let cacheName = currentCacheName
+	if (!cacheName)
 	{
 		for (let name of keys)
 		{
 			if (await (await caches.open(name)).match("/hashes.json"))
 			{
-				currentCacheName = name
+				cacheName = name
 				break
 			}
 		}
-		if (!currentCacheName) currentCacheName = String(Date.now())
+		if (!cacheName) cacheName = String(Date.now())
 	}
-	let cacheName = currentCacheName
 	for (let name of keys)
 		if (name !== cacheName) await caches.delete(name)
+	currentCacheName = cacheName
 }
 
 let computeHash = async buffer =>
@@ -36,15 +37,15 @@ let computeHash = async buffer =>
 
 let main = async () =>
 {
-	for (let name of await caches.keys()) await caches.delete(name)
-	currentCacheName = String(Date.now())
+	await cacheNameReady()
+	let cacheName = currentCacheName
 	
-	let cache = await caches.open(currentCacheName)
+	let cache = await caches.open(cacheName)
 	
 	let response = await fetch("/hashes.json")
 	if (!response.ok) throw new Error()
 	
-	let hashes = await response.json()
+	let hashes = await response.clone().json()
 	
 	for (let url in hashes)
 	{
@@ -59,7 +60,7 @@ let main = async () =>
 		await cache.put(url, response)
 	}
 	
-	await cache.put("/hashes.json", response.clone())
+	await cache.put("/hashes.json", response)
 	
 	skipWaiting()
 }
