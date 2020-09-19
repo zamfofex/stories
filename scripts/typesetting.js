@@ -71,9 +71,9 @@ let prepare = () =>
 	
 	ctx.font = font(document.body)
 	
-	let computedWidths = {}
+	let computedOffsets = {}
 	
-	for (let letter in ratios) computedWidths[letter] = measure(letter)
+	for (let letter in ratios) computedOffsets[letter] = measure(letter) * ratios[letter]
 	
 	hyphenWidth = measure("-")
 	spaceWidth = measure(" ")
@@ -156,10 +156,6 @@ let prepare = () =>
 					
 					let left = syllable[0]
 					let right = syllable[syllable.length-1]
-					let leftWidth = computedWidths[left] || 0
-					let rightWidth = computedWidths[right] || 0
-					leftWidth *= ratios[left] || 0
-					rightWidth *= ratios[right] || 0
 					
 					ctx.font = font(textNode.parentNode)
 					
@@ -172,8 +168,8 @@ let prepare = () =>
 						span,
 						{
 							width: {normal: measure(syllable), lowercase: measure(syllable.toLowerCase())},
-							left: leftWidth,
-							right: rightWidth,
+							left: {normal: computedOffsets[left], lowercase: computedOffsets[left.toLowerCase()]},
+							right: {normal: computedOffsets[right], lowercase: computedOffsets[right.toLowerCase()]},
 						},
 					)
 				}
@@ -229,6 +225,8 @@ let spacingLabel = spacing.closest("label")
 
 let lastWidth
 
+let casingVariant = ({normal, lowercase}) => capitalization.checked ? normal : lowercase
+
 let typeset = () =>
 {
 	pull.disabled = !typesetting.checked
@@ -273,23 +271,19 @@ let typeset = () =>
 			let base = bases[i]
 			let width = widths[i]
 			
-			if (base.type === "box")
-			{
-				if (capitalization.checked) width = width.normal
-				else width = width.lowercase
-			}
+			if (base.type === "box") width = casingVariant(width)
 			
 			if (pull.checked)
 			{
-				let left = lefts[i] || 0
-				let right = rights[i] || 0
+				let left = casingVariant(lefts[i] || {}) || 0
+				let right = casingVariant(rights[i] || {}) || 0
 				
 				width -= left + right
 				
 				if (base.type !== "box")
 				{
-					let next = lefts[i + 1] || 0
-					let prev = rights[i - 1] || 0
+					let next = casingVariant(lefts[i + 1] || {}) || 0
+					let prev = casingVariant(rights[i - 1] || {}) || 0
 					
 					width += next + prev
 				}
@@ -316,13 +310,13 @@ let typeset = () =>
 				if (bases[i].type === "penalty")
 					node.style.setProperty("--pull-left", `${hyphenWidth}px`)
 				else
-					node.style.setProperty("--pull-left", `${rights[i - 1]}px`)
+					node.style.setProperty("--pull-left", `${casingVariant(rights[i - 1]) || 0}px`)
 				
-				node.style.setProperty("--pull-right", `${lefts[i + 1]}px`)
+				node.style.setProperty("--pull-right", `${casingVariant(lefts[i + 1]) || 0}px`)
 			}
 		}
 		
-		if (pull.checked) node.style.setProperty("--pull-before", `${lefts[0]}px`)
+		if (pull.checked) node.style.setProperty("--pull-before", `${casingVariant(lefts[0]) || 0}px`)
 		
 		let push = mainWidth
 		
