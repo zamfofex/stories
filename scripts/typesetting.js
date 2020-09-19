@@ -84,22 +84,18 @@ let prepare = () =>
 		
 		let bases = []
 		let nodes = []
-		let widths = []
-		let lefts = []
-		let rights = []
+		let normal = {lefts: [], rights: [], widths: []}
+		let lowercase = {lefts: [], rights: [], widths: []}
 		let shys = []
 		let currentNodes
-		paragraphs.push({bases, nodes, widths, lefts, rights, node, shys})
+		paragraphs.push({node, bases, nodes, normal, lowercase, shys})
 		
-		let push = (base, node, {width, left, right} = {}) =>
+		let push = (base, node) =>
 		{
 			if (base.type === "penalty") shys.push(bases.length)
 			bases.push(base)
 			nodes.push(node)
 			currentNodes.push(node)
-			widths.push(width)
-			lefts.push(left)
-			rights.push(right)
 		}
 		
 		let textNodes = []
@@ -114,10 +110,28 @@ let prepare = () =>
 			
 			currentNodes = []
 			
-			for (let {length} = words, j = 1 ; j < length ; j += 2)
+			for (let j = 0 ; true ; j += 2)
 			{
-				let word = words[j + 0]
-				let whitespace = words[j + 1]
+				let whitespace = words[j]
+				let word = words[j + 1]
+				
+				if (whitespace)
+				{
+					let glue = document.createElement("span")
+					glue.classList.add("glue")
+					let ws = document.createElement("span")
+					ws.classList.add("ws")
+					ws.append(" ")
+					glue.append(ws)
+					
+					let br = document.createElement("span")
+					br.classList.add("br")
+					glue.append(br)
+					
+					push({type: "glue", stretch: 1, shrink: 0}, glue)
+				}
+				
+				if (!word) break
 				
 				let syllables
 				if (/[^a-z]/i.test(word) || word.length < 4)
@@ -138,6 +152,13 @@ let prepare = () =>
 				}
 				
 				let flag = false
+				
+				if (bases.length && bases[bases.length - 1].type === "box")
+				{
+					flag = true
+					nodes[nodes.length - 1].append(syllables.shift())
+				}
+				
 				for (let syllable of syllables)
 				{
 					if (flag)
@@ -157,63 +178,34 @@ let prepare = () =>
 					let left = syllable[0]
 					let right = syllable[syllable.length-1]
 					
-					ctx.font = font(textNode.parentNode)
-					
 					let span = document.createElement("span")
 					span.classList.add("box")
 					span.append(syllable)
 					
-					push(
-						{type: "box"},
-						span,
-						{
-							width: {normal: measure(syllable), lowercase: measure(syllable.toLowerCase())},
-							left: {normal: computedOffsets[left], lowercase: computedOffsets[left.toLowerCase()]},
-							right: {normal: computedOffsets[right], lowercase: computedOffsets[right.toLowerCase()]},
-						},
-					)
+					push({type: "box"}, span)
 				}
-				
-				if (!whitespace) continue
-				
-				let glue = document.createElement("span")
-				glue.classList.add("glue")
-				let ws = document.createElement("span")
-				ws.classList.add("ws")
-				ws.append(" ")
-				glue.append(ws)
-				
-				let br = document.createElement("span")
-				br.classList.add("br")
-				glue.append(br)
-				
-				push(
-					{
-						type: "glue",
-						stretch: 1,
-						shrink: 0,
-					},
-					glue,
-					{
-						width: spaceWidth,
-					},
-				)
 			}
 			
 			textNode.replaceWith(...currentNodes)
 		}
 		
-		push(
+		push({type: "glue", stretch: 1, shrink: 0}, null)
+		
+		for (let node of nodes)
+		{
+			let textContent
+			if (node)
+				textContent = node.textContent,
+				ctx.font = font(node)
+			else
+				textContent = ""
+			for (let [text, {widths, rights, lefts}] of [[textContent, normal], [textContent.toLowerCase(), lowercase]])
 			{
-				type: "glue",
-				stretch: 1,
-				shrink: 0,
-			},
-			null,
-			{
-				width: spaceWidth,
-			},
-		)
+				widths.push(measure(text))
+				lefts.push(computedOffsets[text[0]])
+				rights.push(computedOffsets[text[text.length - 1]])
+			}
+		}
 	}
 	
 	typeset()
@@ -224,8 +216,6 @@ let hyphensLabel = hyphens.closest("label")
 let spacingLabel = spacing.closest("label")
 
 let lastWidth
-
-let casingVariant = ({normal, lowercase}) => capitalization.checked ? normal : lowercase
 
 let typeset = () =>
 {
@@ -256,10 +246,15 @@ let typeset = () =>
 	if (pull.checked) shyWidth = 0
 	else shyWidth = hyphenWidth
 	
-	for (let {bases, nodes, widths, lefts, rights, node, shys} of paragraphs)
+	for (let {node, bases, nodes, normal, lowercase, shys} of paragraphs)
 	{
+		let which
+		if (capitalization.checked) which = normal
+		else which = lowercase
+		let {widths, lefts, rights} = which
+		
 		if (hyphens.checked)
-			for (let i of shys) { bases[i].cost = 400 ; widths[i] = shyWidth }
+			for (let i of shys) bases[i].cost = 400, widths[i] = shyWidth
 		else
 			// 1000 is a special value that disallows line breaks.
 			for (let i of shys) bases[i].cost = 1000
@@ -271,19 +266,17 @@ let typeset = () =>
 			let base = bases[i]
 			let width = widths[i]
 			
-			if (base.type === "box") width = casingVariant(width)
-			
 			if (pull.checked)
 			{
-				let left = casingVariant(lefts[i] || {}) || 0
-				let right = casingVariant(rights[i] || {}) || 0
+				let left = lefts[i] || 0
+				let right = rights[i] || 0
 				
 				width -= left + right
 				
 				if (base.type !== "box")
 				{
-					let next = casingVariant(lefts[i + 1] || {}) || 0
-					let prev = casingVariant(rights[i - 1] || {}) || 0
+					let next = lefts[i + 1] || 0
+					let prev = rights[i - 1] || 0
 					
 					width += next + prev
 				}
@@ -310,13 +303,13 @@ let typeset = () =>
 				if (bases[i].type === "penalty")
 					node.style.setProperty("--pull-left", `${hyphenWidth}px`)
 				else
-					node.style.setProperty("--pull-left", `${casingVariant(rights[i - 1]) || 0}px`)
+					node.style.setProperty("--pull-left", `${rights[i - 1] || 0}px`)
 				
-				node.style.setProperty("--pull-right", `${casingVariant(lefts[i + 1]) || 0}px`)
+				node.style.setProperty("--pull-right", `${lefts[i + 1] || 0}px`)
 			}
 		}
 		
-		if (pull.checked) node.style.setProperty("--pull-before", `${casingVariant(lefts[0]) || 0}px`)
+		if (pull.checked) node.style.setProperty("--pull-before", `${lefts[0] || 0}px`)
 		
 		let push = mainWidth
 		
