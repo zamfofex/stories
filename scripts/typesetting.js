@@ -2,7 +2,12 @@ import {Hypher, english, breakLines} from "./dependencies.js"
 
 let hypher = new Hypher(english)
 
-let ctx = document.createElement("canvas").getContext("2d")
+let canvas
+if (window.OffscreenCanvas)
+	canvas = new OffscreenCanvas(0, 0)
+else
+	canvas = document.createElement("canvas")
+let ctx = canvas.getContext("2d")
 
 let font = element =>
 {
@@ -11,17 +16,12 @@ let font = element =>
 }
 
 let typesetting = document.querySelector("#typesetting")
-let pull = document.querySelector("#optical-alignment")
 let hyphens = document.querySelector("#hyphenation")
 let capitalization = document.querySelector("#capitalization")
-let spacing = document.querySelector("#spacing-harmony")
 
-for (let checkbox of [typesetting, pull, spacing])
-{
-	let update = () => document.body.classList.toggle(checkbox.id, checkbox.checked)
-	new BroadcastChannel(checkbox.id).addEventListener("message", update)
-	update()
-}
+let update = () => document.body.classList.toggle("typesetting", typesetting.checked)
+new BroadcastChannel("typesetting").addEventListener("message", update)
+update()
 
 let measure = text => ctx.measureText(text).width
 
@@ -33,7 +33,6 @@ let ratios =
 	"”": 1,
 	"‘": 1,
 	"’": 1,
-	"\u2010": 1,
 	"-": 1,
 	";": 1,
 	":": 1,
@@ -61,11 +60,10 @@ let prepare = () =>
 	new BroadcastChannel("optical-alignment").addEventListener("message", typeset)
 	new BroadcastChannel("hyphenation").addEventListener("message", typeset)
 	new BroadcastChannel("capitalization").addEventListener("message", typeset)
-	new BroadcastChannel("spacing-harmony").addEventListener("message", typeset)
 	
 	addEventListener("resize", () =>
 	{
-		if (main.getBoundingClientRect().width === lastWidth) return
+		if (main.offsetWidth === lastWidth) return
 		typeset()
 	})
 	
@@ -211,21 +209,14 @@ let prepare = () =>
 	typeset()
 }
 
-let pullLabel = pull.closest("label")
 let hyphensLabel = hyphens.closest("label")
-let spacingLabel = spacing.closest("label")
 
 let lastWidth
 
 let typeset = () =>
 {
-	pull.disabled = !typesetting.checked
 	hyphens.disabled = !typesetting.checked
-	spacing.disabled = !typesetting.checked
-	
-	pullLabel.classList.toggle("disabled", pull.disabled)
 	hyphensLabel.classList.toggle("disabled", hyphens.disabled)
-	spacingLabel.classList.toggle("disabled", spacing.disabled)
 	
 	if (!typesetting.checked)
 	{
@@ -234,17 +225,13 @@ let typeset = () =>
 		return
 	}
 	
-	let mainWidth = main.getBoundingClientRect().width
+	let mainWidth = main.offsetWidth
 	
 	lastWidth = mainWidth
 	
 	let y = scrollY
 	
 	main.textContent = ""
-	
-	let shyWidth
-	if (pull.checked) shyWidth = 0
-	else shyWidth = hyphenWidth
 	
 	for (let {node, bases, nodes, normal, lowercase, shys} of paragraphs)
 	{
@@ -254,7 +241,7 @@ let typeset = () =>
 		let {widths, lefts, rights} = which
 		
 		if (hyphens.checked)
-			for (let i of shys) bases[i].cost = 400, widths[i] = shyWidth
+			for (let i of shys) bases[i].cost = 400, widths[i] = 0
 		else
 			// 1000 is a special value that disallows line breaks.
 			for (let i of shys) bases[i].cost = 1000
@@ -266,23 +253,20 @@ let typeset = () =>
 			let base = bases[i]
 			let width = widths[i]
 			
-			if (pull.checked)
+			let left = lefts[i] || 0
+			let right = rights[i] || 0
+			
+			width -= left + right
+			
+			if (base.type !== "box")
 			{
-				let left = lefts[i] || 0
-				let right = rights[i] || 0
+				let next = lefts[i + 1] || 0
+				let prev = rights[i - 1] || 0
 				
-				width -= left + right
-				
-				if (base.type !== "box")
-				{
-					let next = lefts[i + 1] || 0
-					let prev = rights[i - 1] || 0
-					
-					width += next + prev
-				}
-				
-				if (width < 0) width = 0
+				width += next + prev
 			}
+			
+			if (width < 0) width = 0
 			
 			base.width = width
 		}
@@ -298,18 +282,15 @@ let typeset = () =>
 			let node = nodes[i]
 			node.classList.add("break")
 			
-			if (pull.checked)
-			{
-				if (bases[i].type === "penalty")
-					node.style.setProperty("--pull-left", `${hyphenWidth}px`)
-				else
-					node.style.setProperty("--pull-left", `${rights[i - 1] || 0}px`)
-				
-				node.style.setProperty("--pull-right", `${lefts[i + 1] || 0}px`)
-			}
+			if (bases[i].type === "penalty")
+				node.style.setProperty("--pull-left", `${hyphenWidth}px`)
+			else
+				node.style.setProperty("--pull-left", `${rights[i - 1] || 0}px`)
+			
+			node.style.setProperty("--pull-right", `${lefts[i + 1] || 0}px`)
 		}
 		
-		if (pull.checked) node.style.setProperty("--pull-before", `${lefts[0] || 0}px`)
+		node.style.setProperty("--pull-before", `${lefts[0] || 0}px`)
 		
 		let push = mainWidth
 		
@@ -323,8 +304,6 @@ let typeset = () =>
 		if (push < 0) push = 0
 		
 		node.style.setProperty("--push", `${push}px`)
-		
-		if (!spacing.checked) continue
 		
 		let prev = 0
 		
@@ -342,8 +321,8 @@ let typeset = () =>
 				if (base.type === "glue")
 					glues++, gaps--
 				else if (base.type === "box")
-					if (capitalization.checked) width += widths[j].normal
-					else width += widths[j].lowercase
+					if (capitalization.checked) width += widths[j]
+					else width += widths[j]
 				
 				if (base.type === "box")
 					gaps += nodes[j].childNodes[0].data.length
@@ -371,7 +350,7 @@ let typeset = () =>
 	scrollY = y
 }
 
-addEventListener("load", () =>
+document.fonts.ready.then(() =>
 {
 	if (typesetting.checked)
 	{

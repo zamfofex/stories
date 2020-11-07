@@ -1,6 +1,4 @@
-import dbRequest from "./indexed-db.js"
-
-dbRequest.addEventListener("success", async () =>
+let main = async () =>
 {
 	let checkbox = document.querySelector("#available-offline")
 	
@@ -9,13 +7,24 @@ dbRequest.addEventListener("success", async () =>
 	let disable = () => { checkbox.disabled = true ; label.classList.add("disabled") }
 	let enable = () => { checkbox.disabled = false ; label.classList.remove("disabled") }
 	
-	let db = dbRequest.result
-	
-	let name = location.pathname.split("/")[1]
+	let name = location.pathname.match(/^\/?([^]*?)\/?$/)[1]
 	
 	let channel = new BroadcastChannel(name + ":available-offline")
 	
-	let response = await fetch(".")
+	let sw = (await navigator.serviceWorker.ready).active
+	
+	let resolve
+	let promises = [new Promise(f => resolve = f)]
+	
+	navigator.serviceWorker.addEventListener("message", ({data}) =>
+	{
+		resolve(data)
+		promises.push(new Promise(f => resolve = f))
+	})
+	
+	sw.postMessage(true)
+	
+	let {result, buffer} = await promises.shift()
 	
 	let modifying = false
 	
@@ -25,33 +34,20 @@ dbRequest.addEventListener("success", async () =>
 		let available = checkbox.checked
 		try
 		{
-			if (available || response.ok) enable()
+			if (available || buffer) enable()
 			else disable()
-			
-			let request = db
-				.transaction("offline-pages", "readwrite")
-				.objectStore("offline-pages")
-				.put(available, name)
-			
-			await new Promise((resolve, reject) => { request.addEventListener("success", resolve) ; request.addEventListener("error", reject) })
 			
 			if (available)
 			{
-				if (!response.ok) throw new Error()
-				for (let name of await caches.keys())
-				{
-					let cache = await caches.open(name)
-					await cache.put(".", response.clone())
-				}
+				if (!buffer) throw new Error()
+				sw.postMessage(buffer)
 			}
 			else
 			{
-				for (let name of await caches.keys())
-				{
-					let cache = await caches.open(name)
-					await cache.delete(".")
-				}
+				sw.postMessage(null)
 			}
+			
+			buffer = await promises.shift()
 		}
 		catch (e)
 		{
@@ -70,27 +66,12 @@ dbRequest.addEventListener("success", async () =>
 	channel.addEventListener("message", ({data}) =>
 	{
 		checkbox.checked = data
-		if (!data) !response.ok && disable()
-		else enable()
+		if (data) enable()
+		else !buffer && disable()
 	})
 	
-	let store = db
-		.transaction("offline-pages", "readwrite")
-		.objectStore("offline-pages")
-	
-	let request = store.get(name)
-	await new Promise(resolve => request.addEventListener("success", resolve))
-	
-	let {result} = request
-	if (result === undefined)
-	{
-		result = true
-		store.put(true, name)
-	}
-	
-	await navigator.serviceWorker.ready
-	
 	checkbox.checked = result
-	if (result) enable()
-	else changed()
-})
+	changed()
+}
+
+main()

@@ -17,8 +17,8 @@
 	→ lists
 	→ paper print
 	→ settings: custom typesetting
-	→ settings: optical alignment
-	→ settings: spacing harmony
+	→ custom typesetting: optical alignment
+	→ custom typesetting: spacing harmony
 	→ not found error page
 	→ miscelaneous compatibility fixes
 	→ fieldsets
@@ -359,7 +359,7 @@ label { cursor: pointer; }
 #settings > fieldset > legend
 {
 	font-size: 1em;
-	font-weight: bold;
+	font-weight: 550;
 	text-align: center;
 	font-style: italic;
 	width: 100%;
@@ -370,7 +370,23 @@ label { cursor: pointer; }
 {
 	margin: 0.75em 0;
 	padding: 0;
-	border-bottom: 0.0625em dashed var(--text-color);
+}
+
+#settings > fieldset::after
+{
+	content: "";
+	display: block;
+	height: 0.0625em;
+	background:
+		0 0 / 0.5em 100%
+		space no-repeat
+		linear-gradient(
+			90deg,
+			#0000 25%,
+			var(--text-color) 25%,
+			var(--text-color) 75%,
+			#0000 75%
+		);
 }
 
 /* → settings: capitalization */
@@ -390,10 +406,12 @@ body:not(.capitalization) #feedback > summary
 body[data-guide-rulers="3"] { --guide-rulers: 3; }
 body[data-guide-rulers="4"] { --guide-rulers: 4; }
 body[data-guide-rulers="5"] { --guide-rulers: 5; }
+body[data-guide-rulers="6"] { --guide-rulers: 6; }
 
 body[data-guide-rulers="3"] > main p,
 body[data-guide-rulers="4"] > main p,
-body[data-guide-rulers="5"] > main p
+body[data-guide-rulers="5"] > main p,
+body[data-guide-rulers="6"] > main p
 {
 	background:
 		repeating-linear-gradient(
@@ -439,8 +457,8 @@ ul > li::before
 {
 	content: "";
 	background: var(--text-color);
-	mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 4 4"><circle r="1.5" fill="%23741" /></svg>');
-	-webkit-mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 4 4"><circle r="1.5" fill="%23741" /></svg>');
+	mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 4 4"><circle r="1.5" fill="%23000" /></svg>');
+	-webkit-mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 4 4"><circle r="1.5" fill="%23000" /></svg>');
 	width: 0.5em;
 	height: 0.5em;
 	top: 0.65em;
@@ -566,42 +584,41 @@ h1, h2, h3, h4, h5, h6 { break-after: avoid; }
 		content: "-" / "" !important;
 	}
 	
-	/* → settings: optical alignment */
+	/* → custom typesetting: optical alignment */
 	
-	body.optical-alignment > main .break::before
+	body.typesetting > main .break::before
 	{
 		content: "";
 		margin-right: calc(1em - var(--pull-left));
 		display: inline-block;
 	}
 	
-	body.optical-alignment > main .break::after
+	body.typesetting > main .break::after
 	{
 		content: "";
 		margin-left: calc(1em - var(--pull-right));
 		display: inline-block;
 	}
 	
-	body.optical-alignment > main .p::before
+	body.typesetting > main .p::before
 	{
 		content: "";
 		margin-left: calc(1em - var(--pull-before));
 		display: inline-block;
 	}
 	
-	body.optical-alignment > main .p
+	body.typesetting > main .p
 	{
 		padding: 0;
 	}
 	
-	/* → settings: spacing harmony */
+	/* → custom typesetting: spacing harmony */
 	
-	body.spacing-harmony > main .box { letter-spacing: var(--spacing); }
+	body.typesetting > main .box { letter-spacing: var(--spacing); }
 	
-	body.spacing-harmony > main .shy { letter-spacing: 0; }
+	body.typesetting > main .shy { letter-spacing: 0; }
 	
-	main .spacing-offset
-	{ margin-right: calc(-1 * var(--spacing, 0)); }
+	main .spacing-offset { margin-right: calc(-1 * var(--spacing, 0)); }
 }
 
 /* → not found error page */

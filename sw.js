@@ -2,6 +2,13 @@ let db
 let prepareDB = async () =>
 {
 	let request = indexedDB.open("cache")
+	
+	request.addEventListener("upgradeneeded", () =>
+	{
+		let db = request.result
+		db.createObjectStore("offline-pages")
+	})
+	
 	await new Promise((resolve, reject) => { request.addEventListener("success", resolve) ; request.addEventListener("error", reject) })
 	db = request.result
 }
@@ -114,7 +121,7 @@ let staleWhileRevalidate = async (request, waitUntil) =>
 		
 		let response = await fetch(request)
 		
-		if (hash && response.ok)
+		if (response.ok)
 		{
 			let hash2 = await computeHash(await response.clone().arrayBuffer())
 			if (hash !== hash2) await revalidate()
@@ -143,15 +150,22 @@ let availableOffline = async url =>
 	return request.result
 }
 
-let revalidating = false
+let revalidating
+let changingAvailability = new Set()
 
 let revalidate = async () =>
 {
 	if (revalidating) return
+	let resolve
+	revalidating = new Promise(f => resolve = f)
+	
+	while (changingAvailability.size) await Promise.all(changingAvailability)
+	
 	await cacheNameReady()
+	
 	let cacheName = currentCacheName
 	let freshName = String(Date.now())
-	revalidating = true
+	
 	try
 	{
 		let copyFonts = true
@@ -212,7 +226,8 @@ let revalidate = async () =>
 	}
 	finally
 	{
-		revalidating = false
+		revalidating = null
+		resolve()
 	}
 }
 
@@ -233,3 +248,85 @@ let respond = (request, waitUntil) =>
 }
 
 addEventListener("fetch", event => event.respondWith(respond(event.request, p => event.waitUntil(p))))
+
+let receiveMessage = async ({data, source}) =>
+{
+	let resolve
+	let promise = new Promise(f => resolve = f)
+	let message
+	try
+	{
+		await revalidating
+		
+		await cacheNameReady()
+		let cacheName = currentCacheName
+		
+		await prepareDB()
+		
+		changingAvailability.add(promise)
+		
+		let cache = await caches.open(cacheName)
+		
+		let pathname = new URL(source.url).pathname.replace(/\/index\.html$/, "/")
+		
+		let response
+		
+		if (data === true)
+			response = await cache.match(pathname)
+		else
+			response = new Response(data, {headers: {"content-type": "text/html"}})
+		
+		let hashesResponse = await cache.match("/hashes.json")
+		if (!hashesResponse) return
+		
+		let hashes = await hashesResponse.json()
+		let {hash} = hashes[pathname]||{}
+		
+		if (!response || !response.ok || hash !== await computeHash(await response.clone().arrayBuffer()))
+		{
+			response = await fetch(pathname)
+			if (!response.ok || hash !== await computeHash(await response.clone().arrayBuffer()))
+				return
+		}
+		
+		let name = pathname.match(/^\/?([^]*?)\/?$/)[1]
+		
+		if (data === true)
+		{
+			let request = db
+				.transaction("offline-pages", "readwrite")
+				.objectStore("offline-pages")
+				.get(name)
+			
+			await new Promise((resolve, reject) => { request.addEventListener("success", resolve) ; request.addEventListener("error", reject) })
+			
+			let {result} = request
+			if (result === undefined)
+				result = true
+			
+			message = {result, buffer: await response.clone().arrayBuffer()}
+		}
+		else
+		{
+			message = await response.clone().arrayBuffer()
+		}
+		
+		if (data) await cache.put(pathname, response)
+		else await cache.delete(pathname)
+		
+		let request = db
+			.transaction("offline-pages", "readwrite")
+			.objectStore("offline-pages")
+			.put(Boolean(data), name)
+		
+		await new Promise((resolve, reject) => { request.addEventListener("success", resolve) ; request.addEventListener("error", reject) })
+	}
+	finally
+	{
+		source.postMessage(message)
+		changingAvailability.delete(promise)
+		resolve()
+	}
+}
+
+addEventListener("message", event => event.waitUntil(receiveMessage(event)))
