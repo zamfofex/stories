@@ -207,12 +207,14 @@ let revalidate = async () =>
 		
 		if (copyJSPM || copyFonts)
 		{
-			for (let response of await stale.matchAll())
+			for (let request of await stale.keys())
 			{
-				if (copyJSPM && "https://jspm.dev" === new URL(response.url).origin)
-					await fresh.put(response.url, response)
-				if (copyFonts && ["https://fonts.googleapis.com", "https://fonts.gstatic.com"].includes(new URL(response.url).origin))
-					await fresh.put(response.url, response)
+				let response = await stale.match(request)
+				let {url} = request
+				if (copyJSPM && "https://jspm.dev" === new URL(url).origin)
+					await fresh.put(url, response)
+				if (copyFonts && ["https://fonts.googleapis.com", "https://fonts.gstatic.com"].includes(new URL(url).origin))
+					await fresh.put(url, response)
 			}
 		}
 		
