@@ -4,10 +4,9 @@
 !/.github/**
 !/.vercelignore
 !/api
-!/api/feedback.js
+!/api/*
 !/build
 !/build/**
-!/dates.js
 !/license.md
 !/not-found
 !/not-found/main.html
@@ -22,3 +21,4 @@
 !/sw.js
 !/dependencies.css
 !/icon.svg
+!/subscribe.html

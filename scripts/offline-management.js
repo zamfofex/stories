@@ -6,7 +6,7 @@ for (let button of document.querySelectorAll("form[action] button"))
 	if (!navigator.onLine) offline()
 }
 
-for (let a of document.querySelectorAll(`a[target="_blank"]`))
+for (let a of document.querySelectorAll(`a[target="_blank"], .subscribe a`))
 {
 	if (a.origin !== location.origin) continue
 	

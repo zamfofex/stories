@@ -1,5 +1,5 @@
 import md from "commonmark"
-import formatDate from "../dates.js"
+import formatDate from "./dates.js"
 
 let parser = new md.Parser()
 let renderer = new md.HtmlRenderer({safe: true})

@@ -1,11 +1,9 @@
 {
-	"license": "0BSD",
 	"dependencies": {
 		"commonmark": "0.29.1",
 		"mongodb": "3.6.2",
 		"formdata-node": "2.4.0",
 		"jsonfeed-to-atom": "1.2.2",
-		"jsonfeed-to-rss": "3.0.4"
-	},
-	"type": "module"
+		"nodemailer": "6.4.15"
+	}
 }

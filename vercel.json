@@ -3,7 +3,8 @@
 	"routes":
 	[
 		{"src": "/submit", "dest": "/api/feedback.js", "methods": ["POST"]},
-		{"src": ".*", "status": 307, "headers": {"location": "https://zamstories.neocities.org"}}
+		{"src": "/subscribe", "dest": "/api/subscribe.js", "methods": ["POST"]},
+		{"src": ".*", "status": 303, "headers": {"location": "https://zamstories.neocities.org"}}
 	],
 	"github": {"silent": true}
 }

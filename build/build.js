@@ -1,10 +1,9 @@
 import md from "commonmark"
 import mongodb from "mongodb"
 import fs from "fs"
-import {months} from "../dates.js"
+import {months} from "./dates.js"
 import buildFeedback from "./feedback.js"
 import buildFeed from "./feed.js"
-import toRSS from "jsonfeed-to-rss"
 import toAtom from "jsonfeed-to-atom"
 import crypto from "crypto"
 
@@ -92,7 +91,7 @@ let main = async () =>
 		list += `${months[month - 1].toLowerCase()} ${year}</time></a></li></span>`
 		
 		// Publication dates have only year and month information, but JSON feed requires full date and time, so I just set it to 16:00 of the tenth day of the month.
-		items.push({title, description, text, main, publication: `${publication}-10T16:00:00-03:00`, url: `https://zamstories.neocities.org/${name}/`})
+		items.push({title, description, publication: `${publication}-10T16:00:00-03:00`, url: `https://zamstories.neocities.org/${name}/`})
 		
 		robots += `allow: /${name}/$\n`
 	}
@@ -105,7 +104,6 @@ let main = async () =>
 	let feedJSON = await buildFeed(items)
 	let feed = JSON.parse(feedJSON)
 	await fsp.writeFile("public/feed.json", feedJSON)
-	await fsp.writeFile("public/rss.xml", toRSS(feed, {feedURLFn: () => "https://zamstories.neocities.org/rss.xml", copyright: "© 2019–2020 Zamfofex"}))
 	await fsp.writeFile("public/atom.xml", toAtom(feed, {feedURLFn: () => "https://zamstories.neocities.org/atom.xml"}))
 	
 	await fsp.writeFile("public/robots.txt", robots)

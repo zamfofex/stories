@@ -23,6 +23,7 @@
 	→ miscelaneous compatibility fixes
 	→ fieldsets
 	→ story list page
+	→ text fields
 */
 
 @import "dependencies.css";
@@ -285,7 +286,6 @@ input[type="radio"]
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	appearance: none;
-	font: inherit;
 	cursor: unset;
 }
 
@@ -686,3 +686,16 @@ legend { margin: 0 0 0 -1em; padding: 0; }
 }
 
 #list > body, #list body > h1 { text-align: center; }
+
+/* → text fields */
+
+input[type="email"]
+{
+	border: 0.0625em solid var(--text-color);
+	appearance: none;
+	font: inherit;
+	color: inherit;
+	background: none;
+	padding: 0 0.5em;
+	border-radius: 0.5em
+}

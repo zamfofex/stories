@@ -4,8 +4,5 @@
 	
 	"title": ((title)),
 	"summary": ((description)),
-	"date_published": ((publication)),
-	
-	"content_text": ((text)),
-	"content_html": ((main))
+	"date_published": ((publication))
 }
