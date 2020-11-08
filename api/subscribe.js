@@ -46,9 +46,30 @@ export default async ({body: {email}}, res) =>
 {
 	let mongo = await MongoClient.connect(process.env.mongo_url, {useUnifiedTopology: true})
 	
-	let addresses = mongo.db(process.env.mongo_database).collection("emails")
+	let sent = mongo.db(process.env.mongo_database).collection("emails")
 	
-	if (await addresses.findOne({email}, {}))
+	let base = Date.now() - 600000
+	let date = new Date(base)
+	let recent = sent.find({date: {$gte: date}}, {date: true}).sort({date: -1})
+	
+	let count = 0
+	
+	for await (let {date} of recent)
+	{
+		count++
+		
+		let time = Number(date) - base
+		
+		if (count / time >= 2 / 10000)
+		{
+			await mongo.close()
+			res.statusCode = 400
+			res.end()
+			return
+		}
+	}
+	
+	if (await sent.findOne({email}, {}))
 	{
 		await mongo.close()
 		res.statusCode = 303
@@ -57,7 +78,7 @@ export default async ({body: {email}}, res) =>
 		return
 	}
 	
-	await addresses.insertOne({email})
+	await sent.insertOne({email, date})
 	
 	await mongo.close()
 	
