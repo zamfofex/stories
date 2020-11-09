@@ -44,8 +44,8 @@ let main = async () =>
 	let hashes = {}
 	await computeHashes("/", hashes)
 	
-	let page = unindent(await fsp.readFile("build/story.html", "utf-8"))
-	let index = unindent(await fsp.readFile("build/list.html", "utf-8"))
+	let page = unindent(await fsp.readFile("pages/story.html", "utf-8"))
+	let index = unindent(await fsp.readFile("pages/list.html", "utf-8"))
 	
 	let mongo = await MongoClient.connect(process.env.mongo_url, {useUnifiedTopology: true})
 	
