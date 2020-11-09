@@ -42,43 +42,36 @@ let text = `
 
 let html = message(renderer.render(parser.parse(text)))
 
+let addresses = new Set()
+
+let url = "https://zamstories.neocities.org"
+
 export default async ({body: {email}}, res) =>
 {
-	let mongo = await MongoClient.connect(process.env.mongo_url, {useUnifiedTopology: true})
-	
-	let sent = mongo.db(process.env.mongo_database).collection("emails")
-	
-	let base = Date.now() - 600000
-	let date = new Date(base)
-	let recent = sent.find({date: {$gte: date}}, {date: true}).sort({date: -1})
-	
-	let count = 0
-	
-	for await (let {date} of recent)
-	{
-		count++
-		
-		let time = Number(date) - base
-		
-		if (count / time >= 2 / 10000)
-		{
-			await mongo.close()
-			res.statusCode = 400
-			res.end()
-			return
-		}
-	}
-	
-	if (await sent.findOne({email}, {}))
+	if (addresses.has(email))
 	{
 		await mongo.close()
 		res.statusCode = 303
-		res.setHeader("location", "https://zamstories.neocities.org")
+		res.setHeader("location", url)
+		res.end()
+	}
+	
+	addresses.add(email)
+	
+	let mongo = await MongoClient.connect(process.env.mongo_url, {useUnifiedTopology: true})
+	
+	let emails = mongo.db(process.env.mongo_database).collection("emails")
+	
+	if (await emails.findOne({email}, {}))
+	{
+		await mongo.close()
+		res.statusCode = 303
+		res.setHeader("location", url)
 		res.end()
 		return
 	}
 	
-	await sent.insertOne({email, date})
+	await emails.insertOne({email, date: new Date()})
 	
 	await mongo.close()
 	
@@ -102,6 +95,6 @@ export default async ({body: {email}}, res) =>
 	})
 	
 	res.statusCode = 303
-	res.setHeader("location", "https://zamstories.neocities.org")
+	res.setHeader("location", url)
 	res.end()
 }
