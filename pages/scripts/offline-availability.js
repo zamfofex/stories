@@ -24,7 +24,7 @@ let main = async () =>
 	
 	sw.postMessage(true)
 	
-	let {result, buffer} = await promises.shift()
+	let {result, buffer} = await promises.shift() || {}
 	
 	let modifying = false
 	
