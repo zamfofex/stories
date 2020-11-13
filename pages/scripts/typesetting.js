@@ -23,7 +23,9 @@ let update = () => document.body.classList.toggle("typesetting", typesetting.che
 new BroadcastChannel("typesetting").addEventListener("message", update)
 update()
 
-let measure = text => ctx.measureText(text).width
+let adjust
+
+let measure = text => ctx.measureText(text).width * adjust
 
 let ratios =
 {
@@ -66,6 +68,21 @@ let prepare = () =>
 		if (main.offsetWidth === lastWidth) return
 		typeset()
 	})
+	
+	let a = document.createElement("span")
+	a.textContent = "aaaaa"
+	
+	document.body.append(a)
+	
+	a.style.fontSize = "4096px"
+	a.style.display = "inline-block"
+	a.style.whiteSpace = "pre"
+	
+	adjust = a.getBoundingClientRect().width
+	a.style.fontSizeAdjust = "none"
+	adjust /= a.getBoundingClientRect().width
+	
+	a.remove()
 	
 	ctx.font = font(document.body)
 	
