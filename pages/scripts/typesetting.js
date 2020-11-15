@@ -36,8 +36,6 @@ let ratios =
 	"‘": 1,
 	"’": 1,
 	"-": 1,
-	";": 1,
-	":": 1,
 	"—": 0.25,
 	"T": 0.2,
 	"Y": 0.2,
@@ -217,8 +215,13 @@ let prepare = () =>
 			for (let [text, {widths, rights, lefts}] of [[textContent, normal], [textContent.toLowerCase(), lowercase]])
 			{
 				widths.push(measure(text))
-				lefts.push(computedOffsets[text[0]])
-				rights.push(computedOffsets[text[text.length - 1]])
+				
+				let first = text[0]
+				let last = text[text.length - 1]
+				if (last === "c" || last === "C") last = ""
+				
+				lefts.push(computedOffsets[first])
+				rights.push(computedOffsets[last])
 			}
 		}
 	}
