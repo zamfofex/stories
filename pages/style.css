@@ -506,7 +506,12 @@ ol[start$="9"] { --list-unit: 9; }
 		margin: 0;
 		padding: 0;
 		width: initial;
+		min-width: initial;
 		text-align: justify;
+	}
+	
+	html
+	{
 		--text-color: #000 !important;
 		--background-color: #0000 !important;
 	}
@@ -523,13 +528,19 @@ ol[start$="9"] { --list-unit: 9; }
 	:not(pre) > code { background: none; }
 	
 	main { margin-bottom: 0; }
+	
+	hr
+	{
+		mask: none;
+		background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 0 12 2" stroke="%23000" fill="none" stroke-width="0.125"><path d="M 0 1 C 1 0 3 2 4 1 M 4.5 1.5 5 0.5 M 5.5 1.5 6 0.5 M 6.5 1 C 7.5 0 9.5 2 10.5 1" /></svg>');
+		background-position: center;
+		background-repeat: no-repeat;
+	}
 }
 
-article, blockquote { break-inside: avoid; }
+article, blockquote, hr { break-inside: avoid; }
 
-h1, h2, h3, h4, h5, h6 { break-after: avoid; }
-
-.end { break-before: avoid; }
+.end, hr { break-before: avoid; }
 
 @media not print
 {
