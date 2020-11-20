@@ -678,23 +678,44 @@ legend { margin: 0 0 0 -1rem; padding: 0; }
 
 /* → story list page */
 
-#list li { margin: 1rem 0; }
-#list li::before { content: none; }
+#list article { margin: 4rem 0; }
 
-#list li a { text-decoration: none; display: inline-block; }
-#list li a > :first-child { text-decoration: underline; }
-#list li a > span { display: inline-block; }
+#list body > div > a { text-decoration: none; }
+#list h2
+{
+	font-weight: 600;
+	font-family: inherit;
+	font-size: 1em;
+}
 
 #list
 {
-	align-content: center;
 	min-height: 100%;
 	display: grid;
 }
 
-#list > body, #list body > h1 { text-align: center; }
+#list > body
+{
+	display: grid;
+	grid-template-rows: 1fr auto;
+	text-transform: lowercase;
+}
 
-/* → text fields */
+#list h1 { text-align: center; }
+
+#list body > footer
+{
+	display: grid;
+	justify-items: center;
+}
+
+@media (min-width: 900px)
+{
+	#list body > footer
+	{
+		grid-template-columns: auto auto auto;
+	}
+}
 
 input[type="email"]
 {
@@ -706,3 +727,14 @@ input[type="email"]
 	padding: 0 0.5rem;
 	border-radius: 0.5rem
 }
+
+/* → subscription page */
+
+#subscribe
+{
+	align-content: center;
+	min-height: 100%;
+	display: grid;
+}
+
+#subscribe body, #subscribe h1 { text-align: center; }

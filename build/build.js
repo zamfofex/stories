@@ -87,8 +87,11 @@ let main = async () =>
 		hashes[`/${name}/`] = {hash: computeHash(buffer)}
 		
 		let [year, month] = publication.split("-")
-		list += `<li><a href="/${name}/"><span>${title}</span> <span>— <time datetime="${publication}">`
-		list += `${months[month - 1].toLowerCase()} ${year}</time></a></li></span>`
+		list += `<a href="/${name}/"><article>`
+		list += `<h2>${title}</h2>`
+		list += `<p><time datetime="${publication}">${months[month - 1].toLowerCase()} ${year}</time></p>`
+		list += `<p>${description}</p>`
+		list += `</article></a>`
 		
 		// Publication dates have only year and month information, but JSON feed requires full date and time, so I just set it to 16:00 of the tenth day of the month.
 		items.push({title, description, publication: `${publication}-10T16:00:00-03:00`, url: `https://zamstories.neocities.org/${name}/`})
