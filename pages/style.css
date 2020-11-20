@@ -111,31 +111,30 @@ html[data-theme="cocoa"]
 
 html[data-theme="milk"]
 {
-	--text-color: #532;
+	--text-color: #8D5F49;
 	--background-color: #FFF6F1;
-	--highlight-color: #5322;
+	--highlight-color: #8D5F4922;
 }
 
 html[data-theme="coffee"]
 {
-	--text-color: #DB8;
-	--background-color: #310;
-	--highlight-color: #DB83;
+	--text-color: #DAAB95;
+	--background-color: #21120B;
+	--highlight-color: #DAAB9522;
 }
 
 html[data-theme="cherry"]
 {
-	--text-color: #F5A;
-	--background-color: #FFE6F2;
-	--highlight-color: #FF55AA18;
-
+	--text-color: #C82B61;
+	--background-color: #FFE9F0;
+	--highlight-color: #C82B6118;
 }
 
 html[data-theme="cinnamon"]
 {
-	--text-color: #FFDDE7;
+	--text-color: #FFE7EE;
 	--background-color: #B03F63;
-	--highlight-color: #FFDDE733;
+	--highlight-color: #FFE7EE33;
 }
 
 /* → scrollbar */
