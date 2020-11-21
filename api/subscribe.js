@@ -1,30 +1,25 @@
-import mailer from "nodemailer"
-import md from "commonmark"
-import mongodb from "mongodb"
-let {MongoClient} = mongodb
+import {SmtpClient, MongoClient, micromark} from "./_dependencies.js"
 
-let parser = new md.Parser()
-let renderer = new md.HtmlRenderer({safe: true})
+let decoder = new TextDecoder()
 
-let style =
-	`font-family: 'Lora', serif;` +
-	`font-size: 16px;` +
-	`background-color: #FFEEDD;` +
-	`color: #774411;` +
-	`margin: 0;` +
-	`padding: 2em;` +
-	`line-height: 1.75em;` +
-	`text-align: center;`
-
-let message = body =>
-	`<!doctype html>\n` +
-	`<html>` +
-		`<head>` +
-			`<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@0;1">` +
-			`<style>a { color: #774411; text-decoration: underline; }</style>` +
-		`</head>` +
-		`<body style="${style}">${body}</body>` +
-	`</html>\n`
+let message = body => `
+<!doctype html>\n
+<html lang="en">
+<style>a { color: #774411; text-decoration: underline; }</style>
+<body
+	style=
+	"
+		font-family: serif;
+		font-size: 16px;
+		background-color: #FFEEDD;
+		color: #774411;
+		margin: 0;
+		padding: 2em;
+		line-height: 1.75em;
+		text-align: center;
+	"
+>${body}</body>
+`
 
 let text = `
 	Hello there!
@@ -40,61 +35,63 @@ let text = `
 	<https://zamstories.neocities.org>
 `.replace(/\t/g, "").replace(/^\n+|\n+$/, "")
 
-let html = message(renderer.render(parser.parse(text)))
+let content = message(micromark(text))
 
 let addresses = new Set()
 
-let url = "https://zamstories.neocities.org"
+let location = "https://zamstories.neocities.org"
 
-export default async ({body: {email}}, res) =>
+export default async request =>
 {
+	let email = new URLSearchParams(decoder.decode(await Deno.readAll(request.body))).get("email")
+	
+	if (/\s/.test(email))
+	{
+		request.respond({status: 400})
+		return
+	}
+	
 	if (addresses.has(email))
 	{
-		await mongo.close()
-		res.statusCode = 303
-		res.setHeader("location", url)
-		res.end()
+		request.respond({status: 303, headers: new Headers({location})})
+		return
 	}
 	
 	addresses.add(email)
 	
-	let mongo = await MongoClient.connect(process.env.mongo_url, {useUnifiedTopology: true})
+	let mongo = new MongoClient()
+	mongo.connectWithUri(Deno.env.get("mongo_url"))
 	
-	let emails = mongo.db(process.env.mongo_database).collection("emails")
+	let emails = mongo.database(Deno.env.get("mongo_database")).collection("emails")
 	
-	if (await emails.findOne({email}, {}))
+	if (false && await emails.findOne({email}, {}))
 	{
-		await mongo.close()
-		res.statusCode = 303
-		res.setHeader("location", url)
-		res.end()
+		mongo.close()
+		request.respond({status: 303, headers: new Headers({location})})
 		return
 	}
 	
 	await emails.insertOne({email, date: new Date()})
 	
-	await mongo.close()
+	mongo.close()
 	
-	let transport = mailer.createTransport(
+	let smtp = new SmtpClient({content_encoding: "8bit"})
+	
+	await smtp.connectTLS(
 	{
-		host: "smtp.gmail.com",
-		port: 587,
-		auth:
-		{
-			user: process.env.email_username,
-			pass: process.env.email_password,
-		},
+		hostname: Deno.env.get("email_host"),
+		port: Number(Deno.env.get("email_port")),
+		username: Deno.env.get("email_username"),
+		password: Deno.env.get("email_password"),
 	})
 	
-	await transport.sendMail(
+	await smtp.send(
 	{
-		from: {name: "Zamfofex", address: process.env.email_address},
-		to: {address: email},
+		from: `Zamfofex <${Deno.env.get("email_address")}>`,
+		to: email,
 		subject: "confirm subscription",
-		text, html,
+		content,
 	})
 	
-	res.statusCode = 303
-	res.setHeader("location", url)
-	res.end()
+	request.respond({status: 303, headers: new Headers({location})})
 }

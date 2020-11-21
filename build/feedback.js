@@ -1,28 +1,5 @@
-import md from "commonmark"
+import {micromark} from "./dependencies.js"
 import formatDate from "./dates.js"
-
-let parser = new md.Parser()
-let renderer = new md.HtmlRenderer({safe: true})
-
-let processFeedback = md =>
-{
-	let tree = parser.parse(md)
-	
-	let walker = tree.walker()
-	while (true)
-	{
-		let event = walker.next()
-		if (!event) break
-		let {entering, node} = event
-		if (entering) continue
-		if (node.type !== "heading") continue
-		
-		if (node.level > 4) node.level = 6
-		else node.level += 2
-	}
-	
-	return renderer.render(tree)
-}
 
 export default feedback =>
 {
@@ -33,14 +10,14 @@ export default feedback =>
 		result += formatDate(date)
 		result += `, someone said:</p></header>`
 		
-		result += processFeedback(message)
+		result += micromark(message)
 		
 		result += `</article>`
 		
 		if (response)
 		{
 			result += `<article class="response"><header><p>response from the author:</p></header>`
-			result += processFeedback(response)
+			result += micromark(response)
 			result += `</article>`
 		}
 	}

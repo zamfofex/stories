@@ -8,8 +8,8 @@
 !/build
 !/build/**
 !/license.md
-!/package.json
 !/readme.md
 !/vercel.json
 !/pages
 !/pages/**
+!/dependencies.js

@@ -1,10 +1,12 @@
-import fs from "fs"
-let fsp = fs.promises
+let decoder = new TextDecoder()
 
 export default async items =>
 {
-	let text = await fsp.readFile("build/feed/main.txt", "utf-8")
-	let itemText = await fsp.readFile("build/feed/item.txt", "utf-8")
+	let buffer = await Deno.readFile("build/feed/main.txt")
+	let itemBuffer = await Deno.readFile("build/feed/item.txt")
+	
+	let text = decoder.decode(buffer)
+	let itemText = decoder.decode(itemBuffer)
 	
 	itemText = itemText.replace(/\n*$/, "")
 	itemText = itemText.replace(/\n/g, "\n\t\t")

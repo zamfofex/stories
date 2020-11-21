@@ -2,6 +2,8 @@
 !/api
 !/api/*
 !/vercel.json
-!/package.json
 !/build
 !/build/feedback.js
+!/build/dependencies.js
+!/build/dates.js
+!/dependencies.js

@@ -1,72 +1,62 @@
-import mongodb from "mongodb"
-let {MongoClient} = mongodb
+import {MongoClient, createHash} from "./_dependencies.js"
 import buildFeedback from "../build/feedback.js"
-import https from "https"
-import util from "util"
-import FormData from "formdata-node"
-import crypto from "crypto"
 
-let streamToBuffer = stream => new Promise((resolve, reject) =>
+let decoder = new TextDecoder()
+let encoder = new TextEncoder()
+
+let computeHash = buffer =>
 {
-	let chunks = []
-	stream.on("data", chunk => chunks.push(chunk))
-	stream.on("error", reject)
-	stream.on("end", () => resolve(Buffer.concat(chunks)))
-})
-
-let computeHash = buffer => crypto.createHash("sha256").update(buffer).digest("hex")
+	let hash = createHash("sha256")
+	hash.update(buffer)
+	return hash.toString()
+}
 
 let origin = "https://zamstories.neocities.org"
 
-export default async ({query: {name}, body: {message}}, res) =>
+export default async request =>
 {
+	let name = new URL(request.url, "https://aaa").searchParams.get("name")
+	let message = new URLSearchParams(decoder.decode(await Deno.readAll(request.body))).get("message")
+	
 	if (!message || !name || message.length < 12)
 	{
-		res.statusCode = 400
-		res.end()
+		request.respond({status: 400})
 		return
 	}
 	
-	let mongo = await MongoClient.connect(process.env.mongo_url, {useUnifiedTopology: true})
+	let mongo = new MongoClient()
+	mongo.connectWithUri(Deno.env.get("mongo_url"))
 	
-	let stories = mongo.db(process.env.mongo_database).collection("stories")
+	let stories = mongo.database(Deno.env.get("mongo_database")).collection("stories")
 	await stories.updateOne({name}, {$push: {feedback: {date: new Date(), message}}})
 	
 	let story = await stories.findOne({name}, {feedback: true})
 	
-	await mongo.close()
+	mongo.close()
 	
 	if (!story)
 	{
-		res.statusCode = 400
-		res.end()
+		request.respond({status: 400})
 		return
 	}
 	
-	let url = `${origin}/${name}/`
+	let location = `${origin}/${name}/`
 	
-	let page = (await streamToBuffer(await new Promise(f => https.get(url, f)))).toString("utf-8")
+	let page = await (await fetch(location)).text()
 	
 	let feedback = buildFeedback(story.feedback)
 	
-	let buffer = Buffer.from(page.replace(/<!--#feedback-->[^]*<!--\/#feedback-->/, feedback))
-	
-	let json = (await streamToBuffer(await new Promise(f => https.get(`${origin}/hashes.json`, f)))).toString("utf-8")
+	let json = await (await fetch(`${origin}/hashes.json`)).text()
 	let hashes = JSON.parse(json)
 	
-	hashes[`/${name}/`] = computeHash(buffer)
+	let updated = page.replace(/<!--#feedback-->[^]*<!--\/#feedback-->/, feedback)
+	hashes[`/${name}/`] = computeHash(updated)
 	
-	let data = new FormData()
-	data.set(`${name}/index.html`, buffer, "index.html")
-	data.set("hashes.json", Buffer.from(JSON.strigify(hashes)), "hashes.json")
+	let body = new FormData()
+	body.set(`${name}/index.html`, new Blob([updated]), "index.html")
+	body.set("hashes.json", new Blob([JSON.stringify(hashes)]), "hashes.json")
 	
-	let {headers, stream} = data
+	await fetch("https://neocities.org/api/upload", {body, method: "POST", headers: {authorization: `Bearer ${Deno.env.get("neocities_token")}`}})
 	
-	let request = https.request("https://neocities.org/api/upload", {method: "POST", headers: {...headers, authorization: `Bearer ${process.env.neocities_token}`}})
-	stream.pipe(request)
-	await new Promise(f => request.on("response", f))
-	
-	res.statusCode = 303
-	res.setHeader("location", url)
-	res.end()
+	request.respond({status: 303, headers: new Headers({location})})
 }

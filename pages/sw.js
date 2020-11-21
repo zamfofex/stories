@@ -38,8 +38,11 @@ let cacheNameReady = async () =>
 
 let computeHash = async buffer =>
 {
-	let array = [...new Uint8Array(await crypto.subtle.digest("SHA-256", buffer))]
-	return array.map(byte => byte.toString(0x10).padStart(2, "0")).join("")
+	let array = Array.from(
+		new Uint8Array(await crypto.subtle.digest("SHA-256", buffer)),
+		byte => byte.toString(0x10).padStart(2, "0")
+	)
+	return array.join("")
 }
 
 let main = async () =>
@@ -202,6 +205,7 @@ let revalidate = async () =>
 			if (hash !== hash3) throw new Error()
 			await fresh.put(url, response)
 			if (url === "/scripts/dependencies.js") copyJSPM = false
+			if (url === "/dependencies.js") copyJSPM = false
 			if (url === "/dependencies.css") copyFonts = false
 		}
 		

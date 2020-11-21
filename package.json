@@ -1,9 +1,0 @@
-{
-	"dependencies": {
-		"commonmark": "0.29.1",
-		"mongodb": "3.6.2",
-		"formdata-node": "2.4.0",
-		"jsonfeed-to-atom": "1.2.2",
-		"nodemailer": "6.4.15"
-	}
-}
