@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="cupcake">
 	<head>
 		<meta charset="utf-8">
 		<title>((title)) — zamfofex’s stories</title>
 		<link rel="icon" href="/icon.svg">
 		<meta name="viewport" content="width=device-width">
-		<script>document.documentElement.dataset.theme = localStorage.getItem("theme")||"caramel"</script>
+		<script>document.documentElement.dataset.theme = localStorage.getItem("theme")||"cupcake"</script>
 		<link rel="stylesheet" href="/style.css">
 		<script type="module" src="/script.js"></script>
 		<meta name="description" content="((description))">
@@ -58,13 +58,14 @@
 							theme:
 							&#x20;
 							<select id="theme" disabled>
-								<optgroup label="beige">
+								<optgroup label="modern">
+									<option value="cupcake" selected>cupcake</option>
+								</optgroup>
+								<optgroup label="classic">
 									<option value="milk">cream</option>
-									<option value="caramel" selected>caramel</option>
+									<option value="caramel">caramel</option>
 									<option value="cocoa">cocoa</option>
 									<option value="coffee">coffee</option>
-								</optgroup>
-								<optgroup label="pink">
 									<option value="cherry">cherry</option>
 									<option value="cinnamon">cinnamon</option>
 								</optgroup>
@@ -81,10 +82,10 @@
 				<p>((end))</p>
 			</div>
 		</main>
-		<p>This story is licensed under a <a href="https://creativecommons.org/licenses/by/4.0" rel="license">Creative Commons Attribution 4.0 International License</a></p>
-		<p><a href="/">Read more stories like this</a></p>
+		<p>license: <a href="https://creativecommons.org/licenses/by/4.0" rel="license">CC BY 4.0</a></p>
+		<p><a href="/">read more stories like this</a></p>
 		<details id="feedback">
-			<summary>Share feedback</summary>
+			<summary>share feedback</summary>
 			<form method="POST" action="https://zamstories-feedback.vercel.app/submit?name=((name))">
 				<p>
 					<textarea name="message" required minlength="12" aria-label="feedback"></textarea>

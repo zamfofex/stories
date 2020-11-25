@@ -37,19 +37,15 @@
 
 html
 {
-	--text-color: #741;
-	--background-color: #FED;
-	--highlight-color: #7412;
 	font-size: 16px;
+	min-height: 100vh;
 }
 
 body
 {
 	font-family: "Ibarra Real Nova", serif;
 	font-size: 18px;
-	background: #FED;
 	background: var(--background-color);
-	color: #741;
 	color: var(--text-color);
 	margin: 2rem auto 4rem;
 	padding: 0 2rem;
@@ -103,6 +99,13 @@ small { font-size: 0.75rem; }
 
 /* → themes */
 
+html[data-theme="caramel"]
+{
+	--text-color: #741;
+	--background-color: #FED;
+	--highlight-color: #7412;
+}
+
 html[data-theme="cocoa"]
 {
 	--text-color: #FDA;
@@ -138,6 +141,72 @@ html[data-theme="cinnamon"]
 	--highlight-color: #FFE7EE33;
 }
 
+html[data-theme="cupcake"]
+{
+	--text-color: #333;
+	--background-color: #FCFCFC;
+}
+
+html[data-theme="cupcake"] body
+{
+	--background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 0 2 4" preserveAspectRatio="none"><path fill="%23BDF" d="M 5 5 5 -1 0 0 Q -1 1 0 2 Q 1 3 0 4" /></svg>');
+	background:
+		url("/pencil.svg") no-repeat calc(100% - 29vw + 20rem) 0 / 13rem auto,
+		linear-gradient(#FBD, #FBD) no-repeat calc(9vw - 2rem) 0 / 1rem auto,
+		linear-gradient(#FBD, #FBD) no-repeat calc(9vw - 4rem) 0 / 1rem auto,
+		var(--background-image) no-repeat repeat calc(100% - 9vw + 4rem) 0 / 4rem 32rem,
+		linear-gradient(#BDF, #BDF) no-repeat right 0 / calc(9vw - 3.25em) auto
+		var(--background-color);
+	transition: none;
+}
+
+html[data-theme="cupcake"] body::-webkit-scrollbar { background: #BDF; }
+
+html:not([data-theme="cupcake"]) #settings > fieldset:last-of-type > p:last-child::after
+{
+	margin: 0.75rem 0;
+	content: "note: classic themes\A will be removed in\A April 2021.";
+	display: block;
+	white-space: pre;
+}
+
+html body:not(.capitalization) #settings > fieldset:last-of-type > p:last-child::after
+{
+	text-transform: lowercase;
+}
+
+@keyframes settings-cupcake
+{
+	from { transform: translate(0, -32rem); }
+}
+
+html[data-theme="cupcake"] #settings
+{
+	border-radius: 0.125rem;
+	box-shadow: none;
+	padding-left: 2rem;
+	--mask:
+		linear-gradient(#000, #000),
+		url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 4 15"><circle r="1" id="c" /><use href="%23c" y="3" /><use href="%23c" y="6" /><use href="%23c" y="9" /><use href="%23c" y="12" /><path stroke-width="0.75" stroke="%23000" d="M 0 0 -3 1 M 0 3 -3 2 M 0 6 -3 6 M 0 9 -3 8 M 0 12 -3 13" /></svg>')
+		no-repeat repeat 0 0 / 1.5rem auto;
+	mask: var(--mask);
+	mask-composite: subtract;
+	-webkit-mask: var(--mask);
+	-webkit-mask-composite: source-out;
+	background:
+		url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -1.6666666666666666 4 15" stroke="%23333" stroke-width="0.3333333333333333"><circle r="1" id="c" /><use href="%23c" y="3" /><use href="%23c" y="6" /><use href="%23c" y="9" /><use href="%23c" y="12" /><path stroke-width="1.0833333333333333" stroke="%23333" d="M 0 0 -3 1 M 0 3 -3 2 M 0 6 -3 6 M 0 9 -3 8 M 0 12 -3 13" /></svg>')
+		border-box no-repeat repeat 0 0.125rem / 1.5rem auto
+		var(--background-color);
+	animation: settings-cupcake ease-out 0.5s;
+}
+
+html[data-theme="cupcake"] { scrollbar-color: var(--text-color) #BDF; }
+
+html[data-theme="cupcake"] ::selection { background: #AFDA; }
+
+html[data-theme="cupcake"] textarea:focus,
+html[data-theme="cupcake"] pre { box-shadow: #3333 0 0 1rem inset; }
+
 /* → scrollbar */
 
 ::-webkit-scrollbar
@@ -148,7 +217,7 @@ html[data-theme="cinnamon"]
 }
 
 ::-webkit-scrollbar-track { background: none; }
-::-webkit-scrollbar-track-piece { background: none; }
+::-webkit-scrollbar-track-piece { display: none; }
 ::-webkit-scrollbar-button { display: none; }
 ::-webkit-scrollbar-corner { background: none; }
 
@@ -211,13 +280,15 @@ blockquote::before
 :not(pre) > code
 {
 	border-radius: 0.25rem;
-	padding: 0.25rem;
+	padding: 0.125rem 0.25rem;
 	border: 0.0625rem solid var(--text-color);
 }
 
 code, pre
 {
-	font-family: "Oxygen Mono", monospace, sans-serif;
+	font-family: "Oxygen", sans-serif;
+	text-transform: none;
+	font-size: 14px;
 }
 
 pre, textarea
@@ -228,6 +299,7 @@ pre, textarea
 	overflow: auto;
 	box-shadow: var(--highlight-color) 0 0 1rem inset;
 	text-align: left;
+	line-height: 1.5rem;
 }
 
 textarea
@@ -241,13 +313,14 @@ textarea
 	font: unset;
 	transition: 0.125s ease box-shadow;
 	display: block;
-	line-height: 1.5rem;
 	padding: 0.75rem;
 }
 
 textarea:not(:focus) { box-shadow: none; }
 
 textarea:focus { outline: none; }
+
+pre { tab-size: 2rem; }
 
 /* → headings */
 
@@ -422,12 +495,7 @@ blockquote > ol { margin-left: 1.25rem; }
 li > ul { margin-left: 1rem; }
 li > ol { margin-left: 1.25rem; }
 
-ol
-{
-	--list-decimal: 0;
-	--list-unit: 1;
-	counter-reset: list calc(var(--list-decimal) + var(--list-unit) - 1);
-}
+ol { counter-reset: list; }
 
 ul > li::before,
 ol > li::before
@@ -468,6 +536,7 @@ ol > li::before
 		width: initial;
 		min-width: initial;
 		text-align: justify;
+		background: none !important;
 	}
 	
 	html
@@ -542,8 +611,6 @@ article, blockquote, hr { break-inside: avoid; }
 		white-space: pre;
 		width: 0;
 	}
-	
-	main .glue.break > .ws::selection { background: #0000; }
 	
 	main .shy.break::before
 	{
@@ -640,7 +707,12 @@ legend { margin: 0 0 0 -1rem; padding: 0; }
 
 #list article { margin: 4rem 0; }
 
-#list body > div > a { text-decoration: none; }
+#list body > div > a
+{
+	display: block;
+	text-decoration: none;
+}
+
 #list h2
 {
 	font-weight: 600;
