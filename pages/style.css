@@ -189,10 +189,10 @@ html[data-theme="cupcake"] #settings
 		linear-gradient(#000, #000),
 		url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 4 15"><circle r="1" id="c" /><use href="%23c" y="3" /><use href="%23c" y="6" /><use href="%23c" y="9" /><use href="%23c" y="12" /><path stroke-width="0.75" stroke="%23000" d="M 0 0 -3 1 M 0 3 -3 2 M 0 6 -3 6 M 0 9 -3 8 M 0 12 -3 13" /></svg>')
 		no-repeat repeat 0 0 / 1.5rem auto;
-	mask: var(--mask);
-	mask-composite: subtract;
 	-webkit-mask: var(--mask);
 	-webkit-mask-composite: source-out;
+	mask: var(--mask);
+	mask-composite: subtract;
 	background:
 		url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -1.6666666666666666 4 15" stroke="%23333" stroke-width="0.3333333333333333"><circle r="1" id="c" /><use href="%23c" y="3" /><use href="%23c" y="6" /><use href="%23c" y="9" /><use href="%23c" y="12" /><path stroke-width="1.0833333333333333" stroke="%23333" d="M 0 0 -3 1 M 0 3 -3 2 M 0 6 -3 6 M 0 9 -3 8 M 0 12 -3 13" /></svg>')
 		border-box no-repeat repeat 0 0.125rem / 1.5rem auto
