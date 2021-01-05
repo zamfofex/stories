@@ -185,7 +185,7 @@ html { scrollbar-color: var(--text-color) #0000; }
 * { scrollbar-width: thin; }
 
 html[data-theme="cupcake"] { scrollbar-color: var(--text-color) #BDF; }
-html[data-theme="cupcake"] body { scrollbar-color: #0000 #BDF; }
+html[data-theme="cupcake"] body { scrollbar-color: var(--text-color) #0000; }
 html[data-theme="cupcake"] body::-webkit-scrollbar { background: #BDF; }
 
 /* → user fields */
@@ -262,7 +262,6 @@ pre, textarea
 
 textarea
 {
-	text-align: justify;
 	background: none;
 	color: inherit;
 	resize: none;
