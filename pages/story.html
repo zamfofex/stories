@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="/style.css">
 		<script type="module" src="/script.js"></script>
 		<meta name="description" content="((description))">
-		<link rel="canonical" href="https://zamstories.neocities.org/((name))/">
+		<link rel="canonical" href="((origin))/((name))/">
 	</head>
 	<body>
 		<details id="display-settings">
@@ -79,14 +79,14 @@
 		<main>
 			((main))
 			<div class="end">
-				<p>((end))</p>
+				<p>the end</p>
 			</div>
 		</main>
 		<p>license: <a href="https://creativecommons.org/licenses/by/4.0" rel="license">CC BY 4.0</a></p>
 		<p><a href="/">read more stories like this</a></p>
 		<details id="feedback">
 			<summary>share feedback</summary>
-			<form method="POST" action="https://zamstories-feedback.vercel.app/submit?name=((name))">
+			<form method="POST" action="((api))/submit?name=((name))">
 				<p>
 					<textarea name="message" required minlength="12" aria-label="feedback"></textarea>
 				</p>
@@ -95,7 +95,6 @@
 					<p><button>submit feedback</button></p>
 				</div>
 			</form>
-			((feedback))
 		</details>
 	</body>
 </html>

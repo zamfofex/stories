@@ -1,5 +1,7 @@
 let decoder = new TextDecoder()
 
+let origin = Deno.env.get("origin")
+
 export default async items =>
 {
 	let buffer = await Deno.readFile("build/feed/main.txt")
@@ -21,5 +23,5 @@ export default async items =>
 		itemTexts.push(array.join(""))
 	}
 	
-	return text.replace("((items))", itemTexts.join(",\n\t\t"))
+	return text.replace(/\(\(\origin\)\)/g, origin).replace("((items))", itemTexts.join(",\n\t\t"))
 }

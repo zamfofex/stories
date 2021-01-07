@@ -1,11 +1,11 @@
-export let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 export default date =>
 {
-	let result = ""
+	let result = document.createElement("time")
 	let title = ""
 	
-	let add = (result_, title_ = result_) => { result += result_ ; title += title_ }
+	let add = (result_, title_ = result_) => { result.append(result_) ; title += title_ }
 	
 	switch (date.getUTCDay())
 	{
@@ -22,6 +22,8 @@ export default date =>
 	
 	let day = date.getUTCDate()
 	
+	let sup = document.createElement("sup")
+	let ord
 	switch (day)
 	{
 		case 1: add("first") ; break
@@ -47,13 +49,16 @@ export default date =>
 		case 30: add("thirtieth") ; break
 		default:
 			add(day)
+			result.append(sup)
 			switch (day % 10)
 			{
-				case 1: add("<sup>st</sup>", "st") ; break
-				case 2: add("<sup>nd</sup>", "nd") ; break
-				case 3: add("<sup>rd</sup>", "rd") ; break
-				default: add("<sup>th</sup>", "th") ; break
+				case 1: ord = "st" ; break
+				case 2: ord = "nd" ; break
+				case 3: ord = "rd" ; break
+				default: ord = "th" ; break
 			}
+			sup.append(ord)
+			title += ord
 			break
 	}
 	
@@ -70,5 +75,7 @@ export default date =>
 	else if (hours === 12) title += "p.m. (UTC)"
 	else title += "UTC"
 	
-	return `<time datetime="${date.toISOString()}" title="${title}">${result}</time>`
+	result.title = title
+	
+	return result
 }

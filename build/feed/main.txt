@@ -1,7 +1,7 @@
 {
 	"version": "https://jsonfeed.org/version/1",
-	"feed_url": "https://zamstories.neocities.org/feed.json",
-	"home_page_url": "https://zamstories.neocities.org",
+	"feed_url": "((origin))/feed.json",
+	"home_page_url": "((origin))",
 	
 	"user_comment": "This file allows for syndication feed readers to be used to read updates to publications in the website.",
 	

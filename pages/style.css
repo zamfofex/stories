@@ -23,8 +23,6 @@
 	→ miscelaneous compatibility fixes
 	→ fieldsets
 	→ story list page
-	→ email fields
-	→ subscription page
 */
 
 @import "dependencies.css";
@@ -738,36 +736,5 @@ legend { margin: 0 0 0 -1rem; padding: 0; }
 {
 	display: grid;
 	justify-items: center;
+	grid-auto-flow: row;
 }
-
-@media (min-width: 900px)
-{
-	#list body > footer
-	{
-		grid-template-columns: auto auto auto;
-	}
-}
-
-/* → email fields */
-
-input[type="email"]
-{
-	border: 0.0625rem solid var(--text-color);
-	appearance: none;
-	font: inherit;
-	color: inherit;
-	background: none;
-	padding: 0 0.5rem;
-	border-radius: 0.5rem
-}
-
-/* → subscription page */
-
-#subscribe
-{
-	align-content: center;
-	min-height: 100%;
-	display: grid;
-}
-
-#subscribe body, #subscribe h1 { text-align: center; }

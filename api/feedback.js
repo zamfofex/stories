@@ -1,20 +1,13 @@
-import {MongoClient, createHash} from "./_dependencies.js"
-import buildFeedback from "../build/feedback.js"
-
 let decoder = new TextDecoder()
 let encoder = new TextEncoder()
 
-let computeHash = buffer =>
-{
-	let hash = createHash("sha256")
-	hash.update(buffer)
-	return hash.toString()
-}
-
-let origin = "https://zamstories.neocities.org"
+let origin = Deno.env.get("neocities_origin")
+let authorization = `Bearer ${Deno.env.get("neocities_token")}`
 
 export default async request =>
 {
+	let time = Date.now()
+	
 	let name = new URL(request.url, "https://aaa").searchParams.get("name")
 	let message = new URLSearchParams(decoder.decode(await Deno.readAll(request.body))).get("message")
 	
@@ -24,39 +17,35 @@ export default async request =>
 		return
 	}
 	
-	let mongo = new MongoClient()
-	mongo.connectWithUri(Deno.env.get("mongo_url"))
+	let path = `.stories/${name}`
 	
-	let stories = mongo.database(Deno.env.get("mongo_database")).collection("stories")
-	await stories.updateOne({name}, {$push: {feedback: {date: new Date(), message}}})
+	let url = new URL("https://neocities.org/api/list")
+	url.searchParams.set("path", path)
 	
-	let story = await stories.findOne({name}, {feedback: true})
-	
-	mongo.close()
-	
-	if (!story)
+	let response = await fetch(url, {headers: {authorization: `Bearer ${token}`}})
+	if (!response)
+	{
+		request.respond({status: 400})
+		return
+	}
+	let {files} = await response.json()
+	if (!files || !files.length)
 	{
 		request.respond({status: 400})
 		return
 	}
 	
-	let location = `${origin}/${name}/`
-	
-	let page = await (await fetch(location)).text()
-	
-	let feedback = buildFeedback(story.feedback)
-	
-	let json = await (await fetch(`${origin}/hashes.json`)).text()
-	let hashes = JSON.parse(json)
-	
-	let updated = page.replace(/<!--#feedback-->[^]*<!--\/#feedback-->/, feedback)
-	hashes[`/${name}/`] = computeHash(updated)
-	
 	let body = new FormData()
-	body.set(`${name}/index.html`, new Blob([updated]), "index.html")
-	body.set("hashes.json", new Blob([JSON.stringify(hashes)]), "hashes.json")
+	body.set(`.stories/${name}/feedback/${time}.md`, new Blob([message]), `${time}.md`)
 	
-	await fetch("https://neocities.org/api/upload", {body, method: "POST", headers: {authorization: `Bearer ${Deno.env.get("neocities_token")}`}})
+	await fetch("https://neocities.org/api/upload", {body, method: "POST", headers: {authorization}})
+	
+	let index = `${path}/feedback/index.txt`
+	let feedback = (await fetch(new URL(index, origin))).text() + `${time}\n`
+	
+	let body2 = new FormData()
+	body2.set(index, new Blob([index]), "index.txt")
+	await fetch("https://neocities.org/api/upload", {body: body2, method: "POST", headers: {authorization}})
 	
 	request.respond({status: 303, headers: new Headers({location})})
 }
