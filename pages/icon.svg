@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 12 10 10">
 	<clipPath id="body-clip-path"><use href="#body" /></clipPath>
 	<clipPath id="point-clip-path"><use href="#point" /></clipPath>
-	<path d="M 9 23 -3 23 -3 20 Q 3 16 9 16" fill="#BDF" />
-	<path d="M 2 15 1 17 3 21 5 17 4 15" fill="#FDB" id="point" />
-	<path d="M 1 1 1 17 2 16 3 17 4 16 5 17 5 1" fill="#FE7" id="body" />
-	<path stroke="#FB6" d="M 2 0 2 17 M 4 0 4 17" stroke-width="0.5" clip-path="url('#body-clip-path')" />
-	<path d="M 3 22 2 20 Q 3 19 4 20" clip-path="url('#point-clip-path')" fill="#333" />
+	<g transform="rotate(11.5) translate(3)">
+		<path d="M 2 15 1 17 3 21 5 17 4 15" fill="#FDB" id="point" />
+		<path d="M 1 1 1 17 2 16 3 17 4 16 5 17 5 1" fill="#FE7" id="body" />
+		<path stroke="#FB6" d="M 2 0 2 17 M 4 0 4 17" stroke-width="0.5" clip-path="url('#body-clip-path')" />
+		<path d="M 3 22 2 20 Q 3 19 4 20" clip-path="url('#point-clip-path')" fill="#8D5F49" />
+	</g>
 </svg>
