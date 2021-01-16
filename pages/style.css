@@ -19,7 +19,6 @@
 	→ settings: custom typesetting
 	→ custom typesetting: optical alignment
 	→ custom typesetting: spacing harmony
-	→ not found error page
 	→ miscelaneous compatibility fixes
 	→ fieldsets
 	→ story list page
@@ -650,19 +649,6 @@ article, blockquote, hr { break-inside: avoid; }
 	body.typesetting > main .shy { letter-spacing: 0; }
 	
 	main .spacing-offset { margin-right: calc(-1 * var(--spacing, 0)); }
-}
-
-/* → not found error page */
-
-.not-found svg
-{
-	width: 100%;
-	max-height: 80vh;
-}
-
-.not-found
-{
-	text-align: center;
 }
 
 /* → feedback section */
