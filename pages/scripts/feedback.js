@@ -7,7 +7,7 @@ let feedback = document.querySelector("#feedback")
 
 let main = async () =>
 {
-	let index = await fetch(`/.stories/${name}/feedback/index.txt`)
+	let index = await fetch(`/stories/${name}/feedback/index.txt`)
 	for (let time of (await index.text()).split(/\n/g))
 	{
 		if (!time) continue
@@ -17,7 +17,7 @@ let main = async () =>
 		let header = document.createElement("header")
 		header.append(p)
 		
-		let response = await fetch(`/.stories/${name}/feedback/${time}.md`)
+		let response = await fetch(`/stories/${name}/feedback/${time}.md`)
 		if (!response.ok) throw new Error()
 		let markdown = await response.text()
 		
@@ -27,7 +27,7 @@ let main = async () =>
 		
 		feedback.append(article)
 		
-		let responseResponse = await fetch(`/.stories/${name}/feedback/${time}-response.md`)
+		let responseResponse = await fetch(`/stories/${name}/feedback/${time}-response.md`)
 		if (!responseResponse.ok) continue
 		let responseMarkdown = await responseResponse.text()
 		

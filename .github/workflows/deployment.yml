@@ -17,4 +17,3 @@ jobs:
       - uses: bcomnes/deploy-to-neocities@v1
         with:
           api_token: ${{secrets.neocities_token}}
-          cleanup: true

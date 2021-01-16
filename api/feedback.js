@@ -17,7 +17,7 @@ export default async request =>
 		return
 	}
 	
-	let path = `.stories/${name}`
+	let path = `stories/${name}`
 	
 	let url = new URL("https://neocities.org/api/list")
 	url.searchParams.set("path", path)
@@ -36,7 +36,7 @@ export default async request =>
 	}
 	
 	let body = new FormData()
-	body.set(`.stories/${name}/feedback/${time}.md`, new Blob([message]), `${time}.md`)
+	body.set(`stories/${name}/feedback/${time}.md`, new Blob([message]), `${time}.md`)
 	
 	await fetch("https://neocities.org/api/upload", {body, method: "POST", headers: {authorization}})
 	
