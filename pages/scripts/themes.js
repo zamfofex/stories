@@ -1,9 +1,6 @@
-let select = document.querySelector("#theme")
-let theme = select.closest("label")
-new BroadcastChannel("theme").addEventListener("message", ({data}) => document.documentElement.dataset.theme = data)
+import {subscribe} from "./messages.js"
 
-select.disabled = false
-theme.classList.remove("disabled")
+subscribe("theme", theme => document.documentElement.dataset.theme = theme)
 
 if (CSS.registerProperty)
 {

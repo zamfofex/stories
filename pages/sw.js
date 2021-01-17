@@ -120,7 +120,9 @@ let staleWhileRevalidate = async (request, waitUntil) =>
 			return fetch(request)
 		}
 		let hashes = await hashesResponse.json()
-		let {hash} = hashes[pathname]||{}
+		let info = hashes[pathname]
+		if (!info) return
+		let {hash} = info
 		
 		let response = await fetch(request)
 		
@@ -247,10 +249,7 @@ let respond = (request, waitUntil) =>
 		return cacheFirst(request, waitUntil)
 	if (origin !== location.origin)
 		return fetch(request)
-	if (pathname === "/style.css" || pathname === "/dependencies.css" || pathname === "/script.js" || pathname.match(/^\/.+\//) || pathname === "/")
-		return staleWhileRevalidate(request, waitUntil)
-	
-	return fetch(request)
+	return staleWhileRevalidate(request, waitUntil)
 }
 
 addEventListener("fetch", event => event.respondWith(respond(event.request, p => event.waitUntil(p))))

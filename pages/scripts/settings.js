@@ -1,3 +1,5 @@
+import {dispatch} from "./messages.js"
+
 let settings = document.querySelector("#settings")
 
 for (let input of settings.querySelectorAll("input, select"))
@@ -10,6 +12,7 @@ for (let input of settings.querySelectorAll("input, select"))
 	
 	let update = value =>
 	{
+		dispatch(name, value)
 		if (input.type === "checkbox")
 			input.checked = value !== "off"
 		else if (input.type === "radio")
@@ -25,6 +28,7 @@ for (let input of settings.querySelectorAll("input, select"))
 	{
 		localStorage.setItem(name, value)
 		channel.postMessage(value)
+		dispatch(name, value)
 	}
 	
 	if (input.type === "checkbox")
@@ -35,16 +39,20 @@ for (let input of settings.querySelectorAll("input, select"))
 		input.addEventListener("change", () => broadcast(input.value||"off"))
 	
 	channel.addEventListener("message", ({data}) => update(data))
+	
+	if (!input.matches(".dependent"))
+	{
+		input.disabled = false
+		input.closest("label").classList.remove("disabled")
+	}
 }
 
 let details = settings.closest("#display-settings")
 
-let submit = settings.querySelector(".submit")
-submit.textContent = ""
-
 let confirm = document.createElement("button")
 confirm.append("confirm changes")
-
-submit.append(confirm)
-
 confirm.addEventListener("click", () => details.open = false)
+
+let submit = settings.querySelector(".submit")
+submit.textContent = ""
+submit.append(confirm)

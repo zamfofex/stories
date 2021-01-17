@@ -1,13 +1,10 @@
-let checkbox = document.querySelector("#guide-rulers")
-
-checkbox.closest("label").classList.remove("disabled")
-checkbox.disabled = false
+import {subscribe} from "./messages.js"
 
 let main = document.querySelector("main")
 
-let update = () =>
+let update = visible =>
 {
-	if (!checkbox.checked)
+	if (visible === "off")
 	{
 		document.body.dataset.guideRulers = "none"
 		return
@@ -21,7 +18,6 @@ let update = () =>
 	document.body.dataset.guideRulers = count
 }
 
-addEventListener("resize", update)
+addEventListener("resize", () => update("on"))
 
-new BroadcastChannel("guide-rulers").addEventListener("message", update)
-addEventListener("load", update)
+subscribe("guide-rulers", update)

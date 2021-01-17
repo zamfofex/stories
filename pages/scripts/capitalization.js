@@ -1,8 +1,3 @@
-let checkbox = document.querySelector("#capitalization")
+import {subscribe} from "./messages.js"
 
-checkbox.disabled = false
-checkbox.closest("label").classList.remove("disabled")
-
-let update = () => document.body.classList.toggle("capitalization", checkbox.checked)
-new BroadcastChannel("capitalization").addEventListener("message", update)
-update()
+subscribe("capitalization", enabled => document.body.classList.toggle("capitalization", enabled !== "off"))

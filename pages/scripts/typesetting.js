@@ -1,4 +1,5 @@
 import {Hypher, english, breakLines} from "./dependencies.js"
+import {subscribe, unsubscribe} from "./messages.js"
 
 let hypher = new Hypher(english)
 
@@ -19,13 +20,10 @@ let typesetting = document.querySelector("#typesetting")
 let hyphens = document.querySelector("#hyphenation")
 let capitalization = document.querySelector("#capitalization")
 
-let update = () => document.body.classList.toggle("typesetting", typesetting.checked)
-new BroadcastChannel("typesetting").addEventListener("message", update)
-update()
+let update = enabled => document.body.classList.toggle("typesetting", enabled !== "off")
+subscribe("typesetting", update)
 
-let adjust
-
-let measure = text => ctx.measureText(text).width * adjust
+let measure = text => ctx.measureText(text).width
 
 let ratios =
 {
@@ -56,31 +54,16 @@ let original = children.map(node => node.cloneNode(true))
 
 let prepare = () =>
 {
-	new BroadcastChannel("typesetting").addEventListener("message", typeset)
-	new BroadcastChannel("optical-alignment").addEventListener("message", typeset)
-	new BroadcastChannel("hyphenation").addEventListener("message", typeset)
-	new BroadcastChannel("capitalization").addEventListener("message", typeset)
+	subscribe("typesetting", typeset)
+	subscribe("optical-alignment", typeset)
+	subscribe("hyphenation", typeset)
+	subscribe("capitalization", typeset)
 	
 	addEventListener("resize", () =>
 	{
 		if (main.offsetWidth === lastWidth) return
 		typeset()
 	})
-	
-	let a = document.createElement("span")
-	a.textContent = "aaaaa"
-	
-	document.body.append(a)
-	
-	a.style.fontSize = "4096px"
-	a.style.display = "inline-block"
-	a.style.whiteSpace = "pre"
-	
-	adjust = a.getBoundingClientRect().width
-	a.style.fontSizeAdjust = "none"
-	adjust /= a.getBoundingClientRect().width
-	
-	a.remove()
 	
 	ctx.font = font(document.body)
 	
@@ -235,10 +218,12 @@ let lastWidth
 
 let typeset = () =>
 {
-	hyphens.disabled = !typesetting.checked
-	hyphensLabel.classList.toggle("disabled", hyphens.disabled)
+	let typesetting = document.body.matches(".typesetting")
 	
-	if (!typesetting.checked)
+	hyphens.disabled = !typesetting
+	hyphensLabel.classList.toggle("disabled", !typesetting)
+	
+	if (!typesetting)
 	{
 		main.textContent = ""
 		main.append(...original)
@@ -372,23 +357,17 @@ let typeset = () =>
 
 document.fonts.ready.then(() =>
 {
-	if (typesetting.checked)
+	if (document.body.matches(".typesetting"))
 	{
 		prepare()
 	}
 	else
 	{
-		let channel = new BroadcastChannel("typesetting")
 		let prepare2 = () =>
 		{
-			channel.close()
-			typesetting.removeEventListener("change", prepare2)
 			prepare()
+			unsubscribe("typesetting", prepare2)
 		}
-		typesetting.addEventListener("change", prepare2)
-		channel.addEventListener("message", prepare2)
+		subscribe("typesetting", prepare2)
 	}
-	
-	typesetting.disabled = false
-	typesetting.closest("label").classList.remove("disabled")
 })
