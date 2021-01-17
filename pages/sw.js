@@ -119,20 +119,18 @@ let staleWhileRevalidate = async (request, waitUntil) =>
 			await revalidate()
 			return fetch(request)
 		}
-		let hashes = await hashesResponse.json()
-		let info = hashes[pathname]
-		if (!info) return
-		let {hash} = info
 		
 		let response = await fetch(request)
 		
-		if (response.ok)
+		let hashes = await hashesResponse.json()
+		let info = hashes[pathname]
+		if (info && response.ok)
 		{
-			let hash2 = await computeHash(await response.clone().arrayBuffer())
-			if (hash !== hash2) await revalidate()
+			let hash = await computeHash(await response.clone().arrayBuffer())
+			if (hash !== info.hash) await revalidate()
 		}
 		
-		return response
+		return response.clone()
 	}
 	
 	let response = await cache.match(pathname)
