@@ -1,106 +1,106 @@
 <!doctype html>
 <html lang="en" data-theme="milk">
-	<head>
-		<meta charset="utf-8">
-		<title>((title)) — zamfofex’s stories</title>
-		<link rel="icon" href="/icon.svg">
-		<meta name="viewport" content="width=device-width">
-		<script>document.documentElement.dataset.theme = localStorage.getItem("theme")||"milk"</script>
-		<link rel="stylesheet" href="/style.css">
-		<script type="module" src="/scripts/story-page.js"></script>
-		<meta name="description" content="((description))">
-		<link rel="canonical" href="((origin))/((name))/">
-	</head>
-	<body>
-		<details id="display-settings">
-			<summary>settings</summary>
-			<div id="settings">
-				<fieldset>
-					<legend>page settings</legend>
-					<p>
-						<label class="disabled">
-							<input type="checkbox" id="available-offline" class="local" checked disabled>
-							&#x20;
-							available offline
-						</label>
-					</p>
-				</fieldset>
-				<fieldset>
-					<legend>global settings</legend>
-					<p>
-						<label class="disabled">
-							<input type="checkbox" id="capitalization" disabled>
-							&#x20;
-							capitalization
-						</label>
-					</p>
-					<p>
-						<label class="disabled">
-							<input type="checkbox" id="guide-rulers" disabled>
-							&#x20;
-							guide rulers
-						</label>
-					</p>
-					<p>
-						<label class="disabled">
-							<input type="checkbox" id="typesetting" disabled>
-							&#x20;
-							custom typesetting
-						</label>
-					</p>
-					<p>
-						<label class="disabled">
-							<input type="checkbox" id="hyphenation" class="dependent" disabled checked>
-							&#x20;
-							hyphenation
-						</label>
-					</p>
-					<p>
-						<label class="disabled">
-							theme:
-							&#x20;
-							<select id="theme" disabled>
-								<optgroup label="light beige">
-									<option value="milk" selected>cream</option>
-									<option value="caramel">caramel</option>
-								</optgroup>
-								<optgroup label="dark beige">
-									<option value="cocoa">cocoa</option>
-									<option value="coffee">coffee</option>
-								</optgroup>
-								<optgroup label="pink">
-									<option value="cherry">cherry</option>
-									<option value="cinnamon">cinnamon</option>
-								</optgroup>
-								<optgroup label="light blue">
-									<option value="cupcake">cupcake</option>
-								</optgroup>
-							</select>
-						</label>
-					</p>
-				</fieldset>
-				<p class="submit">(requires scripting)</p>
-			</div>
-		</details>
-		<main>
-			((main))
-			<div class="end">
-				<p>the end</p>
-			</div>
-		</main>
-		<p>license: <a href="https://creativecommons.org/licenses/by/4.0" rel="license">CC BY 4.0</a></p>
-		<p><a href="/">read more stories like this</a></p>
-		<details id="feedback">
-			<summary>share feedback</summary>
-			<form method="POST" action="((api))/submit?name=((name))">
-				<p>
-					<textarea name="message" required minlength="12" aria-label="feedback"></textarea>
-				</p>
-				<div class="submit">
-					<p>Feedback is public and anonymous</p>
-					<p><button>submit feedback</button></p>
-				</div>
-			</form>
-		</details>
-	</body>
-</html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+<script>document.documentElement.dataset.theme = localStorage.getItem("theme")||"milk"</script>
+
+<title>((title)) — zamfofex’s stories</title>
+<link rel="icon" href="/icon.svg">
+
+<link rel="canonical" href="((origin))/((name))/">
+<meta name="description" content="((description))">
+
+<link rel="stylesheet" href="/style.css">
+<script type="module" src="/scripts/story-page.js"></script>
+
+<details id="display-settings">
+	<summary>settings</summary>
+	<div id="settings">
+		<fieldset>
+			<legend>page settings</legend>
+			<p>
+				<label class="disabled">
+					<input type="checkbox" id="available-offline" class="local" checked disabled>
+					&#x20;
+					available offline
+				</label>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>global settings</legend>
+			<p>
+				<label class="disabled">
+					<input type="checkbox" id="capitalization" disabled>
+					&#x20;
+					capitalization
+				</label>
+			</p>
+			<p>
+				<label class="disabled">
+					<input type="checkbox" id="guide-rulers" disabled>
+					&#x20;
+					guide rulers
+				</label>
+			</p>
+			<p>
+				<label class="disabled">
+					<input type="checkbox" id="typesetting" disabled>
+					&#x20;
+					custom typesetting
+				</label>
+			</p>
+			<p>
+				<label class="disabled">
+					<input type="checkbox" id="hyphenation" class="dependent" disabled checked>
+					&#x20;
+					hyphenation
+				</label>
+			</p>
+			<p>
+				<label class="disabled">
+					theme:
+					&#x20;
+					<select id="theme" disabled>
+						<optgroup label="light beige">
+							<option value="milk" selected>cream</option>
+							<option value="caramel">caramel</option>
+						</optgroup>
+						<optgroup label="dark beige">
+							<option value="cocoa">cocoa</option>
+							<option value="coffee">coffee</option>
+						</optgroup>
+						<optgroup label="pink">
+							<option value="cherry">cherry</option>
+							<option value="cinnamon">cinnamon</option>
+						</optgroup>
+						<optgroup label="light blue">
+							<option value="cupcake">cupcake</option>
+						</optgroup>
+					</select>
+				</label>
+			</p>
+		</fieldset>
+		<p class="submit">(requires scripting)</p>
+	</div>
+</details>
+<main>
+	((main))
+	<div class="end">
+		<p>the end</p>
+	</div>
+</main>
+<p>license: <a href="https://creativecommons.org/licenses/by/4.0" rel="license">CC BY 4.0</a></p>
+<p><a href="/">read more stories like this</a></p>
+<details id="feedback">
+	<summary>share feedback</summary>
+	<form method="POST" action="((api))/submit?name=((name))">
+		<p>
+			<textarea name="message" required minlength="12" aria-label="feedback"></textarea>
+		</p>
+		<div class="submit">
+			<p>Feedback is public and anonymous</p>
+			<p><button>submit feedback</button></p>
+		</div>
+	</form>
+</details>
