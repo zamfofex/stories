@@ -2,9 +2,9 @@ import {subscribe} from "./messages.js"
 
 let main = document.querySelector("main")
 
-let update = visible =>
+let update = () =>
 {
-	if (visible === "off")
+	if (enabled === "off")
 	{
 		document.body.dataset.guideRulers = "none"
 		return
@@ -18,6 +18,8 @@ let update = visible =>
 	document.body.dataset.guideRulers = count
 }
 
-addEventListener("resize", () => update("on"))
+let enabled = "off"
 
-subscribe("guide-rulers", update)
+addEventListener("resize", update)
+
+subscribe("guide-rulers", value => { enabled = value ; update() })
