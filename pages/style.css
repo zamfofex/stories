@@ -44,6 +44,8 @@ body
 {
 	font-family: "Ibarra Real Nova", serif;
 	font-size: 18px;
+	background: #FFF6F1;
+	color: #8D5F49;
 	background: var(--background-color);
 	color: var(--text-color);
 	margin: 2rem auto 4rem;
@@ -70,18 +72,28 @@ p { margin: 0.75rem 0; }
 
 hr
 {
-	--mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -8 100 16" stroke="%23000" fill="none"><path d="M -6 4 -2 -4 M 2 4 6 -4 M -42 0 C -34 -8 -18 8 -10 0 M 10 0 C 18 -8 34 8 42 0" /></svg>');
+	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -8 100 16" width="150" height="24" stroke="%238D5F49" fill="none" stroke-linecap="round"><path d="M -6 4 -2 -4 M 2 4 6 -4 M -42 0 C -34 -8 -18 8 -10 0 M 10 0 C 18 -8 34 8 42 0" /></svg>');
+	background-position: center;
+	background-repeat: no-repeat;
 	border: none;
-	background: var(--text-color);
-	mask: var(--mask);
-	mask-position: center;
-	mask-repeat: no-repeat;
-	-webkit-mask: var(--mask);
-	-webkit-mask-position: center;
-	-webkit-mask-repeat: no-repeat;
 	margin: 1.5rem 0;
 	height: 1.5rem;
 	opacity: 0.75;
+}
+
+@supports (mask: url("")) or (-webkit-mask: url(""))
+{
+	hr
+	{
+		background: var(--text-color);
+		--mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -8 100 16" stroke="%23000" fill="none" stroke-linecap="round"><path d="M -6 4 -2 -4 M 2 4 6 -4 M -42 0 C -34 -8 -18 8 -10 0 M 10 0 C 18 -8 34 8 42 0" /></svg>');
+		-webkit-mask: var(--mask);
+		-webkit-mask-position: center;
+		-webkit-mask-repeat: no-repeat;
+		mask: var(--mask);
+		mask-position: center;
+		mask-repeat: no-repeat;
+	}
 }
 
 article.response { margin-left: 2rem; }
@@ -114,7 +126,8 @@ html[data-theme="cocoa"]
 	--highlight-color: #FDA3;
 }
 
-html[data-theme="milk"]
+/* cream: default theme */
+html
 {
 	--text-color: #8D5F49;
 	--background-color: #FFF6F1;
@@ -195,7 +208,7 @@ option, optgroup
 
 .disabled { opacity: 0.5; }
 
-.disabled, .disabled * { cursor: unset; }
+.disabled, .disabled * { cursor: initial; }
 
 /* → blockquote */
 
@@ -253,7 +266,7 @@ textarea
 	resize: none;
 	width: 100%;
 	height: 16rem;
-	font: unset;
+	font: inherit;
 	transition: 0.125s ease box-shadow;
 	display: block;
 	padding: 0.75rem;
@@ -298,7 +311,7 @@ input[type="checkbox"]
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	appearance: none;
-	cursor: unset;
+	cursor: initial;
 }
 
 input[type="checkbox"]:checked
@@ -582,6 +595,8 @@ article, blockquote, hr { break-inside: avoid; }
 }
 #feedback > summary::-webkit-details-marker { display: none; }
 
+#feedback.no-close > summary { cursor: initial; }
+
 #feedback:not([open]) > summary { text-decoration: underline; }
 #feedback[open] > summary
 {
@@ -636,6 +651,6 @@ legend { margin: 0 0 0 -1rem; padding: 0; }
 #list body > footer
 {
 	display: grid;
-	justify-items: center;
+	text-align: center;
 	grid-auto-flow: row;
 }
