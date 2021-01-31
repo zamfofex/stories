@@ -212,16 +212,11 @@ let prepare = () =>
 	typeset()
 }
 
-let hyphensLabel = hyphens.closest("label")
-
 let lastWidth
 
 let typeset = () =>
 {
 	let typesetting = document.body.matches(".typesetting")
-	
-	hyphens.disabled = !typesetting
-	hyphensLabel.classList.toggle("disabled", !typesetting)
 	
 	if (!typesetting)
 	{

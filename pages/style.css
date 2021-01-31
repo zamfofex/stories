@@ -22,6 +22,7 @@
 	→ miscelaneous compatibility fixes
 	→ fieldsets
 	→ list page
+	→ settings: hyphenation
 */
 
 @import "dependencies.css";
@@ -651,4 +652,13 @@ legend { margin: 0 0 0 -1rem; padding: 0; }
 	display: grid;
 	text-align: center;
 	grid-auto-flow: row;
+}
+
+/* → settings: hyphenation */
+
+body.hyphenation:not(.custom-typesetting) > main
+{
+	-ms-hyphens: auto;
+	-webkit-hyphens: auto;
+	hyphens: auto;
 }

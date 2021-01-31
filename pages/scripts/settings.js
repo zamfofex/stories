@@ -40,11 +40,8 @@ for (let input of settings.querySelectorAll("input, select"))
 	
 	channel.addEventListener("message", ({data}) => update(data))
 	
-	if (!input.matches(".dependent"))
-	{
-		input.disabled = false
-		input.closest("label").classList.remove("disabled")
-	}
+	input.disabled = false
+	input.closest("label").classList.remove("disabled")
 }
 
 let details = settings.closest("#display-settings")
