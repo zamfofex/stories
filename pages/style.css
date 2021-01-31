@@ -595,8 +595,6 @@ article, blockquote, hr { break-inside: avoid; }
 }
 #feedback > summary::-webkit-details-marker { display: none; }
 
-#feedback.no-close > summary { cursor: initial; }
-
 #feedback:not([open]) > summary { text-decoration: underline; }
 #feedback[open] > summary
 {

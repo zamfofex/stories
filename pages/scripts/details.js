@@ -7,7 +7,6 @@ onload = function ()
 		return
 	
 	feedback.setAttribute("open", "")
-	feedback.className += " no-close"
 	
 	document.body.removeChild(document.getElementById("display-settings"))
 }
