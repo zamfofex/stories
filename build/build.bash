@@ -5,7 +5,7 @@ set -e
 rm -rf public/*
 mkdir -p public/scripts
 
-ln pages/{style.css,dependencies.css,icon.svg,sw.js,pencil.svg} public
+ln pages/{style.css,dependencies.css,icon.svg,sw.js} public
 ln pages/scripts/* public/scripts
 ln dependencies.js public
 
