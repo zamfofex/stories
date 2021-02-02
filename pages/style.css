@@ -165,6 +165,9 @@ html[data-theme="cupcake"]
 
 html[data-theme="cupcake"] ::selection { background: #6DC8 !important; }
 
+@property --text-color { syntax: "<color>"; inherits: true; initial-value: #0000; }
+@property --background-color { syntax: "<color>"; inherits: true; initial-value: #0000; }
+
 /* → scrollbar */
 
 ::-webkit-scrollbar
