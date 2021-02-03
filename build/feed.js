@@ -1,6 +1,6 @@
 let decoder = new TextDecoder()
 
-let origin = Deno.env.get("origin")
+let origin = Deno.env.get("neocities_origin")
 
 export default async items =>
 {
