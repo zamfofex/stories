@@ -1,5 +1,4 @@
 import "./capitalization.js"
-import "./themes.js"
 import "./typesetting.js"
 import "./guide-rulers.js"
 import "./offline-availability.js"

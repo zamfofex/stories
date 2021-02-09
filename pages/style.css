@@ -3,7 +3,6 @@
 	===
 	
 	→ main layout and page
-	→ themes
 	→ scrollbar
 	→ user fields
 	→ blockquote
@@ -45,6 +44,9 @@ body
 {
 	font-family: "Ibarra Real Nova", serif;
 	font-size: 18px;
+	--text-color: #8D5F49;
+	--background-color: #FFF6F1;
+	--highlight-color: #8D5F4922;
 	background: #FFF6F1;
 	color: #8D5F49;
 	background: var(--background-color);
@@ -82,21 +84,6 @@ hr
 	opacity: 0.75;
 }
 
-@supports (mask: url("")) or (-webkit-mask: url(""))
-{
-	hr
-	{
-		background: var(--text-color);
-		--mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -8 100 16" stroke="%23000" fill="none" stroke-linecap="round"><path d="M -6 4 -2 -4 M 2 4 6 -4 M -42 0 C -34 -8 -18 8 -10 0 M 10 0 C 18 -8 34 8 42 0" /></svg>');
-		-webkit-mask: var(--mask);
-		-webkit-mask-position: center;
-		-webkit-mask-repeat: no-repeat;
-		mask: var(--mask);
-		mask-position: center;
-		mask-repeat: no-repeat;
-	}
-}
-
 article.response { margin-left: 2rem; }
 
 header { font-weight: bold; }
@@ -110,63 +97,6 @@ small { font-size: 0.75rem; }
 	font-weight: bold;
 	text-align: center;
 }
-
-/* → themes */
-
-html[data-theme="caramel"]
-{
-	--text-color: #741;
-	--background-color: #FED;
-	--highlight-color: #7412;
-}
-
-html[data-theme="cocoa"]
-{
-	--text-color: #FDA;
-	--background-color: #552E11;
-	--highlight-color: #FDA3;
-}
-
-/* cream: default theme */
-html
-{
-	--text-color: #8D5F49;
-	--background-color: #FFF6F1;
-	--highlight-color: #8D5F4922;
-}
-
-html[data-theme="coffee"]
-{
-	--text-color: #DAAB95;
-	--background-color: #21120B;
-	--highlight-color: #DAAB9522;
-}
-
-html[data-theme="cherry"]
-{
-	--text-color: #C82B61;
-	--background-color: #FFE9F0;
-	--highlight-color: #C82B6118;
-}
-
-html[data-theme="cinnamon"]
-{
-	--text-color: #FFE7EE;
-	--background-color: #B03F63;
-	--highlight-color: #FFE7EE33;
-}
-
-html[data-theme="cupcake"]
-{
-	--text-color: #234;
-	--background-color: #E8F5FF;
-	--highlight-color: #2342;
-}
-
-html[data-theme="cupcake"] ::selection { background: #6DC8 !important; }
-
-@property --text-color { syntax: "<color>"; inherits: true; initial-value: #0000; }
-@property --background-color { syntax: "<color>"; inherits: true; initial-value: #0000; }
 
 /* → scrollbar */
 
@@ -193,7 +123,7 @@ html { scrollbar-color: var(--text-color) #0000; }
 
 /* → user fields */
 
-a, button, select
+a, button
 {
 	color: inherit;
 	all: unset;
