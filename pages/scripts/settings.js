@@ -2,7 +2,7 @@ import {dispatch} from "./messages.js"
 
 let settings = document.querySelector("#settings")
 
-for (let input of settings.querySelectorAll("input, select"))
+for (let input of settings.querySelectorAll("input"))
 {
 	if (input.matches(".local")) continue
 	
@@ -33,8 +33,6 @@ for (let input of settings.querySelectorAll("input, select"))
 	
 	if (input.type === "checkbox")
 		input.addEventListener("change", () => broadcast(input.checked ? input.value : "off"))
-	else if (input.type === "radio")
-		input.addEventListener("change", () => { if (input.checked) broadcast(input.value) })
 	else
 		input.addEventListener("change", () => broadcast(input.value||"off"))
 	
