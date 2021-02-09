@@ -54,17 +54,13 @@ robots += "disallow: /\n"
 robots += "allow: /$\n"
 
 let origin = Deno.env.get("neocities_origin")
-let token = Deno.env.get("neocities_token")
-
 let api = Deno.env.get("vercel_origin")
 
-let response = await fetch("https://neocities.org/api/list?path=stories", {headers: {authorization: `Bearer ${token}`}})
-let {files} = await response.json()
+let response = await fetch(new URL(`stories/list.txt`, origin))
+let names = await response.text()
 
-for (let {path} of files)
+for (let name of names.split("\n").filter(Boolean))
 {
-	let name = path.slice("stories/".length)
-	
 	let [title, description, publication] = (await (await fetch(new URL(`stories/${name}/meta.txt`, origin))).text()).split(/\n/g)
 	let text = await (await fetch(new URL(`stories/${name}/story.md`, origin))).text()
 	
