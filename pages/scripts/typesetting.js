@@ -55,7 +55,6 @@ let original = children.map(node => node.cloneNode(true))
 let prepare = () =>
 {
 	subscribe("typesetting", typeset)
-	subscribe("optical-alignment", typeset)
 	subscribe("hyphenation", typeset)
 	subscribe("capitalization", typeset)
 	
