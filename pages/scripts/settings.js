@@ -31,10 +31,14 @@ for (let input of settings.querySelectorAll("input"))
 		dispatch(name, value)
 	}
 	
+	let broadcastChange
 	if (input.type === "checkbox")
-		input.addEventListener("change", () => broadcast(input.checked ? input.value : "off"))
+		broadcastChange = () => broadcast(input.checked ? input.value : "off")
 	else
-		input.addEventListener("change", () => broadcast(input.value||"off"))
+		broadcastChange = () => broadcast(input.value||"off")
+	
+	broadcastChange()
+	input.addEventListener("change", broadcastChange)
 	
 	channel.addEventListener("message", ({data}) => update(data))
 	

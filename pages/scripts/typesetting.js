@@ -212,9 +212,7 @@ let lastWidth
 
 let typeset = () =>
 {
-	let typesetting = document.body.matches(".typesetting")
-	
-	if (!typesetting)
+	if (!typesetting.checked)
 	{
 		main.textContent = ""
 		main.append(...original)
@@ -342,7 +340,7 @@ let typeset = () =>
 
 document.fonts.ready.then(() =>
 {
-	if (document.body.matches(".typesetting"))
+	if (typesetting.checked)
 	{
 		prepare()
 	}
