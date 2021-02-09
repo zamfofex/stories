@@ -1,4 +1,3 @@
-import "./capitalization.js"
 import "./typesetting.js"
 import "./guide-rulers.js"
 import "./offline-availability.js"

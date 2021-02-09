@@ -18,7 +18,6 @@ let font = element =>
 
 let typesetting = document.querySelector("#typesetting")
 let hyphens = document.querySelector("#hyphenation")
-let capitalization = document.querySelector("#capitalization")
 
 let update = enabled => document.body.classList.toggle("typesetting", enabled !== "off")
 subscribe("typesetting", update)
@@ -56,7 +55,6 @@ let prepare = () =>
 {
 	subscribe("typesetting", typeset)
 	subscribe("hyphenation", typeset)
-	subscribe("capitalization", typeset)
 	
 	addEventListener("resize", () =>
 	{
@@ -79,11 +77,12 @@ let prepare = () =>
 		
 		let bases = []
 		let nodes = []
-		let normal = {lefts: [], rights: [], widths: []}
-		let lowercase = {lefts: [], rights: [], widths: []}
+		let lefts = []
+		let rights = []
+		let widths = []
 		let shys = []
 		let currentNodes
-		paragraphs.push({node, bases, nodes, normal, lowercase, shys})
+		paragraphs.push({node, bases, nodes, shys, lefts, rights, widths})
 		
 		let push = (base, node) =>
 		{
@@ -188,23 +187,21 @@ let prepare = () =>
 		
 		for (let node of nodes)
 		{
-			let textContent
+			let text
 			if (node)
-				textContent = node.textContent,
+				text = node.textContent,
 				ctx.font = font(node)
 			else
-				textContent = ""
-			for (let [text, {widths, rights, lefts}] of [[textContent, normal], [textContent.toLowerCase(), lowercase]])
-			{
-				widths.push(measure(text))
-				
-				let first = text[0]
-				let last = text[text.length - 1]
-				if (last === "c" || last === "C") last = ""
-				
-				lefts.push(computedOffsets[first])
-				rights.push(computedOffsets[last])
-			}
+				text = ""
+			
+			widths.push(measure(text))
+			
+			let first = text[0]
+			let last = text[text.length - 1]
+			if (last === "c" || last === "C") last = ""
+			
+			lefts.push(computedOffsets[first])
+			rights.push(computedOffsets[last])
 		}
 	}
 	
@@ -232,13 +229,8 @@ let typeset = () =>
 	
 	main.textContent = ""
 	
-	for (let {node, bases, nodes, normal, lowercase, shys} of paragraphs)
+	for (let {node, bases, nodes, shys, widths, lefts, rights} of paragraphs)
 	{
-		let which
-		if (capitalization.checked) which = normal
-		else which = lowercase
-		let {widths, lefts, rights} = which
-		
 		if (hyphens.checked)
 			for (let i of shys) bases[i].cost = 400, widths[i] = 0
 		else
@@ -320,8 +312,7 @@ let typeset = () =>
 				if (base.type === "glue")
 					glues++, gaps--
 				else if (base.type === "box")
-					if (capitalization.checked) width += widths[j]
-					else width += widths[j]
+					width += widths[j]
 				
 				if (base.type === "box")
 					gaps += nodes[j].childNodes[0].data.length
