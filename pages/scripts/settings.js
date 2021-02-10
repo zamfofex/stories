@@ -31,12 +31,7 @@ for (let input of settings.querySelectorAll("input"))
 		dispatch(name, value)
 	}
 	
-	let broadcastChange
-	if (input.type === "checkbox")
-		broadcastChange = () => broadcast(input.checked ? input.value : "off")
-	else
-		broadcastChange = () => broadcast(input.value||"off")
-	
+	let broadcastChange = () => broadcast(input.checked ? input.value : "off")
 	broadcastChange()
 	input.addEventListener("change", broadcastChange)
 	
