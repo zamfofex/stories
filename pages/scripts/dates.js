@@ -1,4 +1,4 @@
-let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+let months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
 
 export default date =>
 {
@@ -9,13 +9,13 @@ export default date =>
 	
 	switch (date.getUTCDay())
 	{
-		case 0: add("Sunday") ; break
-		case 1: add("Monday") ; break
-		case 2: add("Tuesday") ; break
-		case 3: add("Wednesday") ; break
-		case 4: add("Thursday") ; break
-		case 5: add("Friday") ; break
-		case 6: add("Saturday") ; break
+		case 0: add("sunday") ; break
+		case 1: add("monday") ; break
+		case 2: add("tuesday") ; break
+		case 3: add("wednesday") ; break
+		case 4: add("thursday") ; break
+		case 5: add("friday") ; break
+		case 6: add("saturday") ; break
 	}
 	
 	add(", the ")
