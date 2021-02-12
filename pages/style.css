@@ -17,7 +17,7 @@
 	→ settings: custom typesetting
 	→ custom typesetting: optical alignment
 	→ custom typesetting: spacing harmony
-	→ miscelaneous compatibility fixes
+	→ miscellaneous compatibility fixes
 	→ fieldsets
 	→ list page
 	→ settings: hyphenation
@@ -525,7 +525,7 @@ article, blockquote, hr { break-inside: avoid; }
 	line-height: 1.25em;
 }
 
-/* → miscelaneous compatibility fixes */
+/* → miscellaneous compatibility fixes */
 
 details:not([open]) > :not(summary) { display: none; }
 
