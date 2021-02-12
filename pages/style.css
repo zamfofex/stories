@@ -295,7 +295,14 @@ input[type="checkbox"]:checked
 	z-index: 1;
 }
 
-label { cursor: pointer; }
+#settings label
+{
+	cursor: pointer;
+	display: flex;
+	align-items: baseline;
+}
+
+#settings label > input { flex: 0 0 auto; }
 
 #display-settings { float: right; }
 
