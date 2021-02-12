@@ -74,9 +74,14 @@ p { margin: 0.75rem 0; }
 
 hr
 {
-	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -8 100 16" width="150" height="24" stroke="%238D5F49" fill="none" stroke-linecap="round"><path d="M -6 4 -2 -4 M 2 4 6 -4 M -42 0 C -34 -8 -18 8 -10 0 M 10 0 C 18 -8 34 8 42 0" /></svg>');
-	background-position: center;
-	background-repeat: no-repeat;
+	background: var(--text-color);
+	--mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -8 100 16" width="150" height="24" stroke="%238D5F49" fill="none" stroke-linecap="round"><path d="M -6 4 -2 -4 M 2 4 6 -4 M -42 0 C -34 -8 -18 8 -10 0 M 10 0 C 18 -8 34 8 42 0" /></svg>');
+	-webkit-mask: var(--mask);
+	-webkit-mask-position: center;
+	-webkit-mask-repeat: no-repeat;
+	mask: var(--mask);
+	mask-position: center;
+	mask-repeat: no-repeat;
 	border: none;
 	margin: 1.5rem 0;
 	height: 1.5rem;
