@@ -288,7 +288,6 @@ input[type="checkbox"]:checked
 	padding: 0 1rem;
 	background: var(--background-color);
 	max-width: calc(100% - 2rem);
-	transition: 0.25s ease transform, 0.25s ease opacity;
 	box-shadow: #3333 0 0 1rem;
 	animation: settings ease 0.5s;
 	text-align: left;
