@@ -22,45 +22,21 @@ export default date =>
 	
 	let day = date.getUTCDate()
 	
-	let sup = document.createElement("sup")
 	let ord
-	switch (day)
+	switch (day % 10)
 	{
-		case 1: add("first") ; break
-		case 2: add("second") ; break
-		case 3: add("third") ; break
-		case 4: add("fourth") ; break
-		case 5: add("fifth") ; break
-		case 6: add("sixth") ; break
-		case 7: add("seventh") ; break
-		case 8: add("eighth") ; break
-		case 9: add("ninth") ; break
-		case 10: add("tenth") ; break
-		case 11: add("eleventh") ; break
-		case 12: add("twelfth") ; break
-		case 13: add("thirteenth") ; break
-		case 14: add("fourteenth") ; break
-		case 15: add("fifteenth") ; break
-		case 16: add("sixteenth") ; break
-		case 17: add("seventeenth") ; break
-		case 18: add("eighteenth") ; break
-		case 19: add("nineteenth") ; break
-		case 20: add("twentieth") ; break
-		case 30: add("thirtieth") ; break
-		default:
-			add(day)
-			result.append(sup)
-			switch (day % 10)
-			{
-				case 1: ord = "st" ; break
-				case 2: ord = "nd" ; break
-				case 3: ord = "rd" ; break
-				default: ord = "th" ; break
-			}
-			sup.append(ord)
-			title += ord
-			break
+		case 1: ord = "st" ; break
+		case 2: ord = "nd" ; break
+		case 3: ord = "rd" ; break
+		default: ord = "th" ; break
 	}
+	if (day >= 11 && day <= 13) ord = "th"
+	
+	let sup = document.createElement("sup")
+	add(day)
+	result.append(sup)
+	sup.append(ord)
+	title += ord
 	
 	add(" of ")
 	add(months[date.getUTCMonth()])
@@ -76,6 +52,7 @@ export default date =>
 	else title += "UTC"
 	
 	result.title = title
+	result.dateTime = date.toISOString()
 	
 	return result
 }
