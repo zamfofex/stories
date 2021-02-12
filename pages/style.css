@@ -565,11 +565,10 @@ legend { margin: 0 0 0 -1rem; padding: 0; }
 	display: grid;
 }
 
-#list > body
+#list body
 {
 	display: grid;
 	grid-template-rows: 1fr auto;
-	text-transform: lowercase;
 }
 
 #list h1 { text-align: center; }
