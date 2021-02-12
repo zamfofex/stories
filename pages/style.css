@@ -102,6 +102,8 @@ small { font-size: 0.75rem; }
 	text-align: center;
 }
 
+sup { line-height: 0; }
+
 /* → scrollbar */
 
 ::-webkit-scrollbar
