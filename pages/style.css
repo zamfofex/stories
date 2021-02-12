@@ -581,7 +581,7 @@ legend { margin: 0 0 0 -1rem; padding: 0; }
 
 /* → settings: hyphenation */
 
-body.hyphenation:not(.custom-typesetting) > main
+body.hyphenation:not(.typesetting) > main p
 {
 	-ms-hyphens: auto;
 	-webkit-hyphens: auto;
