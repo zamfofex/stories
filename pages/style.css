@@ -89,13 +89,6 @@ hr
 	text-align: center;
 }
 
-.home
-{
-	float: right;
-	line-height: 2.5rem;
-	margin-left: 1rem;
-}
-
 /* → scrollbar */
 
 ::-webkit-scrollbar
@@ -195,10 +188,19 @@ h2 { font-size: 1.75rem; }
 	from { transform: translate(0, 1rem); opacity: 0; }
 }
 
-#settings
+details
 {
+	float: right;
+	display: flex;
+	clear: right;
+}
+
+summary { line-height: 2.5rem; }
+
+summary + *
+{
+	transform: translate(0, 0.5rem);
 	right: -1rem;
-	top: 2.5rem;
 	position: absolute;
 	border: 0.0625rem solid var(--text-color);
 	border-radius: 0.5rem;
@@ -206,11 +208,13 @@ h2 { font-size: 1.75rem; }
 	background: var(--background-color);
 	max-width: calc(100% - 2rem);
 	box-shadow: #3333 0 0 1rem;
-	animation: settings ease 0.5s;
 	text-align: left;
 	pointer-events: initial;
-	z-index: 1;
 }
+
+#settings { z-index: 1; }
+
+details[open] > summary + * { animation: settings ease 0.25s; }
 
 #settings label
 {
@@ -221,32 +225,11 @@ h2 { font-size: 1.75rem; }
 
 #settings label > input { flex: 0 0 auto; }
 
-#display-settings { float: right; }
-
-#display-settings > summary
+summary
 {
 	display: block;
 	cursor: pointer;
 	text-decoration: underline;
-	margin-left: 1rem;
-	line-height: 2.5rem;
-}
-
-#display-settings > summary::-webkit-details-marker { display: none; }
-
-#settings > fieldset > legend
-{
-	font-size: 1rem;
-	font-weight: 550;
-	text-align: center;
-	width: 100%;
-	margin: 0;
-}
-
-#settings > fieldset
-{
-	margin: 0.75rem 0;
-	padding: 0;
 }
 
 /* → settings: guide rulers */
