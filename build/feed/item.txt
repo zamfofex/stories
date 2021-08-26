@@ -1,8 +1,0 @@
-{
-	"id": ((url)),
-	"url": ((url)),
-	
-	"title": ((title)),
-	"summary": ((description)),
-	"date_published": ((publication))
-}

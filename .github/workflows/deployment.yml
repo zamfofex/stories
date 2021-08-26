@@ -8,13 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: denolib/setup-deno@v2
-      - run: >
-          neocities_origin="${{secrets.neocities_origin}}"
-          vercel_origin="${{secrets.vercel_origin}}"
-          build/build.bash
+      - run: build/build.bash
       - uses: bcomnes/deploy-to-neocities@v1
         with:
           api_token: ${{secrets.neocities_token}}
           cleanup: true
-          protected_files: stories/**

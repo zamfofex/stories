@@ -1,3 +1,8 @@
+import "./typesetting.js"
+import "./guide-rulers.js"
+import "./hyphenation.js"
+import "./pageshow-settings.js"
+
 import {dispatch} from "./messages.js"
 
 let settings = document.querySelector("#settings")

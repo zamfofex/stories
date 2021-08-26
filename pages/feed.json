@@ -1,0 +1,21 @@
+{
+	"version": "https://jsonfeed.org/version/1",
+	"feed_url": "https://zamstories.neocities.org/feed.json",
+	"home_page_url": "https://zamstories.neocities.org",
+	
+	"language": "en",
+	
+	"title": "zamfofex’s stories",
+	"description": "a collection of potentially mildly lewd, yet hopefully heartwarming stories",
+	"author": {"name": "zamfofex", "url": "https://github.com/zamfofex"},
+	"authors": [{"name": "zamfofex", "url": "https://github.com/zamfofex"}],
+	
+	"items":
+	[{
+		"id": "https://zamstories.neocities.org",
+		"url": "https://zamstories.neocities.org",
+		"title": "feed disabling notice",
+		"summary": "syndication feeds have been disabled indeterminately. please visit https://zamstories.neocities.org to keep up with future stories.",
+		"date_published": "2021-08-10T16:00:00-03:00"
+	}]
+}

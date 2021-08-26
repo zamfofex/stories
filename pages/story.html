@@ -2,71 +2,38 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-
-<title>((title)) — zamfofex’s stories</title>
 <link rel="icon" href="/icon.svg">
 
-<link rel="canonical" href="((origin))/((name))/">
-<meta name="description" content="((description))">
+<title>
+((title))
+— zamfofex’s stories
+</title>
 
 <link rel="stylesheet" href="/style.css">
-<script type="module" src="/scripts/story-page.js"></script>
-
-<script src="/scripts/details.js"></script>
+<script type="module" src="/scripts/settings.js"></script>
 
 <details id="display-settings">
 	<summary>settings</summary>
 	<div id="settings">
-		<fieldset>
-			<legend>page settings</legend>
-			<p>
-				<label class="disabled" title="when enabled, allows the story to be read even when you don’t have access to the internet">
-					<input type="checkbox" id="available-offline" class="local" checked disabled>
-					available offline
-				</label>
-			</p>
-		</fieldset>
-		<fieldset>
-			<legend>global settings</legend>
-			<p>
-				<label class="disabled" title="when enabled, shows horizontal lines between some of the rows of text to help you keep track of your position as you read">
-					<input type="checkbox" id="guide-rulers" disabled>
-					guide rulers
-				</label>
-			</p>
-			<p>
-				<label class="disabled" title="when enabled, lays out the text on the page using an algorithm tailored to make it more comfortable to read">
-					<input type="checkbox" id="typesetting" checked disabled>
-					custom typesetting
-				</label>
-			</p>
-			<p>
-				<label class="disabled" title="when enabled, allows words to be occasionally hyphenated across lines to help the text look more organized">
-					<input type="checkbox" id="hyphenation" checked disabled>
-					hyphenation
-				</label>
-			</p>
-		</fieldset>
+		<p>
+			<label class="disabled" title="when enabled, shows horizontal lines between some of the rows of text to help you keep track of your position as you read">
+				<input type="checkbox" id="guide-rulers" disabled>
+				guide rulers
+			</label>
+		</p>
+		<p>
+			<label class="disabled" title="when enabled, lays out the text on the page using an algorithm tailored to make it more comfortable to read">
+				<input type="checkbox" id="typesetting" checked disabled>
+				custom typesetting
+			</label>
+		</p>
+		<p>
+			<label class="disabled" title="when enabled, allows words to be occasionally hyphenated across lines to help the text look more organized">
+				<input type="checkbox" id="hyphenation" checked disabled>
+				hyphenation
+			</label>
+		</p>
 		<p class="submit">(requires scripting)</p>
 	</div>
 </details>
-<main>
-	((main))
-	<div class="end">
-		<p>the end</p>
-	</div>
-</main>
-<p>license: <a href="https://creativecommons.org/licenses/by/4.0" rel="license">cc by 4.0</a></p>
-<p><a href="/">read more stories like this</a></p>
-<details id="feedback">
-	<summary>share feedback</summary>
-	<form method="POST" action="((api))/submit?name=((name))">
-		<p>
-			<textarea name="message" required minlength="12" aria-label="feedback"></textarea>
-		</p>
-		<div class="submit">
-			<p>feedback is public and anonymous</p>
-			<p><button>submit feedback</button></p>
-		</div>
-	</form>
-</details>
+<nav class="home"><a href="/">home</a></nav>

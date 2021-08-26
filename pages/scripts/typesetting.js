@@ -47,9 +47,7 @@ let spaceWidth
 
 let paragraphs = []
 
-let main = document.querySelector("main")
-let children = [...main.childNodes]
-let original = children.map(node => node.cloneNode(true))
+let children = document.querySelectorAll("body > p:not(.end)")
 
 let prepare = () =>
 {
@@ -58,7 +56,7 @@ let prepare = () =>
 	
 	addEventListener("resize", () =>
 	{
-		if (main.offsetWidth === lastWidth) return
+		if (document.body.offsetWidth === lastWidth) return
 		typeset()
 	})
 	
@@ -71,10 +69,8 @@ let prepare = () =>
 	hyphenWidth = measure("-")
 	spaceWidth = measure(" ")
 	
-	for (let node of main.querySelectorAll("main > p, main > :not(footer):not(.end) p"))
+	for (let node of children)
 	{
-		node.classList.add("p")
-		
 		let bases = []
 		let nodes = []
 		let lefts = []
@@ -109,7 +105,7 @@ let prepare = () =>
 				let whitespace = words[j]
 				let word = words[j + 1]
 				
-				if (whitespace)
+				if (whitespace && j !== 0)
 				{
 					let glue = document.createElement("span")
 					glue.classList.add("glue")
@@ -212,20 +208,16 @@ let lastWidth
 
 let typeset = () =>
 {
-	if (!typesetting.checked)
-	{
-		main.textContent = ""
-		main.append(...original)
-		return
-	}
+	if (typesetting.checked)
+		for (let node of children) node.classList.add("p")
+	else
+		for (let node of children) node.classList.remove("p")
 	
-	let mainWidth = main.offsetWidth
+	let mainWidth = document.body.offsetWidth
 	
 	lastWidth = mainWidth
 	
 	let y = scrollY
-	
-	main.textContent = ""
 	
 	for (let {node, bases, nodes, shys, widths, lefts, rights} of paragraphs)
 	{
@@ -334,7 +326,6 @@ let typeset = () =>
 			if (bases[j].type === "box") nodes[j].style.setProperty("--spacing", "0")
 	}
 	
-	main.append(...children)
 	scrollY = y
 }
 

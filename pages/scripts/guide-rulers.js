@@ -1,7 +1,5 @@
 import {subscribe} from "./messages.js"
 
-let main = document.querySelector("main")
-
 let update = () =>
 {
 	if (enabled === "off")
@@ -10,7 +8,7 @@ let update = () =>
 		return
 	}
 	
-	let count = Math.round((64 - main.offsetWidth / 16) / 8)
+	let count = Math.round((64 - document.body.offsetWidth / 16) / 8)
 	
 	if (count < 3) count = "3"
 	if (count > 6) count = "6"
