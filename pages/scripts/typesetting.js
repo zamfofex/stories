@@ -275,7 +275,7 @@ let typeset = () =>
 		
 		let push = mainWidth
 		
-		for (let i = indices[indices.length-1] ; i < length ; i++)
+		for (let i = indices[indices.length-1] || 0 ; i < length ; i++)
 		{
 			let {type, width} = bases[i]
 			if (type === "box") push -= width
