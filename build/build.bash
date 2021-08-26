@@ -4,7 +4,7 @@ set -e
 rm -rf public/*
 mkdir -p public/scripts
 
-ln pages/{robots.txt,style.css,icon.svg} public
+ln pages/{robots.txt,style.css,icon.svg,feed.json,atom.xml} public
 ln pages/scripts/* public/scripts
 cp pages/list.html public/index.html
 
