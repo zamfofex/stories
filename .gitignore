@@ -5,8 +5,7 @@
 !/.vercelignore
 !/api
 !/api/*
-!/build
-!/build/**
+!/build.bash
 !/license.md
 !/readme.md
 !/vercel.json
