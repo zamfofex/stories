@@ -179,7 +179,7 @@ h1, h2
 }
 
 h1 { font-size: 2rem; }
-h2 { font-size: 1.75rem; }
+h2 { font-size: 1.5rem; }
 
 /* → settings box */
 
@@ -294,11 +294,6 @@ hr { break-after: avoid; }
 	{
 		white-space: nowrap;
 		text-align-last: justify;
-	}
-	
-	body[data-guide-rulers] > .p
-	{
-		background-size: calc(100% - 2rem) calc(100% - 1.75rem * 2);
 	}
 	
 	body > .p::after

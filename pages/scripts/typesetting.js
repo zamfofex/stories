@@ -105,7 +105,7 @@ let prepare = () =>
 				let whitespace = words[j]
 				let word = words[j + 1]
 				
-				if (whitespace && j !== 0)
+				if (whitespace && (j !== 0 || textNode !== textNodes[0]))
 				{
 					let glue = document.createElement("span")
 					glue.classList.add("glue")
