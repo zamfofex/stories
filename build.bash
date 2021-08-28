@@ -18,7 +18,6 @@ do
 	echo "$title" | sed -e '/((title))/{r /dev/stdin' -e 'd}' ../pages/story.html > "../public/$name/index.html"
 	echo >> "../public/$name/index.html"
 	cat "$name.txt" >> "../public/$name/index.html"
-	printf '<p class="end">the end</p>\n' >> "../public/$name/index.html"
 	
 	printf '\n<a href="/%s/">\n\t<article>\n\t\t<h2>%s</h2>\n%s\n\t</article>\n</a>\n' "$name" "$title" "$(sed 's/^/\t\t/' "about/$name.txt")" >> ../public/index.html
 done

@@ -193,6 +193,7 @@ details
 	float: right;
 	display: flex;
 	clear: right;
+	margin-left: 0.5rem;
 }
 
 summary { line-height: 2.5rem; }
